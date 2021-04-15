@@ -3,7 +3,7 @@
   <div style="max-width: 1200px; margin: auto; width: 100%;">
       
       <div id="layout-2" class="a44-widget layout" ref="container">
-          <slider-component/>
+          <slider-component title="This is a static title" :container="container"/>
           <offers-component/>
       </div>
 
@@ -59,12 +59,12 @@ export default{
     }
 
 
-      const store = useStore();
-      store.dispatch("fetchOffers");
-      
-      onMounted(()=>{
-        screen_size();
-      })
+    const store = useStore();
+    store.dispatch("fetchOffers");
+    
+    onMounted(()=>{
+      screen_size();
+    })
 
     return{
       container
