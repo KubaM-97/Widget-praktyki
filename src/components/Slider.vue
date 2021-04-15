@@ -16,7 +16,7 @@
 
         <div class="input-wrapper">
           <input type="range" class="a44-period-69ac1091c4c51b931f1225a13d0e9e39 costslider"
-            step="1"  data-suffix=" dni" value="" @input="getPeriod"/>
+            step="1"  data-suffix=" dni"  @input="getPeriod"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min">1 dni</span>
@@ -35,7 +35,7 @@
         </div>
         <div class="amount-value-container">
           <span class="value-wrapper">
-            <input type="text" class="value" value="1000" /> zł
+            <input type="text" class="value" value="" /> zł
           </span>
         </div>
         <div class="aclr"></div>
@@ -83,10 +83,12 @@ export default ({
         let tr;
 
         onMounted(()=>{
+            
             tr = $('.translations').val(JSON.stringify(input_hidden.value));    
            
-            var $sliderAmount = $('.amount-container input.costslider');
-            var $sliderPeriod = $('.period-container input.costslider');
+            var $sliderAmount = $('.amount-container input');
+            var $sliderPeriod = $('.period-container input');
+            
             $sliderAmount.attr({
                 min: 100,
                 max: 60000,
@@ -100,7 +102,9 @@ export default ({
                 'data-suffix': ' dni',
                 value: '12'
             });
-             getPeriod()
+
+            getPeriod();
+            
         })
        
         let slider;
@@ -112,15 +116,14 @@ export default ({
 
         // Poradziłbyś coś? 
          function getPeriod(){
-
+             
             var $category = 1;
             var $suffix = ' dni';
 
             var $sliderAmount = $('.amount-container input.costslider');
             var $sliderPeriod = $('.period-container input.costslider');
             var $freeAmount = $('[id^="#chck-free-amount-"');
-
-            
+           
 
             $([$sliderPeriod, $sliderAmount, $freeAmount]).each(function(i, $e) {
                 
@@ -130,22 +133,15 @@ export default ({
                 $suffix = $e.attr('data-suffix') == undefined ? '' : ($e.attr('data-suffix') == ' dni' ? ' ' + $suffixDays : ' ' + $suffixMonth);
               
                 const $currency = $e.attr('data-currency') == undefined ? '' : $e.attr('data-currency');
-                const $sliderLabelValue = $(this).parents('.range-wrapper').find('input.value').val($e.attr('value'));
-                
-                // console.log($(this).parents('.range-wrapper').find('input.value'))
-                // console.log($sliderLabelValue)
-                console.log($sliderLabelValue.val())
+                const $sliderLabelValue = $(this).parents('.range-wrapper').find('input.value');
 
                 $(this).parents('.range-wrapper').find('.a44-min').html($category == 3 && $(this).parents('.period-container').length ? '61 ' + (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days') : ($e.attr('min') + $suffix + $currency));
                 $(this).parents('.range-wrapper').find('.a44-max').html($e.attr('max') + $suffix + $currency);
-                // console.log(1)
+
                 $e.on('input', function() {
-                    // console.log(2)
                     const $this = $(this);
                     const to = parseInt($this.val());
                     const from = parseInt($sliderLabelValue.val());
-                    // console.log(from, to)
-                
                     $({
                         counter: from
                     }).animate({
@@ -163,6 +159,7 @@ export default ({
                                 var $span = $('<span>' + (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days') + '</span>');
                                 $sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append($sliderLabelValue).append($span);
                             } else if ($sliderLabelValue.parents('.period-value-container').length) {
+                                console.log($sliderLabelValue.val(), to)
                                 $sliderLabelValue.val(to);
                                 $span = $('<span>' + ($e.attr('data-suffix') == ' dni' ? (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days') : (typeof tr['months'] !== 'undefined' ? tr['months'] : 'months')) + '</span>');
                                 $sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append($sliderLabelValue).append($span);
