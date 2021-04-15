@@ -370,8 +370,10 @@ export default ({
         
         
 
-        // store.commit("setOffers",$offers)
+        store.commit("setOffers", $offers)
+
         console.log($offers.length)
+        console.log(store.state.offers.length)
         $offers.show();
         if ($offers.length > 0)
             $alert.hide();

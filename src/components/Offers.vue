@@ -123,8 +123,9 @@ export default {
     let tr = $('.translations').val(JSON.stringify(input_hidden.value));  
     rating(tr)
   })
-
-      const offers = computed(() => store.state.offers);
+  
+      // const offers = computed(() => store.state.offers);
+      const offers = computed(() => store.getters.filteredOffers);
       /* eslint-disable */
        function rating(){
       // STARS DISPLAY - START

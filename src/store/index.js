@@ -28,15 +28,21 @@ export default createStore({
         "maximal APR":"maksymalne RRSO"
     }
   },
+  getters: {
+    filteredOffers(state){
+      return state.offers.filter( offer => offer.id>100)
+    }
+  },
   mutations: {
     setOffers( state, offers){
-      state.offers = offers
+      state.offers = offers;
     }
   },
   actions: {
     fetchOffers:( { commit } )=>{
         axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
         .then( response => {
+          // state.offers = response.data
           commit("setOffers", response.data);
         })
     }
