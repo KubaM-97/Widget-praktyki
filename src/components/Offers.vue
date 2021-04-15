@@ -3,7 +3,7 @@
     <div class="a44-offers" v-for="offer in offers" :key="offer.id">
    
       <div class='a44-offer pl promo' :data-id="offer.id" data-costs 
-        :data-minamount="offer.min_amount" :data-maxamout="offer.max_amount"
+        :data-minamount="offer.min_amount" :data-maxamount="offer.max_amount"
         :data-minperiod="offer.min_period" :data-maxperiod="offer.max_period" 
         :data-freeamount="offer.first_free_amount"
       >

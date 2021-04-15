@@ -229,7 +229,7 @@ export default ({
            widget.find('[data-costs]').each(function(i, e) {
             //    console.log("widget")/
             //    console.log($(e))
-               console.log($(e).data('costs'))
+            //    console.log($(e).data('costs'))
                slugs.push($(e).data('costs'));
            });
 
@@ -351,7 +351,6 @@ export default ({
         const amount = parseInt($sliderAmount.val());
         const period = parseInt($sliderPeriod.val());
 
-        // console.log($(".layout"))
         $(slider.value).find('.a44-offer').hide();
 
         const $offers = $(".layout").find('.a44-offer').filter(function() {
@@ -370,18 +369,9 @@ export default ({
         });
         
         
-        console.log(
-            $(".layout").find('.a44-offer').filter(function() {
-            return parseInt($(this).attr("data-minamount")) <= amount;
-            }).filter(function() {
-            return parseInt($(this).attr("data-maxamount")) >= amount;
-            }).filter(function() {
-         return parseInt($(this).attr("data-minperiod")) <= period;
-        })
-        )
 
         // store.commit("setOffers",$offers)
-        console.log($offers)
+        console.log($offers.length)
         $offers.show();
         if ($offers.length > 0)
             $alert.hide();
