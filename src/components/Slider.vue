@@ -109,6 +109,57 @@ export default ({
             getPeriod();
         })
 
+        // function testChange(){
+        //     const widget = $('input[type=range].costslider').parents('.a44-widget');
+        //         const slugs = [];
+
+
+        //         store.state.offers.forEach(offer => {
+        //             slugs.push(offer.loando_slug)
+        //         })
+
+        //         widget.find('.amount, .time, .installment, .cost, .apr').html('-');
+
+        //         if (slugs.length > 0) {
+        //             const prefix = widget.find('input[class^="a44-period"]').attr('data-suffix') === ' dni' ? 'day' : 'month';
+        //             const amount = parseInt(widget.find('input[class^="a44-amount"]').val());
+        //             const time = parseInt(widget.find('input[class^="a44-period"]').val());
+                
+        //             $.getJSON('https://loando.pl/api/json/costs', {
+        //                 slug: slugs,
+        //                 amount: amount,
+        //                 period: time,
+        //                 time_type: prefix
+        //             }, function(data) {
+
+        //                 $(slugs).each(function(i, name) {
+                            
+        //                     if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
+        //                         const container = widget.find($('[data-costs]'));
+
+
+        //                         container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communications.value['months'] !== 'undefined' ? communications.value['months'] : 'months') : ' ' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days')));
+        //                         container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
+        
+        //                         if (typeof data.costs[name].installment !== 'undefined' && prefix == 'month')
+        //                             container.find('.installment').html(data.costs[name].installment + '  zł');
+        //                         if (typeof data.costs[name].cost !== 'undefined' && prefix == 'day')
+        //                             container.find('.installment').html(data.costs[name].cost + '  zł');
+                                    
+        //                         container.find('.apr').html(((typeof data.costs[name].apr !== 'undefined' && data.costs[name].apr != null) ? data.costs[name].apr + '%' : '<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Sprawdź</a>'));
+                             
+        //                         if (typeof data.costs[name].amount !== 'undefined' && typeof data.costs[name].cost !== 'undefined') {
+                                    
+        //                             const installment = container.find('.installment');
+                                    
+        //                             console.log(installment)
+        //                             installment.html(installment.html() + ' / ' + (Math.round((data.costs[name].cost + data.costs[name].amount) * 100) / 100) + '  zł');
+        //                         }
+        //                     }
+        //                 })
+        //             })
+        //         }
+        // }
 
         function getPeriod(){
              
@@ -205,6 +256,8 @@ export default ({
 
 
 
+            // $('input[type=range].costslider').change(testChange);
+
             $('input[type=range].costslider').change(function() {
 
                 const widget = $('input[type=range].costslider').parents('.a44-widget');
@@ -226,13 +279,23 @@ export default ({
                         time_type: prefix
                     }, function(data) {
 
+                        // const container = widget.find($('[data-costs]'));
+                        // console.log(store.state.offers)
+                        // store.state.offers.forEach(offer=>{
+                        //     container.each(()=>{
+
+                        //     })
+                        //     container.attr("data-costs", luando_slug)
+                        // })
+                        // console.log(22222222222222,name)
                         $(slugs).each(function(i, name) {
-                            
+                            // console.log(33333333333333333,name)
                             if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
-                                const container = widget.find($('[data-costs="' + name + '"]'));
+                                
+                                // here need to add some names to the container
+                                var container = widget.find($('[data-costs="' + name + '"]'));                            
 
-                                console.log(container.length)
-
+                                console.log(widget)
                                 container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communications.value['months'] !== 'undefined' ? communications.value['months'] : 'months') : ' ' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days')));
                                 container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
         
@@ -245,17 +308,19 @@ export default ({
                                 // console.log(    typeof data.costs[name].amount)
                                 // console.log(    typeof data.costs[name].cost)
                                 if (typeof data.costs[name].amount !== 'undefined' && typeof data.costs[name].cost !== 'undefined') {
-                                    console.log(7777)
+                                   
                                     const installment = container.find('.installment');
-                                    console.log(container)
-                                    console.log(installment)
+                                    // console.log(installment)
                                     installment.html(installment.html() + ' / ' + (Math.round((data.costs[name].cost + data.costs[name].amount) * 100) / 100) + '  zł');
+                                    console.log(installment)
                                 }
                             }
                         })
                     })
                 }
             })
+        setTimeout(()=>$('input[type=range].costslider').last().trigger('change'),2000)
+        
         }
 
 
