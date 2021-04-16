@@ -1,5 +1,6 @@
 <template>
 
+<<<<<<< HEAD
     <div class="a44-offers" v-for="offer in filteredOffers" :key="offer.id">
    
       <div class='a44-offer pl promo' :data-id="offer.id" data-costs="" 
@@ -7,6 +8,11 @@
         :data-minperiod="offer.min_period" :data-maxperiod="offer.max_period" 
         :data-freeamount="offer.first_free_amount"
       >
+=======
+    <div class="a44-offers" v-for="offer in offers" :key="offer.id">
+   
+      <div class='a44-offer pl promo' data-costs="">
+>>>>>>> 99d6ad9040d92362dd40e477bf93820323fb5cc9
         
           <div class="offer-details">
 

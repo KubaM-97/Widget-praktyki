@@ -79,6 +79,7 @@ export default ({
     setup() {
         
         const store = useStore();
+        
         const communicates = computed(()=>store.state.communicates);
 
         const slider = ref(null)
@@ -247,6 +248,7 @@ export default ({
                        if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
                            const container = widget.find($('[data-costs="' + name + '"]'));
                            container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communicates.value['months'] !== 'undefined' ? communicates.value['months'] : 'months') : ' ' + (typeof communicates.value['days'] !== 'undefined' ? communicates.value['days'] : 'days')));
+
  
                            container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
  
@@ -258,7 +260,6 @@ export default ({
                            container.find('.apr').html(((typeof data.costs[name].apr !== 'undefined' && data.costs[name].apr != null) ? data.costs[name].apr + '%' : '<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Sprawdź</a>'));
                            if (typeof data.costs[name].amount !== 'undefined' && typeof data.costs[name].cost !== 'undefined') {
                                const installment = container.find('.installment');
-                               
                                installment.html(installment.html() + ' / ' + (Math.round((data.costs[name].cost + data.costs[name].amount) * 100) / 100) + '  zł');
                            }
                        }
@@ -337,18 +338,3 @@ export default ({
     }
 })
 </script>
-
-
-
-
-
-
-
-
-
-  //  Cześć Rafał, wczoraj mówiłeś, że jeżeli będę miał jakiś kłopot to żebym do Cibie napisał, to piszę ;)
-        //  W tym widgetu chodzi o te 5 gwiazdek po najechaniu ładnie wypełnia się 1,2,3,4 lub 5 gwiazdek, ale po kliknięciu wyświtla i się aki błąd:
-         
-        //  GET https://widgets.aff44.com/vote?save_rate=undefined&rate=1&callback=jQuery360048765289300618697_1618472727013&_=1618472727014 net::ERR_ABORTED 500 (Internal Server Error)
-
-        // Poradziłbyś coś? 
