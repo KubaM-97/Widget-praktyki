@@ -120,13 +120,19 @@ export default ({
             // $alert.insertBefore(slider.value.children.last());
             $promo.insertBefore('.costs-info');
             
+            
+      
             getPeriod();
         })
        
-         
-      
+
+
+           
+
+
+
          function getPeriod(){
-            //  console.log("getPeriod")
+             
             const $category = 1;
             let $suffix = ' dni';
 
@@ -221,22 +227,25 @@ export default ({
 
 
 
+            $('input[type=range].costslider').change(function() {
+                
            const widget = $('input[type=range].costslider').parents('.a44-widget');
            const slugs = [];
 
            
-           
+           console.log(widget)
+           console.log(widget.find('div').length)
+           console.log(widget.find('[data-costs]'))
            widget.find('[data-costs]').each(function(i, e) {
             //    console.log("widget")/
-            //    console.log($(e))
-            //    console.log($(e).data('costs'))
+               console.log($(e).data())
                slugs.push($(e).data('costs'));
            });
 
            widget.find('.amount, .time, .installment, .cost, .apr').html('-');
-
+console.log(slugs.length)
            if (slugs.length > 0) {
-
+               console.log(333)
                const prefix = widget.find('input[class^="a44-period"]').attr('data-suffix') === ' dni' ? 'day' : 'month';
                const amount = parseInt(widget.find('input[class^="a44-amount"]').val());
                const time = parseInt(widget.find('input[class^="a44-period"]').val());
@@ -249,6 +258,7 @@ export default ({
                }, function(data) {
                 //    console.log(data)
                    $(slugs).each(function(i, name) {
+                       console.log(4444)
                        if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
                            const container = widget.find($('[data-costs="' + name + '"]'));
                            container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof tr['months'] !== 'undefined' ? tr['months'] : 'months') : ' ' + (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days')));
@@ -270,6 +280,8 @@ export default ({
                    });
                });
            }
+            })
+            $('input[type=range].costslider').last().trigger('change');
         }
 
         function getAmount(){

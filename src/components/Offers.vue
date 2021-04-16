@@ -1,8 +1,8 @@
 <template>
 
-    <div class="a44-offers" v-for="offer in offers3" :key="offer.id">
+    <div class="a44-offers" v-for="offer in filteredOffers" :key="offer.id">
    
-      <div class='a44-offer pl promo' :data-id="offer.id" data-costs 
+      <div class='a44-offer pl promo' :data-id="offer.id" data-costs="" 
         :data-minamount="offer.min_amount" :data-maxamount="offer.max_amount"
         :data-minperiod="offer.min_period" :data-maxperiod="offer.max_period" 
         :data-freeamount="offer.first_free_amount"
@@ -115,16 +115,12 @@ export default {
   const store = useStore();
   const input_hidden = computed(()=>store.state.input_hidden);
 
-  let offers3;
-
-  // setTimeout(()=>{
-    offers3 = computed(() => store.getters.filteredOffers({period: 12, amount: 1000}));
-    // console.log(offers3)
-  // },1000)
+  const filteredOffers = computed(() => store.getters.filteredOffers({period: 12, amount: 1000}));
 
 
   onMounted(()=>{
     let tr = $('.translations').val(JSON.stringify(input_hidden.value));
+    // console.log(tr)
     rating(tr)
   })
 
@@ -233,12 +229,8 @@ export default {
     
     /* eslint-enable */
 
-    setTimeout(()=>{
-    // console.log(offers3.value)
-  },1000)
-  console.log(offers3)
       return {
-          offers3
+          filteredOffers
       };
   },
   

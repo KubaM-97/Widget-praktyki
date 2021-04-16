@@ -37,18 +37,19 @@ export default createStore({
       // const $freeAmount = $('[id^="#chck-free-amount-"');
 
       
-      const aa = state.offers
+      const filteredOffers = state.offers
       .filter( offer => offer.min_amount <= p.amount )
       .filter( offer => offer.max_amount >= p.amount )
       .filter( offer => offer.min_period <= p.period )
       .filter( offer => offer.max_period >= p.period )
+      .filter( offer => offer.first_free_amount >= p.amount )
       // .filter( offer => {
       //      if ($freeAmount.is(':checked')){
       //          return parseInt($(this).attr("first_free_amount")) >= p.amount;
       //      }  
       //      return true;
       //  });
-       return aa
+       return filteredOffers
 
     }
   },
@@ -62,13 +63,9 @@ export default createStore({
     }
   },
   actions: {
-    async fetchOffers ( { commit } ) {
-        await axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
-        .then( response => {
-          // console.log("d")
-          // state.offers = response.data
-          commit("setOffers", response.data);
-        })
+    fetchOffers ( { commit } ) {
+        axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
+        .then( response => commit("setOffers", response.data) )
     }
   },
 })
