@@ -1,8 +1,9 @@
 <template>
 
+    {{filteredOffers.length}}
     <div class="a44-offers" v-for="offer in filteredOffers" :key="offer.id">
    
-      <div class='a44-offer pl promo' :data-id="offer.id" data-costs="" 
+      <div class='a44-offer pl promo' :data-id="offer.id" 
         :data-minamount="offer.min_amount" :data-maxamount="offer.max_amount"
         :data-minperiod="offer.min_period" :data-maxperiod="offer.max_period" 
         :data-freeamount="offer.first_free_amount"
@@ -115,9 +116,54 @@ export default {
   const store = useStore();
   const communicates = computed(()=>store.state.communicates);
 
-  const filteredOffers = computed(() => store.getters.filteredOffers({period: 12, amount: 1000}));
+        
+  const filteredOffers = computed(() => store.getters.filteredOffers());
+//  filteredOffers.value.show();
+                // if (filteredOffers.value.length > 0)
+                //     $alert.hide();
+                // else
+                //     $alert.show();
+                // if (filteredOffers.value.length <= 3) {
+                //     if ($('.a44-offer.promo').length) {
+                //         $('.a44-offer.promo').each(function() {
+                //             if ($(this).css('display') == 'none')
+                //                 $(this).insertAfter($promo).show();
+                //         });
+                //         $promo.show();
+                //     }
+                // } else {
+                //     $promo.hide();
+                // }
+  function alerts(){
 
-
+    
+    const $alert = $('<div />').addClass('a44-alert').html(typeof communicates.value['No offers matching criteria'] !== 'undefined' ? communicates.value['No offers matching criteria'] : 'No offers matching criteria').hide();
+  const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
+  
+//   if ($category == 1)
+// $freeAmount.change(filter);
+// else
+// $freeAmount.parent().remove();
+$alert.insertBefore($(".layout").children().last());
+$promo.insertBefore('.costs-info');
+    console.log($alert)
+    if (filteredOffers.value.length > 0)
+                    $alert.hide();
+                else
+                
+                    $alert.show();
+                if (filteredOffers.value.length <= 3) {
+                    if ($('.a44-offer.promo').length) {
+                        $('.a44-offer.promo').each(function() {
+                            if ($(this).css('display') == 'none')
+                                $(this).insertAfter($promo).show();
+                        });
+                        $promo.show();
+                    }
+                } else {
+                    $promo.hide();
+                }
+  }
   onMounted(()=>{
     let tr = $('.translations').val(JSON.stringify(communicates.value));
     // console.log(tr) 
@@ -127,6 +173,7 @@ export default {
   onUpdated(()=>{
     let tr = $('.translations').val(JSON.stringify(communicates.value));  
     rating(tr)
+    alerts()
   })
       
       /* eslint-disable */

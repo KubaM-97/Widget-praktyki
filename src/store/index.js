@@ -6,7 +6,7 @@ export default createStore({
     state: {
       offers: [],
       filterParams: {
-        period: 12,
+        period: -12,
         amount: 1000,
         free_amount: false
       },
@@ -33,10 +33,7 @@ export default createStore({
     }
   },
   getters: {
-    filteredOffers: (state) => (p) => {
-
-      console.log(p)
-      // const $freeAmount = $('[id^="#chck-free-amount-"');
+    filteredOffers: state => () => {
 
       const stateFilterParams = state.filterParams
 
@@ -47,8 +44,6 @@ export default createStore({
       .filter( offer => offer.max_period >= stateFilterParams.period )
       .filter( offer => stateFilterParams.free_amount ? offer.first_free_amount >= stateFilterParams.free_amount : true)
          
-      console.log(filteredOffers.length)
-      console.log(filteredOffers)
        return filteredOffers
 
     }

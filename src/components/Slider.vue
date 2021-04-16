@@ -42,7 +42,7 @@
         <div class="aclr"></div>
         <div class="input-wrapper">
           <input type="range" class="a44-amount-69ac1091c4c51b931f1225a13d0e9e39 costslider" step="50"
-            data-currency=" zł" @input="getAmount"/>
+            data-currency=" zł"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min">100 zł</span>
@@ -84,8 +84,8 @@ export default ({
 
         const slider = ref(null)
         
-        onMounted(()=>{
-     
+        function initSliders(){
+
             const $sliderAmount = $('.amount-container input');
             const $sliderPeriod = $('.period-container input');
             
@@ -102,12 +102,15 @@ export default ({
                 'data-suffix': ' dni',
                 value: '12'
             });
+        }
 
+        function alerts(){
             const $freeAmount = $('[id^="#chck-free-amount-"');
+
             let $category = 1; 
             // const $alert = $('<div />').addClass('a44-alert').html(typeof tr['No offers matching criteria'] !== 'undefined' ? tr['No offers matching criteria'] : 'No offers matching criteria').hide();
             
-            const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
+            // const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
             
             if ($category == 1){
                 $freeAmount.change(filter);
@@ -116,8 +119,14 @@ export default ({
             $freeAmount.parent().remove();
 
             // $alert.insertBefore(slider.value.children.last());
-            $promo.insertBefore('.costs-info');
+            // $promo.insertBefore('.costs-info');
+
+        }
+        
+        onMounted(()=>{
             
+            initSliders();
+            alerts();
             getPeriod();
 
         })
@@ -179,6 +188,7 @@ export default ({
                         }
                     });
                 });
+                
                 $sliderLabelValue.on('blur keyup', function(e) {
                     if (e.type === 'blur' || e.keyCode === 13) {
                         const $this = $(this);
@@ -217,6 +227,7 @@ export default ({
                 });
 
                 $e.on('change', filter);
+                
             });
 
  
@@ -225,115 +236,114 @@ export default ({
 
             $('input[type=range].costslider').change(function() {
 
-            const widget = $('input[type=range].costslider').parents('.a44-widget');
-            const slugs = [];
+                const widget = $('input[type=range].costslider').parents('.a44-widget');
+                const slugs = [];
 
-            store.state.offers.forEach(offer => slugs.push(offer.loando_slug))
-            console.log(slugs)
+                store.state.offers.forEach(offer => slugs.push(offer.loando_slug))
 
-            widget.find('.amount, .time, .installment, .cost, .apr').html('-');
+                widget.find('.amount, .time, .installment, .cost, .apr').html('-');
 
-            if (slugs.length > 0) {
-                const prefix = widget.find('input[class^="a44-period"]').attr('data-suffix') === ' dni' ? 'day' : 'month';
-                const amount = parseInt(widget.find('input[class^="a44-amount"]').val());
-                const time = parseInt(widget.find('input[class^="a44-period"]').val());
-            
-               $.getJSON('https://loando.pl/api/json/costs', {
-                   slug: slugs,
-                   amount: amount,
-                   period: time,
-                   time_type: prefix
-               }, function(data) {
-                   $(slugs).each(function(i, name) {
-                       if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
-                           const container = widget.find($('[data-costs="' + name + '"]'));
-                           container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communicates.value['months'] !== 'undefined' ? communicates.value['months'] : 'months') : ' ' + (typeof communicates.value['days'] !== 'undefined' ? communicates.value['days'] : 'days')));
+                if (slugs.length > 0) {
+                    const prefix = widget.find('input[class^="a44-period"]').attr('data-suffix') === ' dni' ? 'day' : 'month';
+                    const amount = parseInt(widget.find('input[class^="a44-amount"]').val());
+                    const time = parseInt(widget.find('input[class^="a44-period"]').val());
+                
+                $.getJSON('https://loando.pl/api/json/costs', {
+                    slug: slugs,
+                    amount: amount,
+                    period: time,
+                    time_type: prefix
+                }, function(data) {
+                    $(slugs).each(function(i, name) {
+                        if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
+                            const container = widget.find($('[data-costs="' + name + '"]'));
+                            container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communicates.value['months'] !== 'undefined' ? communicates.value['months'] : 'months') : ' ' + (typeof communicates.value['days'] !== 'undefined' ? communicates.value['days'] : 'days')));
 
- 
-                           container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
- 
-                           if (typeof data.costs[name].installment !== 'undefined' && prefix == 'month')
-                               container.find('.installment').html(data.costs[name].installment + '  zł');
-                           if (typeof data.costs[name].cost !== 'undefined' && prefix == 'day')
-                               container.find('.installment').html(data.costs[name].cost + '  zł');
-                               
-                           container.find('.apr').html(((typeof data.costs[name].apr !== 'undefined' && data.costs[name].apr != null) ? data.costs[name].apr + '%' : '<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Sprawdź</a>'));
-                           if (typeof data.costs[name].amount !== 'undefined' && typeof data.costs[name].cost !== 'undefined') {
-                               const installment = container.find('.installment');
-                               installment.html(installment.html() + ' / ' + (Math.round((data.costs[name].cost + data.costs[name].amount) * 100) / 100) + '  zł');
-                           }
-                       }
-                   });
-               });
-           }
-            })
-        }
-            setTimeout(()=>{
-            $('input[type=range].costslider').last().trigger('change');
-
-            },2000)
-        function getAmount(){
-            // slider = $('.a44-slider');
-            // const resultAmount = slider.find(".amount-container input[type=text]");
-            // sliderAmount = slider.find(".amount-container input[type=range]").val();
- 
-            // resultAmount.val(sliderAmount);
-            // display_offers(sliderAmount, sliderPeriod)
-        }
-    const filter = function() {
-        // console.log(11, $('<div />'))
-        const $alert = $('<div />').addClass('a44-alert').html(typeof communicates.value['No offers matching criteria'] !== 'undefined' ? communicates.value['No offers matching criteria'] : 'No offers matching criteria').hide();
-        const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
-  
-        const $sliderAmount = $('.amount-container input.costslider');
-        const $sliderPeriod = $('.period-container input.costslider');
-        const $freeAmount = $('[id^="#chck-free-amount-"');
-
-        const amount = parseInt($sliderAmount.val());
-        const period = parseInt($sliderPeriod.val());
-
-        $(slider.value).find('.a44-offer').hide();
-
-        const $offers = $(".layout").find('.a44-offer').filter(function() {
-         return parseInt($(this).attr("data-minamount")) <= amount;
-        }).filter(function() {
-         return parseInt($(this).attr("data-maxamount")) >= amount;
-        }).filter(function() {
-         return parseInt($(this).attr("data-minperiod")) <= period;
-        }).filter(function() {
-          return parseInt($(this).attr("data-maxperiod")) >= period;
-        }).filter(function() {
-            if ($freeAmount.is(':checked')){
-                return parseInt($(this).attr("data-freeamount")) >= amount;
-            }  
-            return true;
-        });
-        
-        
-        store.commit("updateFilteres", { period, amount })
-
-        $offers.show();
-        if ($offers.length > 0)
-            $alert.hide();
-        else
-            $alert.show();
-        if ($offers.length <= 3) {
-            if ($('.a44-offer.promo').length) {
-                $('.a44-offer.promo').each(function() {
-                    if ($(this).css('display') == 'none')
-                        $(this).insertAfter($promo).show();
+    
+                            container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
+    
+                            if (typeof data.costs[name].installment !== 'undefined' && prefix == 'month')
+                                container.find('.installment').html(data.costs[name].installment + '  zł');
+                            if (typeof data.costs[name].cost !== 'undefined' && prefix == 'day')
+                                container.find('.installment').html(data.costs[name].cost + '  zł');
+                                
+                            container.find('.apr').html(((typeof data.costs[name].apr !== 'undefined' && data.costs[name].apr != null) ? data.costs[name].apr + '%' : '<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Sprawdź</a>'));
+                            if (typeof data.costs[name].amount !== 'undefined' && typeof data.costs[name].cost !== 'undefined') {
+                                const installment = container.find('.installment');
+                                installment.html(installment.html() + ' / ' + (Math.round((data.costs[name].cost + data.costs[name].amount) * 100) / 100) + '  zł');
+                            }
+                        }
+                    });
                 });
-                $promo.show();
             }
-        } else {
-            $promo.hide();
-        }
-};
+                })
+            }
+            setTimeout(()=>{
+                $('input[type=range].costslider').last().trigger('change');
+            },2000)
+
+
+
+            const filter = function() {
+                // console.log(11, $('<div />'))
+                // const $alert = $('<div />').addClass('a44-alert').html(typeof communicates.value['No offers matching criteria'] !== 'undefined' ? communicates.value['No offers matching criteria'] : 'No offers matching criteria').hide();
+                // const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
+        
+                const $sliderAmount = $('.amount-container input.costslider');
+                const $sliderPeriod = $('.period-container input.costslider');
+                // const $freeAmount = $('[id^="#chck-free-amount-"');
+
+                const amount = parseInt($sliderAmount.val());
+                const period = parseInt($sliderPeriod.val());
+
+                $(slider.value).find('.a44-offer').hide();
+
+                // const $offers = $(".layout").find('.a44-offer').filter(function() {
+                // return parseInt($(this).attr("data-minamount")) <= amount;
+                // }).filter(function() {
+                // return parseInt($(this).attr("data-maxamount")) >= amount;
+                // }).filter(function() {
+                // return parseInt($(this).attr("data-minperiod")) <= period;
+                // }).filter(function() {
+                // return parseInt($(this).attr("data-maxperiod")) >= period;
+                // }).filter(function() {
+                //     if ($freeAmount.is(':checked')){
+                //         return parseInt($(this).attr("data-freeamount")) >= amount;
+                //     }  
+                //     return true;
+                // });
+                
+                
+                store.commit("updateFilteres", { period, amount })
+
+                // $offers.show();
+                // if ($offers.length > 0)
+                //     $alert.hide();
+                // else
+                //     $alert.show();
+                // if ($offers.length <= 3) {
+                //     if ($('.a44-offer.promo').length) {
+                //         $('.a44-offer.promo').each(function() {
+                //             if ($(this).css('display') == 'none')
+                //                 $(this).insertAfter($promo).show();
+                //         });
+                //         $promo.show();
+                //     }
+                // } else {
+                //     $promo.hide();
+                // }
+            };
+
+
+
+
+
+
+
 
         return {
             slider,
-            getPeriod,
-            getAmount
+            getPeriod
         }
     }
 })
