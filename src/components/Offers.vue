@@ -114,29 +114,17 @@ export default {
     
   const store = useStore();
   const input_hidden = computed(()=>store.state.input_hidden);
-  // let offers;
-  // console.log("App2",computed(() => store.state.offers))
-
-// const offers2 = computed(() => store.state.offers);
-// console.log(offers2.value.length)
 
   let offers3;
 
-  setTimeout(()=>{
+  // setTimeout(()=>{
     offers3 = computed(() => store.getters.filteredOffers({period: 12, amount: 1000}));
-    console.log(offers3)
-  },1000)
+    // console.log(offers3)
+  // },1000)
 
 
   onMounted(()=>{
-
     let tr = $('.translations').val(JSON.stringify(input_hidden.value));
-    
-    // Here 0 instead of 25 - must be from dispatch -> commit -> state
-    // In getters change - filteredAmount to json data
-    // offers = computed(() => store.getters.filteredOffers);
-
-    // console.log(offers)
     rating(tr)
   })
 
@@ -242,11 +230,13 @@ export default {
                                     return Math.ceil((number - offset) / increment) * increment + offset;
                                 }
     }
-    setTimeout(()=>{
-    console.log(offers3.value)
-  },1000)
-    // console.log()
+    
     /* eslint-enable */
+
+    setTimeout(()=>{
+    // console.log(offers3.value)
+  },1000)
+  console.log(offers3)
       return {
           offers3
       };

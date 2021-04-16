@@ -32,13 +32,7 @@ export default createStore({
     }
   },
   getters: {
-    getTodoById: () => (id) => {
-      return id
-    },
     filteredOffers: (state) => (p) => {
-
-      console.log(p)
-      console.log(state.offers) 
 
       // const $freeAmount = $('[id^="#chck-free-amount-"');
 
@@ -54,32 +48,12 @@ export default createStore({
       //      }  
       //      return true;
       //  });
-      //  console.log(aa)
        return aa
-// console.log($(".layout").find('.a44-offer'))
-      
-      // return $(".layout").find('.a44-offer').filter(function() {
-      //   return parseInt($(this).attr("data-minamount")) <= state.filterParams.amount;
-      //  }).filter(function() {
-      //   return parseInt($(this).attr("data-maxamount")) >= state.filterParams.amount;
-      //  }).filter(function() {
-      //   return parseInt($(this).attr("data-minperiod")) <= state.filterParams.period;
-      //  }).filter(function() {
-      //    return parseInt($(this).attr("data-maxperiod")) >= state.filterParams.period;
-      //  }).filter(function() {
-      //      if ($freeAmount.is(':checked')){
-      //          return parseInt($(this).attr("data-freeamount")) >= state.filterParams.amount;
-      //      }  
-      //      return true;
-      //  });
-      //  return 333
-      //  console.log($offers.length)
 
     }
   },
   mutations: {
     setOffers( state, offers ){
-      console.log("m")
       state.offers = offers;
     },
     updateFilteres(state, value){
