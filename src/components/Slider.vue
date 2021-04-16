@@ -227,35 +227,19 @@ export default ({
 
 
             $('input[type=range].costslider').change(function() {
-                
-                // console.log(store.state)
 
-            //Here doesnt see offers companies
-           const widget = $('input[type=range].costslider').parents('.a44-widget');
-           const slugs = [];
-
-           
-        //    console.log(store.state.offers)
-        // //    offer.loando_slug
-        //    console.log(widget)
-        //    console.log(widget.find('div').length)
-        //    console.log(widget.find('[data-costs]'))
-        //    widget.find('[data-costs]').each(function(i, e) {
-        //     //    console.log("widget")/
-        //        console.log($(e).data())
-        //        slugs.push($(e).data('costs'));
-        //    });
+            const widget = $('input[type=range].costslider').parents('.a44-widget');
+            const slugs = [];
 
             store.state.offers.forEach(offer => slugs.push(offer.loando_slug))
             console.log(slugs)
 
-           widget.find('.amount, .time, .installment, .cost, .apr').html('-');
-// console.log(slugs.length)
-           if (slugs.length > 0) {
-               console.log(333)
-               const prefix = widget.find('input[class^="a44-period"]').attr('data-suffix') === ' dni' ? 'day' : 'month';
-               const amount = parseInt(widget.find('input[class^="a44-amount"]').val());
-               const time = parseInt(widget.find('input[class^="a44-period"]').val());
+            widget.find('.amount, .time, .installment, .cost, .apr').html('-');
+
+            if (slugs.length > 0) {
+                const prefix = widget.find('input[class^="a44-period"]').attr('data-suffix') === ' dni' ? 'day' : 'month';
+                const amount = parseInt(widget.find('input[class^="a44-amount"]').val());
+                const time = parseInt(widget.find('input[class^="a44-period"]').val());
             
                $.getJSON('https://loando.pl/api/json/costs', {
                    slug: slugs,
@@ -263,9 +247,7 @@ export default ({
                    period: time,
                    time_type: prefix
                }, function(data) {
-                   console.log(data)
                    $(slugs).each(function(i, name) {
-                       console.log(4444)
                        if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
                            const container = widget.find($('[data-costs="' + name + '"]'));
                            container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof tr['months'] !== 'undefined' ? tr['months'] : 'months') : ' ' + (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days')));
@@ -302,6 +284,7 @@ export default ({
             // display_offers(sliderAmount, sliderPeriod)
         }
     const filter = function() {
+        console.log(11, $('<div />'))
         const $alert = $('<div />').addClass('a44-alert').html(typeof tr['No offers matching criteria'] !== 'undefined' ? tr['No offers matching criteria'] : 'No offers matching criteria').hide();
         const $promo = $('<div />').addClass('a44-promo').html(typeof tr['We also recommend loans with other parameters'] !== 'undefined' ? tr['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
   
@@ -331,7 +314,6 @@ export default ({
         
         
         store.commit("updateFilteres", { period, amount })
-        // store.commit("setOffers", $offers)
 
         $offers.show();
         if ($offers.length > 0)

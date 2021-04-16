@@ -7,7 +7,8 @@ export default createStore({
       offers: [],
       filterParams: {
         period: 12,
-        amount: 1000
+        amount: 1000,
+        free_amount: false
       },
       input_hidden: {
         "No offers matching criteria" : "Nie znaleziono ofert spełniających podane kryteria",
@@ -34,21 +35,20 @@ export default createStore({
   getters: {
     filteredOffers: (state) => (p) => {
 
+      console.log(p)
       // const $freeAmount = $('[id^="#chck-free-amount-"');
 
-      
+      const stateFilterParams = state.filterParams
+
       const filteredOffers = state.offers
-      .filter( offer => offer.min_amount <= p.amount )
-      .filter( offer => offer.max_amount >= p.amount )
-      .filter( offer => offer.min_period <= p.period )
-      .filter( offer => offer.max_period >= p.period )
-      .filter( offer => offer.first_free_amount >= p.amount )
-      // .filter( offer => {
-      //      if ($freeAmount.is(':checked')){
-      //          return parseInt($(this).attr("first_free_amount")) >= p.amount;
-      //      }  
-      //      return true;
-      //  });
+      .filter( offer => offer.min_amount <= stateFilterParams.amount )
+      .filter( offer => offer.max_amount >= stateFilterParams.amount )
+      .filter( offer => offer.min_period <= stateFilterParams.period )
+      .filter( offer => offer.max_period >= stateFilterParams.period )
+      .filter( offer => stateFilterParams.free_amount ? offer.first_free_amount >= stateFilterParams.free_amount : true)
+         
+      console.log(filteredOffers.length)
+      console.log(filteredOffers)
        return filteredOffers
 
     }
@@ -60,6 +60,7 @@ export default createStore({
     updateFilteres(state, value){
       state.filterParams.period = value.period;
       state.filterParams.amount = value.amount;
+      state.filterParams.free_amount = value.free_amount;
     }
   },
   actions: {
