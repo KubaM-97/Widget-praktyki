@@ -120,7 +120,7 @@ export default {
 
   onMounted(()=>{
     let tr = $('.translations').val(JSON.stringify(communicates.value));
-    // console.log(tr)
+    // console.log(tr) 
     rating(tr)
   })
 
