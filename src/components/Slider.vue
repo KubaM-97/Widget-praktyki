@@ -132,8 +132,7 @@ export default ({
 
                 $(this).parents('.range-wrapper').find('.a44-min').html($category == 3 && $(this).parents('.period-container').length ? '61 ' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days') : ($e.attr('min') + $suffix + $currency));
                 $(this).parents('.range-wrapper').find('.a44-max').html($e.attr('max') + $suffix + $currency);
-
-                
+          
                 $e.on('input', function() {
                     const $this = $(this);
                     const to = parseInt($this.val());
@@ -227,15 +226,14 @@ export default ({
                         time_type: prefix
                     }, function(data) {
 
-                        //amount, installment, apr
                         $(slugs).each(function(i, name) {
-                            // console.log("name",name)
+                            
                             if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
                                 const container = widget.find($('[data-costs="' + name + '"]'));
-                                // console.log(widget)
-                                console.log(container)
-                                container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communications.value['months'] !== 'undefined' ? communications.value['months'] : 'months') : ' ' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days')));
 
+                                console.log(container.length)
+
+                                container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communications.value['months'] !== 'undefined' ? communications.value['months'] : 'months') : ' ' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days')));
                                 container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
         
                                 if (typeof data.costs[name].installment !== 'undefined' && prefix == 'month')
@@ -244,8 +242,13 @@ export default ({
                                     container.find('.installment').html(data.costs[name].cost + '  zł');
                                     
                                 container.find('.apr').html(((typeof data.costs[name].apr !== 'undefined' && data.costs[name].apr != null) ? data.costs[name].apr + '%' : '<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Sprawdź</a>'));
+                                // console.log(    typeof data.costs[name].amount)
+                                // console.log(    typeof data.costs[name].cost)
                                 if (typeof data.costs[name].amount !== 'undefined' && typeof data.costs[name].cost !== 'undefined') {
+                                    console.log(7777)
                                     const installment = container.find('.installment');
+                                    console.log(container)
+                                    console.log(installment)
                                     installment.html(installment.html() + ' / ' + (Math.round((data.costs[name].cost + data.costs[name].amount) * 100) / 100) + '  zł');
                                 }
                             }

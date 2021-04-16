@@ -163,6 +163,7 @@ export default {
         $('.rating').on('mousemove', ratingHover);
         $('.rating').on('mouseleave', ratingLeave);
         $(".rate").on('click', ratingClick)
+        // calculateFill(e, $(".rate"))
     },2200)
     
      
