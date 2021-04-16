@@ -2,6 +2,7 @@
   <div class="a44-slider" ref="slider">
     <div class="period-container">
       <div class="range-wrapper">
+
         <div class="period-name-container">
           <span class="name">Okres pożyczki</span>
         </div>
@@ -55,13 +56,14 @@
     <div class="aclr"></div>
 
     <div class="free-amount-container">
-      <!-- <input type="checkbox" id="chck-free-amount-12392823e6dbdfb0f22e748cfdf47832" ref="freeAmount"> -->
       <input type="checkbox" id="chck-free-amount-12392823e6dbdfb0f22e748cfdf47832" ref="freeAmount"/>
       <span class="checkmark"></span>
       <label for="chck-free-amount"> Pokaż tylko darmowe pożyczki</label>
       <input type="hidden" class="translations" value="" />
     </div>
+
   </div>
+
 </template>
 
 <script>
@@ -77,16 +79,17 @@ export default ({
     setup() {
         
         const store = useStore();
-        const input_hidden = computed(()=>store.state.input_hidden);
+        const communicates = computed(()=>store.state.communicates);
 
         const slider = ref(null)
-
-        let tr;
+        
+        console.log(communicates.value["days"])
+        // let tr;
 
         onMounted(()=>{
 
-            tr = $('.translations').val(JSON.stringify(input_hidden.value));    
-           
+            // tr = $('.translations').val(JSON.stringify(communicates.value));    
+       
             const $sliderAmount = $('.amount-container input');
             const $sliderPeriod = $('.period-container input');
             
@@ -108,7 +111,7 @@ export default ({
             let $category = 1; 
             // const $alert = $('<div />').addClass('a44-alert').html(typeof tr['No offers matching criteria'] !== 'undefined' ? tr['No offers matching criteria'] : 'No offers matching criteria').hide();
             
-            const $promo = $('<div />').addClass('a44-promo').html(typeof tr['We also recommend loans with other parameters'] !== 'undefined' ? tr['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
+            const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
             
             if ($category == 1){
                 $freeAmount.change(filter);
@@ -142,15 +145,15 @@ export default ({
 
             $([$sliderPeriod, $sliderAmount, $freeAmount]).each(function(i, $e) {
                 
-                const $suffixDays = JSON.parse(tr.val())["days"]
-                const $suffixMonth = JSON.parse(tr.val())["month"]
+                const $suffixDays = communicates.value["days"]
+                const $suffixMonth = communicates.value["month"]
 
                 $suffix = $e.attr('data-suffix') == undefined ? '' : ($e.attr('data-suffix') == ' dni' ? ' ' + $suffixDays : ' ' + $suffixMonth);
               
                 const $currency = $e.attr('data-currency') == undefined ? '' : $e.attr('data-currency');
                 const $sliderLabelValue = $(this).parents('.range-wrapper').find('input.value');
 
-                $(this).parents('.range-wrapper').find('.a44-min').html($category == 3 && $(this).parents('.period-container').length ? '61 ' + (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days') : ($e.attr('min') + $suffix + $currency));
+                $(this).parents('.range-wrapper').find('.a44-min').html($category == 3 && $(this).parents('.period-container').length ? '61 ' + (typeof communicates.value['days'] !== 'undefined' ? communicates.value['days'] : 'days') : ($e.attr('min') + $suffix + $currency));
                 $(this).parents('.range-wrapper').find('.a44-max').html($e.attr('max') + $suffix + $currency);
 
                 $e.on('input', function() {
@@ -171,11 +174,11 @@ export default ({
                             $sliderLabelValue.val(to);
                             if ($sliderLabelValue.parents('.period-value-container').length && $category == 3 && to == 2) {
                                 $sliderLabelValue.val('61');
-                                let $span = $('<span>' + (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days') + '</span>');
+                                let $span = $('<span>' + (typeof communicates.value['days'] !== 'undefined' ? communicates.value['days'] : 'days') + '</span>');
                                 $sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append($sliderLabelValue).append($span);
                             } else if ($sliderLabelValue.parents('.period-value-container').length) {
                                 $sliderLabelValue.val(to);
-                                let $span = $('<span>' + ($e.attr('data-suffix') == ' dni' ? (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days') : (typeof tr['months'] !== 'undefined' ? tr['months'] : 'months')) + '</span>');
+                                let $span = $('<span>' + ($e.attr('data-suffix') == ' dni' ? (typeof communicates.value['days'] !== 'undefined' ? communicates.value['days'] : 'days') : (typeof communicates.value['months'] !== 'undefined' ? communicates.value['months'] : 'months')) + '</span>');
                                 $sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append($sliderLabelValue).append($span);
                             }
                         }
@@ -250,7 +253,7 @@ export default ({
                    $(slugs).each(function(i, name) {
                        if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
                            const container = widget.find($('[data-costs="' + name + '"]'));
-                           container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof tr['months'] !== 'undefined' ? tr['months'] : 'months') : ' ' + (typeof tr['days'] !== 'undefined' ? tr['days'] : 'days')));
+                           container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communicates.value['months'] !== 'undefined' ? communicates.value['months'] : 'months') : ' ' + (typeof communicates.value['days'] !== 'undefined' ? communicates.value['days'] : 'days')));
  
                            container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
  
@@ -285,8 +288,8 @@ export default ({
         }
     const filter = function() {
         console.log(11, $('<div />'))
-        const $alert = $('<div />').addClass('a44-alert').html(typeof tr['No offers matching criteria'] !== 'undefined' ? tr['No offers matching criteria'] : 'No offers matching criteria').hide();
-        const $promo = $('<div />').addClass('a44-promo').html(typeof tr['We also recommend loans with other parameters'] !== 'undefined' ? tr['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
+        const $alert = $('<div />').addClass('a44-alert').html(typeof communicates.value['No offers matching criteria'] !== 'undefined' ? communicates.value['No offers matching criteria'] : 'No offers matching criteria').hide();
+        const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
   
         const $sliderAmount = $('.amount-container input.costslider');
         const $sliderPeriod = $('.period-container input.costslider');

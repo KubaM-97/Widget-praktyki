@@ -113,19 +113,19 @@ export default {
   setup() {
     
   const store = useStore();
-  const input_hidden = computed(()=>store.state.input_hidden);
+  const communicates = computed(()=>store.state.communicates);
 
   const filteredOffers = computed(() => store.getters.filteredOffers({period: 12, amount: 1000}));
 
 
   onMounted(()=>{
-    let tr = $('.translations').val(JSON.stringify(input_hidden.value));
+    let tr = $('.translations').val(JSON.stringify(communicates.value));
     // console.log(tr)
     rating(tr)
   })
 
   onUpdated(()=>{
-    let tr = $('.translations').val(JSON.stringify(input_hidden.value));  
+    let tr = $('.translations').val(JSON.stringify(communicates.value));  
     rating(tr)
   })
       
