@@ -83,13 +83,8 @@ export default ({
 
         const slider = ref(null)
         
-        console.log(communicates.value["days"])
-        // let tr;
-
         onMounted(()=>{
-
-            // tr = $('.translations').val(JSON.stringify(communicates.value));    
-       
+     
             const $sliderAmount = $('.amount-container input');
             const $sliderPeriod = $('.period-container input');
             
@@ -122,9 +117,8 @@ export default ({
             // $alert.insertBefore(slider.value.children.last());
             $promo.insertBefore('.costs-info');
             
-            
-      
             getPeriod();
+
         })
        
 
@@ -221,7 +215,6 @@ export default ({
                     }
                 });
 
-                // // do not delete
                 $e.on('change', filter);
             });
 
@@ -287,7 +280,7 @@ export default ({
             // display_offers(sliderAmount, sliderPeriod)
         }
     const filter = function() {
-        console.log(11, $('<div />'))
+        // console.log(11, $('<div />'))
         const $alert = $('<div />').addClass('a44-alert').html(typeof communicates.value['No offers matching criteria'] !== 'undefined' ? communicates.value['No offers matching criteria'] : 'No offers matching criteria').hide();
         const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
   
