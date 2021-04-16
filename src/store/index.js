@@ -1,25 +1,16 @@
 import { createStore } from 'vuex'
-<<<<<<< HEAD
 // import $ from 'jquery'
-=======
-
->>>>>>> 99d6ad9040d92362dd40e477bf93820323fb5cc9
 import axios from 'axios'
 
 export default createStore({
     state: {
       offers: [],
-<<<<<<< HEAD
       filterParams: {
         period: 12,
         amount: 1000,
         free_amount: false
       },
       communicates: {
-=======
-      
-      input_hidden: {
->>>>>>> 99d6ad9040d92362dd40e477bf93820323fb5cc9
         "No offers matching criteria" : "Nie znaleziono ofert spełniających podane kryteria",
         "We also recommend loans with other parameters":"Polecamy też pożyczki o innych parametrach",
         "days":"dni",
