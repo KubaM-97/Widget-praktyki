@@ -130,11 +130,9 @@ export default {
   })
       
       /* eslint-disable */
-       function rating(){
+       function rating(tr){
       // STARS DISPLAY - START
                                 $('.rating').on('mousemove', function(e) {
-                                  // console.log(e)
-                                  // console.log($(this))
                                     const fill = calculateFill(e, $(this));
                                     $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
                                 });

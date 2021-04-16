@@ -52,7 +52,6 @@
         <div class="aclr"></div>
       </div>
     </div>
-
     <div class="aclr"></div>
 
     <div class="free-amount-container">
@@ -229,21 +228,29 @@ export default ({
 
             $('input[type=range].costslider').change(function() {
                 
+                // console.log(store.state)
+
+            //Here doesnt see offers companies
            const widget = $('input[type=range].costslider').parents('.a44-widget');
            const slugs = [];
 
            
-           console.log(widget)
-           console.log(widget.find('div').length)
-           console.log(widget.find('[data-costs]'))
-           widget.find('[data-costs]').each(function(i, e) {
-            //    console.log("widget")/
-               console.log($(e).data())
-               slugs.push($(e).data('costs'));
-           });
+        //    console.log(store.state.offers)
+        // //    offer.loando_slug
+        //    console.log(widget)
+        //    console.log(widget.find('div').length)
+        //    console.log(widget.find('[data-costs]'))
+        //    widget.find('[data-costs]').each(function(i, e) {
+        //     //    console.log("widget")/
+        //        console.log($(e).data())
+        //        slugs.push($(e).data('costs'));
+        //    });
+
+            store.state.offers.forEach(offer => slugs.push(offer.loando_slug))
+            console.log(slugs)
 
            widget.find('.amount, .time, .installment, .cost, .apr').html('-');
-console.log(slugs.length)
+// console.log(slugs.length)
            if (slugs.length > 0) {
                console.log(333)
                const prefix = widget.find('input[class^="a44-period"]').attr('data-suffix') === ' dni' ? 'day' : 'month';
@@ -256,7 +263,7 @@ console.log(slugs.length)
                    period: time,
                    time_type: prefix
                }, function(data) {
-                //    console.log(data)
+                   console.log(data)
                    $(slugs).each(function(i, name) {
                        console.log(4444)
                        if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
@@ -281,9 +288,11 @@ console.log(slugs.length)
                });
            }
             })
-            $('input[type=range].costslider').last().trigger('change');
         }
+            setTimeout(()=>{
+            $('input[type=range].costslider').last().trigger('change');
 
+            },2000)
         function getAmount(){
             // slider = $('.a44-slider');
             // const resultAmount = slider.find(".amount-container input[type=text]");

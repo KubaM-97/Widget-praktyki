@@ -3,7 +3,7 @@
   <div style="max-width: 1200px; margin: auto; width: 100%;">
       
       <div id="layout-2" class="a44-widget layout" ref="container">
-          <slider-component title="This is a static title" :container="container"/>
+          <slider-component/>
           <offers-component/>
       </div>
 
@@ -15,7 +15,7 @@
 
 import Slider from '@/components/Slider.vue';
 import Offers from '@/components/Offers.vue';
-import { onMounted, ref, } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { useStore } from 'vuex';
 export default{
@@ -23,7 +23,6 @@ export default{
     "offers-component": Offers,
     "slider-component": Slider,
   },
- 
   setup(){
 
     const container = ref(null);
