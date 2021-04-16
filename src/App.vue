@@ -15,11 +15,8 @@
 
 import Slider from '@/components/Slider.vue';
 import Offers from '@/components/Offers.vue';
-<<<<<<< HEAD
+
 import { onMounted, ref } from 'vue';
-=======
-import { onMounted, ref, } from 'vue';
->>>>>>> 99d6ad9040d92362dd40e477bf93820323fb5cc9
 
 import { useStore } from 'vuex';
 export default{
@@ -27,10 +24,6 @@ export default{
     "offers-component": Offers,
     "slider-component": Slider,
   },
-<<<<<<< HEAD
-=======
- 
->>>>>>> 99d6ad9040d92362dd40e477bf93820323fb5cc9
   setup(){
 
     const container = ref(null);
@@ -66,21 +59,12 @@ export default{
     }
 
 
-<<<<<<< HEAD
     const store = useStore();
     store.dispatch("fetchOffers");
     
     onMounted(()=>{
       screen_size();
     })
-=======
-      const store = useStore();
-      store.dispatch("fetchOffers");
-      
-      onMounted(()=>{
-        screen_size();
-      })
->>>>>>> 99d6ad9040d92362dd40e477bf93820323fb5cc9
 
     return{
       container
