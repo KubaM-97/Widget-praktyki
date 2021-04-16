@@ -280,66 +280,6 @@ export default ({
             // resultAmount.val(sliderAmount);
             // display_offers(sliderAmount, sliderPeriod)
         }
-
-/* eslint-disable */
-        function display_offers(sliderAmount, sliderPeriod){
-
-                const $category = 1;
-
-                const $alert = $('<div />').addClass('a44-alert').html(typeof tr['No offers matching criteria'] !== 'undefined' ? tr['No offers matching criteria'] : 'No offers matching criteria').hide();
-                const $promo = $('<div />').addClass('a44-promo').html(typeof tr['We also recommend loans with other parameters'] !== 'undefined' ? tr['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
-
-                const freeAmount = slider.find('.free-amount-container');
-
-                if ($category == 1)
-                    freeAmount.change(filter);
-                else
-                    freeAmount.parent().remove();
-                $alert.insertBefore(slider.children().last());
-                $promo.insertBefore('.costs-info');
-
-                const filter = function() {
-        
-                    const amount = parseInt(sliderAmount.val());
-                    const period = parseInt(sliderPeriod.val());
-
-                    slider.find('.a44-offer').hide();
-
-                    const $offers = slider.find('.a44-offer').filter(function() {
-                        return parseInt($(this).attr("data-minamount")) <= amount;
-                    }).filter(function() {
-                        return parseInt($(this).attr("data-maxamount")) >= amount;
-                    }).filter(function() {
-                        return parseInt($(this).attr("data-minperiod")) <= period;
-                    }).filter(function() {
-                        return parseInt($(this).attr("data-maxperiod")) >= period;
-                    }).filter(function() {
-                        if (freeAmount.is(':checked'))
-                            return parseInt($(this).attr("data-freeamount")) >= amount;
-                        return true;
-                    });
-                    $offers.show();
-                    if ($offers.length > 0)
-                        $alert.hide();
-                    else
-                        $alert.show();
-                    if ($offers.length <= 3) {
-                        if ($('.a44-offer.promo').length) {
-                            $('.a44-offer.promo').each(function() {
-                                if ($(this).css('display') == 'none')
-                                    $(this).insertAfter($promo).show();
-                            });
-                            $promo.show();
-                        }
-                    } else {
-                            $('.a44-offer.promo').hide();
-                        $promo.hide();
-                    }
-    }
-        }
-
-/* eslint-enable */
-     
     const filter = function() {
         const $alert = $('<div />').addClass('a44-alert').html(typeof tr['No offers matching criteria'] !== 'undefined' ? tr['No offers matching criteria'] : 'No offers matching criteria').hide();
         const $promo = $('<div />').addClass('a44-promo').html(typeof tr['We also recommend loans with other parameters'] !== 'undefined' ? tr['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
@@ -369,11 +309,9 @@ export default ({
         });
         
         
+        store.commit("updateFilteres", { period, amount })
+        // store.commit("setOffers", $offers)
 
-        store.commit("setOffers", $offers)
-
-        console.log($offers.length)
-        console.log(store.state.offers.length)
         $offers.show();
         if ($offers.length > 0)
             $alert.hide();
@@ -393,7 +331,7 @@ export default ({
 };
 
         return {
-                        slider,
+            slider,
             getPeriod,
             getAmount
         }

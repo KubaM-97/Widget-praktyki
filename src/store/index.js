@@ -1,11 +1,14 @@
 import { createStore } from 'vuex'
-
+// import $ from 'jquery'
 import axios from 'axios'
 
 export default createStore({
     state: {
       offers: [],
-      
+      filterParams: {
+        period: 12,
+        amount: 1000
+      },
       input_hidden: {
         "No offers matching criteria" : "Nie znaleziono ofert spełniających podane kryteria",
         "We also recommend loans with other parameters":"Polecamy też pożyczki o innych parametrach",
@@ -29,19 +32,66 @@ export default createStore({
     }
   },
   getters: {
-    filteredOffers(state){
-      return state.offers.filter( offer => offer.id>100)
+    getTodoById: () => (id) => {
+      return id
+    },
+    filteredOffers: (state) => (p) => {
+
+      console.log(p)
+      console.log(state.offers) 
+
+      // const $freeAmount = $('[id^="#chck-free-amount-"');
+
+      
+      const aa = state.offers
+      .filter( offer => offer.min_amount <= p.amount )
+      .filter( offer => offer.max_amount >= p.amount )
+      .filter( offer => offer.min_period <= p.period )
+      .filter( offer => offer.max_period >= p.period )
+      // .filter( offer => {
+      //      if ($freeAmount.is(':checked')){
+      //          return parseInt($(this).attr("first_free_amount")) >= p.amount;
+      //      }  
+      //      return true;
+      //  });
+      //  console.log(aa)
+       return aa
+// console.log($(".layout").find('.a44-offer'))
+      
+      // return $(".layout").find('.a44-offer').filter(function() {
+      //   return parseInt($(this).attr("data-minamount")) <= state.filterParams.amount;
+      //  }).filter(function() {
+      //   return parseInt($(this).attr("data-maxamount")) >= state.filterParams.amount;
+      //  }).filter(function() {
+      //   return parseInt($(this).attr("data-minperiod")) <= state.filterParams.period;
+      //  }).filter(function() {
+      //    return parseInt($(this).attr("data-maxperiod")) >= state.filterParams.period;
+      //  }).filter(function() {
+      //      if ($freeAmount.is(':checked')){
+      //          return parseInt($(this).attr("data-freeamount")) >= state.filterParams.amount;
+      //      }  
+      //      return true;
+      //  });
+      //  return 333
+      //  console.log($offers.length)
+
     }
   },
   mutations: {
-    setOffers( state, offers){
+    setOffers( state, offers ){
+      console.log("m")
       state.offers = offers;
+    },
+    updateFilteres(state, value){
+      state.filterParams.period = value.period;
+      state.filterParams.amount = value.amount;
     }
   },
   actions: {
-    fetchOffers:( { commit } )=>{
-        axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
+    async fetchOffers ( { commit } ) {
+        await axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
         .then( response => {
+          // console.log("d")
           // state.offers = response.data
           commit("setOffers", response.data);
         })

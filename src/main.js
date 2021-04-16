@@ -10,5 +10,5 @@ createApp(App).use(store)
 // .use(router)
 .mount('#app')
 
-require("./detectContainerWidth.js")
+// require("./detectContainerWidth.js")
 require("./style.css")
