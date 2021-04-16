@@ -10,7 +10,7 @@ export default createStore({
         amount: 1000,
         free_amount: false
       },
-      communicates: {
+      communications: {
         "No offers matching criteria" : "Nie znaleziono ofert spełniających podane kryteria",
         "We also recommend loans with other parameters":"Polecamy też pożyczki o innych parametrach",
         "days":"dni",

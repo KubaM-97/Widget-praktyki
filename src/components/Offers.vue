@@ -3,7 +3,7 @@
     {{filteredOffers.length}}
     <div class="a44-offers" v-for="offer in filteredOffers" :key="offer.id">
    
-      <div class='a44-offer pl promo' :data-id="offer.id" 
+      <div class='a44-offer pl promo' :data-id="offer.id" data-costs=''
         :data-minamount="offer.min_amount" :data-maxamount="offer.max_amount"
         :data-minperiod="offer.min_period" :data-maxperiod="offer.max_period" 
         :data-freeamount="offer.first_free_amount"
@@ -114,166 +114,115 @@ export default {
   setup() {
     
   const store = useStore();
-  const communicates = computed(()=>store.state.communicates);
+  const communications = computed(()=>store.state.communications);
 
         
   const filteredOffers = computed(() => store.getters.filteredOffers());
-//  filteredOffers.value.show();
-                // if (filteredOffers.value.length > 0)
-                //     $alert.hide();
-                // else
-                //     $alert.show();
-                // if (filteredOffers.value.length <= 3) {
-                //     if ($('.a44-offer.promo').length) {
-                //         $('.a44-offer.promo').each(function() {
-                //             if ($(this).css('display') == 'none')
-                //                 $(this).insertAfter($promo).show();
-                //         });
-                //         $promo.show();
-                //     }
-                // } else {
-                //     $promo.hide();
-                // }
+
   function alerts(){
 
-    
-    const $alert = $('<div />').addClass('a44-alert').html(typeof communicates.value['No offers matching criteria'] !== 'undefined' ? communicates.value['No offers matching criteria'] : 'No offers matching criteria').hide();
-  const $promo = $('<div />').addClass('a44-promo').html(typeof communicates.value['We also recommend loans with other parameters'] !== 'undefined' ? communicates.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
-  
-//   if ($category == 1)
-// $freeAmount.change(filter);
-// else
-// $freeAmount.parent().remove();
-$alert.insertBefore($(".layout").children().last());
-$promo.insertBefore('.costs-info');
-    console.log($alert)
-    if (filteredOffers.value.length > 0)
-                    $alert.hide();
-                else
-                
-                    $alert.show();
-                if (filteredOffers.value.length <= 3) {
-                    if ($('.a44-offer.promo').length) {
-                        $('.a44-offer.promo').each(function() {
-                            if ($(this).css('display') == 'none')
-                                $(this).insertAfter($promo).show();
-                        });
-                        $promo.show();
-                    }
-                } else {
-                    $promo.hide();
-                }
+    const $alert = $('<div />').addClass('a44-alert').html(typeof communications.value['No offers matching criteria'] !== 'undefined' ? communications.value['No offers matching criteria'] : 'No offers matching criteria').hide();
+    const $promo = $('<div />').addClass('a44-promo').html(typeof communications.value['We also recommend loans with other parameters'] !== 'undefined' ? communications.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
+    // const $freeAmount = $('[id^="#chck-free-amount-"');
+    // let $category = 1; 
+    //   if ($category == 1)
+    // $freeAmount.change(filter);
+    // else
+    // $freeAmount.parent().remove();
+    $alert.insertBefore($(".layout").children().last());
+    $promo.insertBefore('.costs-info');
+    filteredOffers.value.length > 0 ? $alert.hide(): $alert.show();
+
+    if (filteredOffers.value.length <= 3) {
+        if ($('.a44-offer.promo').length) {
+            $('.a44-offer.promo').each(function() {
+                if ($(this).css('display') == 'none')
+                    $(this).insertAfter($promo).show();
+            });
+            $promo.show();
+        }
+    } else {
+        $promo.hide();
+    }
+    const $sliderAmount = $('.amount-container input.costslider');
+    const $sliderPeriod = $('.period-container input.costslider');
+
+    const amount = parseInt($sliderAmount.val());
+    const period = parseInt($sliderPeriod.val());
+
+    store.commit("updateFilteres", { period, amount });
+
   }
+  
   onMounted(()=>{
-    let tr = $('.translations').val(JSON.stringify(communicates.value));
+    // let tr = $('.translations').val(JSON.stringify(communications.value));
     // console.log(tr) 
-    rating(tr)
+    // rating(tr)
+    // rating(communications.value)
+    setTimeout(()=>{
+        $('.rating').on('mousemove', ratingHover);
+        $('.rating').on('mouseleave', ratingLeave);
+        $(".rate").on('click', ratingClick)
+    },2200)
+    
+     
   })
 
-  onUpdated(()=>{
-    let tr = $('.translations').val(JSON.stringify(communicates.value));  
-    rating(tr)
+  onUpdated( () => {
+    // let tr = $('.translations').val(JSON.stringify(communications.value));  
+    // rating(tr)
     alerts()
   })
       
-      /* eslint-disable */
-       function rating(tr){
-      // STARS DISPLAY - START
-                                $('.rating').on('mousemove', function(e) {
-                                    const fill = calculateFill(e, $(this));
-                                    $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
-                                });
-                                $('.rating').on('mouseleave', function() {
-                                    $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
-                                });
-                                // STARS DISPLAY - END
     
 
-                                const rates = document.querySelectorAll(".rate");
+    // function rating(tr){    
+        //  
+    // }
+    function ratingClick(e){
+          let tr = $('.translations').val(JSON.stringify(communications.value));
 
-                                rates.forEach(rate=>{
-                                  rate.addEventListener("click", function(e){
-
-                                    var elem = $(this);
-                                    var fill = calculateFill(e, $(this).parents('.rating'));
-                                    var rate = Math.ceil(fill / 100 * 5);
-                                    var url = $(location).attr('href');
-                                    setTimeout(function() {
-                                        $.ajax({
-                                            url: 'https://widgets.aff44.com/vote?save_rate=' + elem.parents('.a44-offer').attr('data-id') + '&rate=' + rate,
-                                            dataType: 'jsonp',
-                                        }).done(function(data) {
-                                            if (data.status === 'success') {
-                                                var new_rate = Number(data.new_rate);
-                                                elem.parents('.a44-offer').find('.offer-rate').html(new_rate.toFixed(1));
-                                                var vote_count = data.votes_count.toString();
-                                                var last_char = vote_count.slice(-1);
-                                                elem.parents('.a44-offer').find('.votes-count').html('(<b>' + data.votes_count + '</b> ' + (last_char == '1' ? (typeof tr['vote'] !== 'undefined' ? tr['vote'] : 'vote') : (['2', '3', '4'].includes(last_char) ? (typeof tr['votes'] !== 'undefined' ? tr['votes'] : 'votes') : (typeof tr['votes2'] !== 'undefined' ? tr['votes2'] : 'votes2'))) + ')');
-                                                //console.log((new_rate.toFixed(1) / 5 * 100));
-                                                elem.parents('.a44-offer').find('.rate').css('width', (new_rate.toFixed(1) / 5 * 100) + '%')
-                                            }
-                                        });
-                                    }, Math.random() * 300);
-
-
-                                  })
-                                })
-
-                                // // STARS CLICK - START
-                                // $('.rate').on('click', function(e) {
-                                //     // const elem = $(this);
-                                //     // const fill = calculateFill(e, $(this).parents('.rating'));
-                                //     // const rate = Math.ceil(fill / 100 * 5);
-                                //     setTimeout(function() {
-                                //         $.ajax({
-                                //             url: 'https://widgets.aff44.com/vote?save_rate=' + elem.parents('.a44-offer').attr('data-id') + '&rate=' + rate,
-                                //             dataType: 'jsonp',
-                                //         }).done(function(data) {
-                                //             if (data.status === 'success') {
-                                //                 const new_rate = Number(data.new_rate);
-                                //                 elem.parents('.a44-offer').find('.offer-rate').html(new_rate.toFixed(1));
-                                //                 const vote_count = data.votes_count.toString();
-                                //                 const last_char = vote_count.slice(-1);
-                                //                 elem.parents('.a44-offer').find('.votes-count').html('(<b>' + data.votes_count + '</b> ' + (last_char == '1' ? (typeof tr['vote'] !== 'undefined' ? tr['vote'] : 'vote') : (['2', '3', '4'].includes(last_char) ? (typeof tr['votes'] !== 'undefined' ? tr['votes'] : 'votes') : (typeof tr['votes2'] !== 'undefined' ? tr['votes2'] : 'votes2'))) + ')');
-                                //                 elem.parents('.a44-offer').find('.rate').css('width', (new_rate.toFixed(1) / 5 * 100) + '%')
-                                //             }
-                                //         });
-                                //     }, Math.random() * 300);
-
-                                // });
-                                // // STARS CLICK - END
-
-                               
-                                function calculateFill(e, container) {
-
-
-                                   var startCoord = container.offset().left;
-                                  var endCoord = container.offset().left + container.width();
-                                  var cursorPosX = e.pageX;
-                                  var relativeWidth = endCoord - startCoord;
-                                  var relativeCursorPosX = cursorPosX - startCoord;
-                                  var percentFilled = relativeCursorPosX / relativeWidth * 100;
-                                  // console.log(startCoord,endCoord, cursorPosX,relativeWidth,relativeCursorPosX,percentFilled)
-                                  return percentFilled;
-
-
-                                    // const startCoord = container.offsetLeft ;
-                                    // const endCoord = container.offsetLeft + container.clientWidth;
-                                    // const cursorPosX = e.pageX;
-                                    // const relativeWidth = endCoord - startCoord;
-                                    // const relativeCursorPosX = cursorPosX - startCoord;
-                                    // const percentFilled = relativeCursorPosX / relativeWidth * 100;
-                                    // console.log(container.offsetLef, endCoord, cursorPosX, relativeWidth, relativeCursorPosX, percentFilled)
-                                    // return percentFilled;
-                                }
-
-                                function round(number, increment, offset) {
-                                    return Math.ceil((number - offset) / increment) * increment + offset;
-                                }
+        const elem = $(this);
+            const fill = calculateFill(e, $(this).parents('.rating'));
+            const rate = Math.ceil(fill / 100 * 5);
+            setTimeout(function() {
+                $.ajax({
+                    url: 'https://widgets.aff44.com/vote?save_rate=' + elem.parents('.a44-offer').attr('data-id') + '&rate=' + rate,
+                    dataType: 'jsonp',
+                }).done(function(data) {
+                    if (data.status === 'success') {
+                        const new_rate = Number(data.new_rate);
+                        elem.parents('.a44-offer').find('.offer-rate').html(new_rate.toFixed(1));
+                        const vote_count = data.votes_count.toString();
+                        const last_char = vote_count.slice(-1);
+                        elem.parents('.a44-offer').find('.votes-count').html('(<b>' + data.votes_count + '</b> ' + (last_char == '1' ? (typeof tr['vote'] !== 'undefined' ? tr['vote'] : 'vote') : (['2', '3', '4'].includes(last_char) ? (typeof tr['votes'] !== 'undefined' ? tr['votes'] : 'votes') : (typeof tr['votes2'] !== 'undefined' ? tr['votes2'] : 'głosów'))) + ')');
+                        elem.parents('.a44-offer').find('.rate').css('width', (new_rate.toFixed(1) / 5 * 100) + '%')
+                    }
+                });
+            }, Math.random() * 300);
     }
-    
-    /* eslint-enable */
 
+    function ratingHover(e){
+        const fill = calculateFill(e, $(this));
+        $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
+    }
+
+    function ratingLeave(){
+        $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
+    }
+    function calculateFill(e, container) {
+      const startCoord = container.offset().left;
+      const endCoord = container.offset().left + container.width();
+      const cursorPosX = e.pageX;
+      const relativeWidth = endCoord - startCoord;
+      const relativeCursorPosX = cursorPosX - startCoord;
+      const percentFilled = relativeCursorPosX / relativeWidth * 100;
+      return percentFilled;
+    }
+
+    function round(number, increment, offset) {
+      return Math.ceil((number - offset) / increment) * increment + offset;
+    }
       return {
           filteredOffers
       };
