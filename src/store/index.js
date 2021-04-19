@@ -1,5 +1,4 @@
 import { createStore } from 'vuex'
-// import $ from 'jquery'
 import axios from 'axios'
 
 export default createStore({
@@ -44,7 +43,6 @@ export default createStore({
       .filter( offer => offer.max_period >= stateFilterParams.period )
       .filter( offer => stateFilterParams.free_amount ? offer.first_free_amount >= stateFilterParams.free_amount : true)
          
-      // console.log(filteredOffers.length)
        return filteredOffers
 
     }
