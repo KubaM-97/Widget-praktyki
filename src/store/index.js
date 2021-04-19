@@ -34,16 +34,8 @@ export default createStore({
   },
   getters: {
     filteredOffers: state => () => {
-      // console.log(state.filterParams)
+      
       const stateFilterParams = state.filterParams
-      // 
-      // console.log("state", state.offers.length)
-      // console.log(state.offers)
-
-      // const aa = state.offers
-      // .filter( offer => offer.max_amount >= stateFilterParams.amount )
-      // // console.log(aa.length)
-
 
       const filteredOffers = state.offers
       .filter( offer => offer.min_amount <= stateFilterParams.amount )
@@ -63,9 +55,9 @@ export default createStore({
     }
   },
   actions: {
-    fetchOffers ( { commit } ) {
-        axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
-        .then( response => commit("setOffers", response.data) )
+    async fetchOffers ( { commit } ) {
+      await axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
+        .then( response =>  commit("setOffers", response.data) )
     }
   },
 })

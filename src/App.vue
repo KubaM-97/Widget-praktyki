@@ -1,14 +1,18 @@
 <template>
+    <suspense>
+      <template #default>
+        <div style="max-width: 1200px; margin: auto; width: 100%;">
+          
+            <div id="layout-2" class="a44-widget layout" ref="container">
+                <slider-component/>
+                <offers-component/>
+            </div>
 
-  <div style="max-width: 1200px; margin: auto; width: 100%;">
-      
-      <div id="layout-2" class="a44-widget layout" ref="container">
-          <slider-component/>
-          <offers-component/>
-      </div>
-
-  </div>
- 
+        </div>
+  
+     </template>
+     
+  </suspense>
 </template>
 
 <script>
@@ -18,7 +22,7 @@ import Offers from '@/components/Offers.vue';
 
 import { onMounted, ref } from 'vue';
 
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 export default{
   components: {
     "offers-component": Offers,
@@ -59,13 +63,16 @@ export default{
     }
 
 
-    const store = useStore();
-    store.dispatch("fetchOffers");
+    // const store = useStore();
     
     onMounted(()=>{
       screen_size();
     })
 
+    console.log(1)
+    // await store.dispatch("fetchOffers");
+    console.log(2)
+    
     return{
       container
     }
