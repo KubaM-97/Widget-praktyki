@@ -514,7 +514,7 @@ input[type="range"]:focus::-ms-fill-lower {
     padding: 8px 14px;
 }
 
-.a44-widget .a44-alert {
+.a44-alert {
     border: 3px solid red;
     padding: 8px;
     border-radius: 5px;
@@ -523,7 +523,7 @@ input[type="range"]:focus::-ms-fill-lower {
     margin-bottom: 16px;
 }
 
-.a44-widget .a44-promo {
+.a44-promo {
     border: 3px solid green;
     padding: 8px;
     border-radius: 5px;

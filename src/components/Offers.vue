@@ -1,6 +1,5 @@
 <template>
 
-    {{filteredOffers.length}}
     <div class="a44-offers" v-for="offer in filteredOffers" :key="offer.id">
    
       <div class='a44-offer pl promo' :data-id="offer.id" :data-costs="offer.loando_slug"
@@ -30,8 +29,8 @@
                     <div class="stars">
                       <div class="rank-rate">
                         <span>
-                          <div class="rating">
-                            <div class="rate" style=""></div>
+                          <div class="rating" @mousemove="ratingHover" @mouseleave="ratingLeave">
+                            <div class="rate" @click="ratingClick"></div>
                           </div>
                         </span>
                       </div>
@@ -98,134 +97,99 @@
       </div>
 
     </div>
+
+    <p class="costs-info">
+      *Powyższe wartości są mają charakter orientacyjny i nie stanowią oferty w rozumieniu art. 66 Kodeksu Cywilnego. 
+      Aby potwierdzić koszt pożyczki kliknij na "Weź pożyczkę". 
+      Minimalna kwota pożyczki zaczyna się od 100 zł, a maksymalna do 60000 zł. 
+      Minimalne RRSO: 0%, maksymalne RRSO: 323667%
+    </p>
+    
+    <teleport to="body">
+        <div class="a44-alert" v-if="showAlert">{{messages['No offers matching criteria']}}</div>
+        <div ref="promo_message" class="a44-promo" v-if="showPromo">{{messages['We also recommend loans with other parameters']}}</div>
+    </teleport>
+    
     
 </template>
 
 <script>
 
-import { computed, onMounted, onUpdated } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
+import mixinRating from "../assets/mixins/rating.js"
 
-import $ from "jquery";
+// import $ from "jquery";
 export default {
   
   name: "offers",
 
   setup() {
     
-  const store = useStore();
-  const communications = computed(()=>store.state.communications);
+  const showAlert = ref(false);
+  const showPromo = ref(false);
+  const promo_message = ref(null);
 
-        
+  const store = useStore();
+  const messages = computed(()=>store.state.messages);
   const filteredOffers = computed(() => store.getters.filteredOffers());
 
-  function alerts(){
+  watch(filteredOffers, ()=>{
+    manageAlertWindow()
+    managePromoWindow()
+  })
 
-    const $alert = $('<div />').addClass('a44-alert').html(typeof communications.value['No offers matching criteria'] !== 'undefined' ? communications.value['No offers matching criteria'] : 'No offers matching criteria').hide();
-    const $promo = $('<div />').addClass('a44-promo').html(typeof communications.value['We also recommend loans with other parameters'] !== 'undefined' ? communications.value['We also recommend loans with other parameters'] : 'We also recommend loans with other parameters').hide();
-    // const $freeAmount = $('[id^="#chck-free-amount-"');
-    // let $category = 1; 
-    //   if ($category == 1)
-    // $freeAmount.change(filter);
-    // else
-    // $freeAmount.parent().remove();
-    $alert.insertBefore($(".layout").children().last());
-    $promo.insertBefore('.costs-info');
-    filteredOffers.value.length > 0 ? $alert.hide(): $alert.show();
+  function manageAlertWindow(){
+      filteredOffers.value.length > 0 ? showAlert.value = false: showAlert.value  = true;
+  }
+
+  function managePromoWindow(){
+
+            
 
     if (filteredOffers.value.length <= 3) {
-        if ($('.a44-offer.promo').length) {
-            $('.a44-offer.promo').each(function() {
-                if ($(this).css('display') == 'none')
-                    $(this).insertAfter($promo).show();
-            });
-            $promo.show();
+        
+        if (filteredOffers.value.length) {
+            showPromo.value = true;
+            const remainingOffers = []
+            for(const key of store.state.offers){
+              if(!store.getters.filteredOffers().includes(key)){
+                remainingOffers.push(key)
+              }
+            }
+            remainingOffers.forEach(offer => {
+              promo_message.value.innnerHTML += offer
+            })
+            // console.log(promo_message.value)
+            // promo_message.value.after(remainingOffers)
+            // console.log(remainingOffers, promo_message.value)
         }
     } else {
-        $promo.hide();
+        showPromo.value = false
     }
-    const $sliderAmount = $('.amount-container input.costslider');
-    const $sliderPeriod = $('.period-container input.costslider');
-
-    const amount = parseInt($sliderAmount.val());
-    const period = parseInt($sliderPeriod.val());
-
-    store.commit("updateFilteres", { period, amount });
-
   }
-  
+
   onMounted(()=>{
-    // let tr = $('.translations').val(JSON.stringify(communications.value));
-    // console.log(tr) 
-    // rating(tr)
-    // rating(communications.value)
+    // console.log(mixinRating().ratingHover)
     setTimeout(()=>{
-        $('.rating').on('mousemove', ratingHover);
-        $('.rating').on('mouseleave', ratingLeave);
-        $(".rate").on('click', ratingClick)
-        // calculateFill(e, $(".rate"))
+        // $('.rating').on('mousemove', mixinRating.ratingHover);
+        // $('.rating').on('mouseleave', mixinRating.ratingLeave);
+        // $(".rate").on('click', mixinRating.ratingClick)
+        // console.log(111)
+        // $('.rating').trigger('mousemove');
+        // console.log(222)
     },2200)
     
      
   })
 
-  onUpdated( () => {
-    // let tr = $('.translations').val(JSON.stringify(communications.value));  
-    // rating(tr)
-    alerts()
-  })
-      
-    
-
-    // function rating(tr){    
-        //  
-    // }
-    function ratingClick(e){
-          let tr = $('.translations').val(JSON.stringify(communications.value));
-
-        const elem = $(this);
-            const fill = calculateFill(e, $(this).parents('.rating'));
-            const rate = Math.ceil(fill / 100 * 5);
-            setTimeout(function() {
-                $.ajax({
-                    url: 'https://widgets.aff44.com/vote?save_rate=' + elem.parents('.a44-offer').attr('data-id') + '&rate=' + rate,
-                    dataType: 'jsonp',
-                }).done(function(data) {
-                    if (data.status === 'success') {
-                        const new_rate = Number(data.new_rate);
-                        elem.parents('.a44-offer').find('.offer-rate').html(new_rate.toFixed(1));
-                        const vote_count = data.votes_count.toString();
-                        const last_char = vote_count.slice(-1);
-                        elem.parents('.a44-offer').find('.votes-count').html('(<b>' + data.votes_count + '</b> ' + (last_char == '1' ? (typeof tr['vote'] !== 'undefined' ? tr['vote'] : 'vote') : (['2', '3', '4'].includes(last_char) ? (typeof tr['votes'] !== 'undefined' ? tr['votes'] : 'votes') : (typeof tr['votes2'] !== 'undefined' ? tr['votes2'] : 'głosów'))) + ')');
-                        elem.parents('.a44-offer').find('.rate').css('width', (new_rate.toFixed(1) / 5 * 100) + '%')
-                    }
-                });
-            }, Math.random() * 300);
-    }
-
-    function ratingHover(e){
-        const fill = calculateFill(e, $(this));
-        $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
-    }
-
-    function ratingLeave(){
-        $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
-    }
-    function calculateFill(e, container) {
-      const startCoord = container.offset().left;
-      const endCoord = container.offset().left + container.width();
-      const cursorPosX = e.pageX;
-      const relativeWidth = endCoord - startCoord;
-      const relativeCursorPosX = cursorPosX - startCoord;
-      const percentFilled = relativeCursorPosX / relativeWidth * 100;
-      return percentFilled;
-    }
-
-    function round(number, increment, offset) {
-      return Math.ceil((number - offset) / increment) * increment + offset;
-    }
       return {
-          filteredOffers
+        showAlert,
+        showPromo,
+        filteredOffers,
+        messages,
+        promo_message,
+         ...mixinRating(),
       };
   },
   

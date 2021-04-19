@@ -17,7 +17,7 @@
 
         <div class="input-wrapper">
           <input type="range" class="a44-period-69ac1091c4c51b931f1225a13d0e9e39 costslider"
-            step="1"  data-suffix=" dni"/>
+            step="1"  data-suffix=" dni" v-model.number="filterParams.period"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min">1 dni</span>
@@ -42,7 +42,7 @@
         <div class="aclr"></div>
         <div class="input-wrapper">
           <input type="range" class="a44-amount-69ac1091c4c51b931f1225a13d0e9e39 costslider" step="50"
-            data-currency=" zł"/>
+            data-currency=" zł" v-model.number="filterParams.amount"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min">100 zł</span>
@@ -56,7 +56,8 @@
     <div class="aclr"></div>
 
     <div class="free-amount-container">
-      <input type="checkbox" id="chck-free-amount-12392823e6dbdfb0f22e748cfdf47832" ref="freeAmount"/>
+      <input type="checkbox" id="chck-free-amount-12392823e6dbdfb0f22e748cfdf47832" ref="freeAmount"
+       v-model="filterParams.free_amount"/>
       <span class="checkmark"></span>
       <label for="chck-free-amount"> Pokaż tylko darmowe pożyczki</label>
       <input type="hidden" class="translations" value="" />
@@ -78,10 +79,13 @@ export default ({
 
     setup() {
         
+
         const store = useStore();
-        const communications = computed(()=>store.state.communications);
+        const messages = computed(()=>store.state.messages);
         const slider = ref(null)
         
+        const filterParams = computed(()=>store.state.filterParams).value
+
         function slidersAttr(){
 
             const $sliderAmount = $('.amount-container input');
@@ -109,57 +113,6 @@ export default ({
             getPeriod();
         })
 
-        // function testChange(){
-        //     const widget = $('input[type=range].costslider').parents('.a44-widget');
-        //         const slugs = [];
-
-
-        //         store.state.offers.forEach(offer => {
-        //             slugs.push(offer.loando_slug)
-        //         })
-
-        //         widget.find('.amount, .time, .installment, .cost, .apr').html('-');
-
-        //         if (slugs.length > 0) {
-        //             const prefix = widget.find('input[class^="a44-period"]').attr('data-suffix') === ' dni' ? 'day' : 'month';
-        //             const amount = parseInt(widget.find('input[class^="a44-amount"]').val());
-        //             const time = parseInt(widget.find('input[class^="a44-period"]').val());
-                
-        //             $.getJSON('https://loando.pl/api/json/costs', {
-        //                 slug: slugs,
-        //                 amount: amount,
-        //                 period: time,
-        //                 time_type: prefix
-        //             }, function(data) {
-
-        //                 $(slugs).each(function(i, name) {
-                            
-        //                     if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
-        //                         const container = widget.find($('[data-costs]'));
-
-
-        //                         container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communications.value['months'] !== 'undefined' ? communications.value['months'] : 'months') : ' ' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days')));
-        //                         container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
-        
-        //                         if (typeof data.costs[name].installment !== 'undefined' && prefix == 'month')
-        //                             container.find('.installment').html(data.costs[name].installment + '  zł');
-        //                         if (typeof data.costs[name].cost !== 'undefined' && prefix == 'day')
-        //                             container.find('.installment').html(data.costs[name].cost + '  zł');
-                                    
-        //                         container.find('.apr').html(((typeof data.costs[name].apr !== 'undefined' && data.costs[name].apr != null) ? data.costs[name].apr + '%' : '<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Sprawdź</a>'));
-                             
-        //                         if (typeof data.costs[name].amount !== 'undefined' && typeof data.costs[name].cost !== 'undefined') {
-                                    
-        //                             const installment = container.find('.installment');
-                                    
-        //                             console.log(installment)
-        //                             installment.html(installment.html() + ' / ' + (Math.round((data.costs[name].cost + data.costs[name].amount) * 100) / 100) + '  zł');
-        //                         }
-        //                     }
-        //                 })
-        //             })
-        //         }
-        // }
 
         function getPeriod(){
              
@@ -173,15 +126,15 @@ export default ({
 
             $([$sliderPeriod, $sliderAmount, $freeAmount]).each(function(i, $e) {
                 
-                const $suffixDays = communications.value["days"]
-                const $suffixMonth = communications.value["month"]
+                const $suffixDays = messages.value["days"]
+                const $suffixMonth = messages.value["month"]
 
                 $suffix = $e.attr('data-suffix') == undefined ? '' : ($e.attr('data-suffix') == ' dni' ? ' ' + $suffixDays : ' ' + $suffixMonth);
               
                 const $currency = $e.attr('data-currency') == undefined ? '' : $e.attr('data-currency');
                 const $sliderLabelValue = $(this).parents('.range-wrapper').find('input.value');
 
-                $(this).parents('.range-wrapper').find('.a44-min').html($category == 3 && $(this).parents('.period-container').length ? '61 ' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days') : ($e.attr('min') + $suffix + $currency));
+                $(this).parents('.range-wrapper').find('.a44-min').html($category == 3 && $(this).parents('.period-container').length ? '61 ' + (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days') : ($e.attr('min') + $suffix + $currency));
                 $(this).parents('.range-wrapper').find('.a44-max').html($e.attr('max') + $suffix + $currency);
           
                 $e.on('input', function() {
@@ -202,11 +155,11 @@ export default ({
                             $sliderLabelValue.val(to);
                             if ($sliderLabelValue.parents('.period-value-container').length && $category == 3 && to == 2) {
                                 $sliderLabelValue.val('61');
-                                let $span = $('<span>' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days') + '</span>');
+                                let $span = $('<span>' + (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days') + '</span>');
                                 $sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append($sliderLabelValue).append($span);
                             } else if ($sliderLabelValue.parents('.period-value-container').length) {
                                 $sliderLabelValue.val(to);
-                                let $span = $('<span>' + ($e.attr('data-suffix') == ' dni' ? (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days') : (typeof communications.value['months'] !== 'undefined' ? communications.value['months'] : 'months')) + '</span>');
+                                let $span = $('<span>' + ($e.attr('data-suffix') == ' dni' ? (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days') : (typeof messages.value['months'] !== 'undefined' ? messages.value['months'] : 'months')) + '</span>');
                                 $sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append($sliderLabelValue).append($span);
                             }
                         }
@@ -252,11 +205,6 @@ export default ({
                 
             });
 
- 
-
-
-
-            // $('input[type=range].costslider').change(testChange);
 
             $('input[type=range].costslider').change(function() {
 
@@ -279,24 +227,13 @@ export default ({
                         time_type: prefix
                     }, function(data) {
 
-                        // const container = widget.find($('[data-costs]'));
-                        // console.log(store.state.offers)
-                        // store.state.offers.forEach(offer=>{
-                        //     container.each(()=>{
-
-                        //     })
-                        //     container.attr("data-costs", luando_slug)
-                        // })
-                        // console.log(22222222222222,name)
                         $(slugs).each(function(i, name) {
-                            // console.log(33333333333333333,name)
                             if (typeof data.costs !== 'undefined' && typeof data.costs[name] !== 'undefined') {
                                 
                                 // here need to add some names to the container
                                 var container = widget.find($('[data-costs="' + name + '"]'));                            
 
-                                console.log(widget)
-                                container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof communications.value['months'] !== 'undefined' ? communications.value['months'] : 'months') : ' ' + (typeof communications.value['days'] !== 'undefined' ? communications.value['days'] : 'days')));
+                                container.find('.amount').html((typeof data.costs[name].amount !== 'undefined' ? data.costs[name].amount : '*' + amount) + '  zł /' + (typeof data.costs[name].time !== 'undefined' ? data.costs[name].time : time) + (prefix == 'month' ? ' ' + (typeof messages.value['months'] !== 'undefined' ? messages.value['months'] : 'months') : ' ' + (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days')));
                                 container.find('.installment').html('<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Zobacz</a>');
         
                                 if (typeof data.costs[name].installment !== 'undefined' && prefix == 'month')
@@ -305,14 +242,10 @@ export default ({
                                     container.find('.installment').html(data.costs[name].cost + '  zł');
                                     
                                 container.find('.apr').html(((typeof data.costs[name].apr !== 'undefined' && data.costs[name].apr != null) ? data.costs[name].apr + '%' : '<a href="' + container.find('.cta-link').attr('href') + '" target="_blank" style="color:#fff;">Sprawdź</a>'));
-                                // console.log(    typeof data.costs[name].amount)
-                                // console.log(    typeof data.costs[name].cost)
                                 if (typeof data.costs[name].amount !== 'undefined' && typeof data.costs[name].cost !== 'undefined') {
                                    
                                     const installment = container.find('.installment');
-                                    // console.log(installment)
                                     installment.html(installment.html() + ' / ' + (Math.round((data.costs[name].cost + data.costs[name].amount) * 100) / 100) + '  zł');
-                                    console.log(installment)
                                 }
                             }
                         })
@@ -328,6 +261,7 @@ export default ({
 
 
         return {
+          filterParams,
             slider,
             getPeriod
         }

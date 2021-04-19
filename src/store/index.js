@@ -6,11 +6,11 @@ export default createStore({
     state: {
       offers: [],
       filterParams: {
-        period: -12,
+        period: 12,
         amount: 1000,
         free_amount: false
       },
-      communications: {
+      messages: {
         "No offers matching criteria" : "Nie znaleziono ofert spełniających podane kryteria",
         "We also recommend loans with other parameters":"Polecamy też pożyczki o innych parametrach",
         "days":"dni",
@@ -34,8 +34,16 @@ export default createStore({
   },
   getters: {
     filteredOffers: state => () => {
-
+      // console.log(state.filterParams)
       const stateFilterParams = state.filterParams
+      // 
+      // console.log("state", state.offers.length)
+      // console.log(state.offers)
+
+      // const aa = state.offers
+      // .filter( offer => offer.max_amount >= stateFilterParams.amount )
+      // // console.log(aa.length)
+
 
       const filteredOffers = state.offers
       .filter( offer => offer.min_amount <= stateFilterParams.amount )
@@ -44,6 +52,7 @@ export default createStore({
       .filter( offer => offer.max_period >= stateFilterParams.period )
       .filter( offer => stateFilterParams.free_amount ? offer.first_free_amount >= stateFilterParams.free_amount : true)
          
+      // console.log(filteredOffers.length)
        return filteredOffers
 
     }
@@ -51,11 +60,6 @@ export default createStore({
   mutations: {
     setOffers( state, offers ){
       state.offers = offers;
-    },
-    updateFilteres(state, value){
-      state.filterParams.period = value.period;
-      state.filterParams.amount = value.amount;
-      state.filterParams.free_amount = value.free_amount;
     }
   },
   actions: {
