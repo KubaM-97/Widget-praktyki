@@ -9,7 +9,7 @@
 
         <div class="period-value-container">
           <span class="value-wrapper">
-            <input type="text" class="value" readonly value="" />dni
+            <input type="text" class="value" readonly value=12 />dni
           </span>
         </div>
 
@@ -17,7 +17,7 @@
 
         <div class="input-wrapper">
           <input type="range" class="a44-period-69ac1091c4c51b931f1225a13d0e9e39 costslider"
-            step="1"  data-suffix=" dni" v-model.number="filterParams.period"/>
+            step="1"  data-suffix=" dni" v-model.number="filterParams.period" min=1 max=65 @input="getPeriod"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min">1 dni</span>
@@ -36,13 +36,13 @@
         </div>
         <div class="amount-value-container">
           <span class="value-wrapper">
-            <input type="text" class="value" value="" /> zł
+            <input type="text" class="value" value=1000 /> zł
           </span>
         </div>
         <div class="aclr"></div>
         <div class="input-wrapper">
           <input type="range" class="a44-amount-69ac1091c4c51b931f1225a13d0e9e39 costslider" step="50"
-            data-currency=" zł" v-model.number="filterParams.amount"/>
+            data-currency=" zł" v-model.number="filterParams.amount" min=100 max=60000 />
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min">100 zł</span>
@@ -86,40 +86,58 @@ export default ({
         
         const filterParams = computed(()=>store.state.filterParams).value
 
-        function slidersAttr(){
+        const $category = ref(1).value;
+        // let $suffix = ref(' dni').value;
 
-            const $sliderAmount = $('.amount-container input');
-            const $sliderPeriod = $('.period-container input');
-            
-            $sliderAmount.attr({
-                min: 100,
-                max: 60000,
-                'data-currency': ' zł',
-                value: '1000'
-            });
-            
-            $sliderPeriod.attr({
-                min: 1,
-                max: 65,
-                'data-suffix': ' dni',
-                value: '12'
-            });
-        
-        }
-       
 
         onMounted(()=>{
-            slidersAttr();
             getPeriod();
         })
 
+        function sliderMoveAnimation(){
+          
+          // const $sliderLabelValue = $(this).parents('.range-wrapper').find('input.value');
+          // const $this = $(this);
+          // const to = parseInt($this.val());
+          // const from = parseInt($sliderLabelValue.val());
+            const sliderLabelValue = document.querySelector('.range-wrapper input[type="text"].value');
+            const to = parseInt(this.value)
+            const from = parseInt(sliderLabelValue.value)
+            
+            $({
+                counter: from
+            }).animate({
+                counter: to
+            }, {
+                duration: 500,
+                easing: 'swing',
+                step: function() {
+                    sliderLabelValue.value = Math.round(this.counter);
+                },
+                done: function() {
+                    sliderLabelValue.value = to;
+                    if (sliderLabelValue.parents('.period-value-container').length && $category == 3 && to == 2) {
+                        sliderLabelValue.value = '61';
+                        const $span = `<span>  + 
+                                      ${ (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days')} 
+                                      </span>`;
+                        sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append(sliderLabelValue).append($span);
+                    } else if (sliderLabelValue.parents('.period-value-container').length) {
+                        sliderLabelValue.value = to;
+                        // let $span = $('<span>' + ($e.attr('data-suffix') == ' dni' ? (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days') : (typeof messages.value['months'] !== 'undefined' ? messages.value['months'] : 'months')) + '</span>');
+                        // sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append(sliderLabelValue).append($span);
+                    }
+                }
+            });
+
+        }
 
         function getPeriod(){
              
-            const $category = 1;
-            let $suffix = ' dni';
 
             const $sliderAmount = $('.amount-container input.costslider');
+            // const $sliderAmount = document.querySelector('.amount-container input.costslider');
+            
             const $sliderPeriod = $('.period-container input.costslider');
             const $freeAmount = $('[id^="#chck-free-amount-"');
            
@@ -129,6 +147,7 @@ export default ({
                 const $suffixDays = messages.value["days"]
                 const $suffixMonth = messages.value["month"]
 
+                let $suffix = ref(' dni').value;
                 $suffix = $e.attr('data-suffix') == undefined ? '' : ($e.attr('data-suffix') == ' dni' ? ' ' + $suffixDays : ' ' + $suffixMonth);
               
                 const $currency = $e.attr('data-currency') == undefined ? '' : $e.attr('data-currency');
@@ -137,34 +156,11 @@ export default ({
                 $(this).parents('.range-wrapper').find('.a44-min').html($category == 3 && $(this).parents('.period-container').length ? '61 ' + (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days') : ($e.attr('min') + $suffix + $currency));
                 $(this).parents('.range-wrapper').find('.a44-max').html($e.attr('max') + $suffix + $currency);
           
-                $e.on('input', function() {
-                    const $this = $(this);
-                    const to = parseInt($this.val());
-                    const from = parseInt($sliderLabelValue.val());
-                    $({
-                        counter: from
-                    }).animate({
-                        counter: to
-                    }, {
-                        duration: 500,
-                        easing: 'swing',
-                        step: function() {
-                            $sliderLabelValue.val(Math.round(this.counter));
-                        },
-                        done: function() {
-                            $sliderLabelValue.val(to);
-                            if ($sliderLabelValue.parents('.period-value-container').length && $category == 3 && to == 2) {
-                                $sliderLabelValue.val('61');
-                                let $span = $('<span>' + (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days') + '</span>');
-                                $sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append($sliderLabelValue).append($span);
-                            } else if ($sliderLabelValue.parents('.period-value-container').length) {
-                                $sliderLabelValue.val(to);
-                                let $span = $('<span>' + ($e.attr('data-suffix') == ' dni' ? (typeof messages.value['days'] !== 'undefined' ? messages.value['days'] : 'days') : (typeof messages.value['months'] !== 'undefined' ? messages.value['months'] : 'months')) + '</span>');
-                                $sliderLabelValue.parents('.period-value-container').find('.value-wrapper').html('').append($sliderLabelValue).append($span);
-                            }
-                        }
-                    });
-                });
+                $e.on('input', sliderMoveAnimation);
+
+                // $e.on('input', function() {
+                    
+                // });
                 
                 $sliderLabelValue.on('blur keyup', function(e) {
                     if (e.type === 'blur' || e.keyCode === 13) {
@@ -252,7 +248,8 @@ export default ({
                     })
                 }
             })
-        setTimeout(()=>$('input[type=range].costslider').last().trigger('change'),2000)
+        
+        $('input[type=range].costslider').last().trigger('change')
         
         }
 
@@ -266,5 +263,6 @@ export default ({
             getPeriod
         }
     }
+    
 })
 </script>

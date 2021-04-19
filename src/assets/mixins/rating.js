@@ -30,27 +30,50 @@ export default function mixinRating(){
             }, Math.random() * 300);
     }
 
-    function ratingHover(e){
-
-        const fill = calculateFill(e, e.target.parentNode);
-        console.log(e.target)
-        console.log(round(fill, 20, 0))
-        e.target.style.width = round(fill, 20, 0) + '%';
+    function ratingHover(e, x){
+        console.log(e)
+        
+        const fill = calculateFill(e, x);
+        // const fill = calculateFill(x);
+        console.log(fill)
+        $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
         // const fill = calculateFill(e, $(this));
-        // $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
     }
 
-    function ratingLeave(){
-      console.log("ratingL")
+    function ratingLeave(e){
         $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
+        e.target.style.width = $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%';
     }
 
+  //   function calculateFill(e, container) {
+  //     console.log(container)
+  //     var startCoord = container.offset().left;
+  //     var endCoord = container.offset().left + container.width();
+  //     console.log(startCoord, endCoord)
+  //     var cursorPosX = e.pageX;
+  //     var relativeWidth = endCoord - startCoord;
+  //     var relativeCursorPosX = cursorPosX - startCoord;
+  //     // console.log(startCoord, endCoord)
+  //     var percentFilled = relativeCursorPosX / relativeWidth * 100;
+  //     return percentFilled;
+  // }
     function calculateFill(e, container) {
-      const startCoord = container.offsetLeft;
-      const endCoord = container.offsetLeft + container.offsetWidth;
+      // const aa = []
+      // console.log(container.offsetLeft)
+      // console.log(container.offset().left)
+      const startCoord = container.offset().left;
+      const endCoord = startCoord + container.width();
       const cursorPosX = e.pageX;
       const relativeWidth = endCoord - startCoord;
       const relativeCursorPosX = cursorPosX - startCoord;
+      // console.log(e.target.style.width)
+      // console.log(container.offsetLeft)
+      // console.log(container.offsetWidth)
+      // console.log(document.getElementsByTagName("BODY")[0].offsetWidth)
+      // console.log(e.target.parentNode)
+      
+      // console.log(aa)
+      console.log(e, relativeWidth, relativeCursorPosX)
       const percentFilled = relativeCursorPosX / relativeWidth * 100;
       return percentFilled;
     }

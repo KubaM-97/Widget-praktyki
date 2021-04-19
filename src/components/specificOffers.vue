@@ -77,7 +77,7 @@
             </div>
 
             <div class="offer-cta">
-              <a href="#" class="cta-link" target="_blank">
+              <a :href="offer.link" class="cta-link" target="_blank">
                 <span class="cta-icon"></span>
                 <span class="cta-text">Weź pożyczkę</span>
               </a>
@@ -89,7 +89,7 @@
           <div class="offer-description">
             {{ offer.description }}
             <br>
-            *Minimalne RRSO: 0%, maksymalne RRSO: 000000%
+            *Minimalne RRSO: {{ offer.minrrso }}%, maksymalne RRSO: {{ offer.maxrrso }}%
           </div>
 
           <div class="aclr"></div>
@@ -103,43 +103,40 @@
 
 <script>
 
-import { computed, onMounted} from 'vue';
+import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
+// import $ from 'jquery'
 
-// import $ from "jquery";
 export default {
   
-  name: "offers",
-props: {
-    sourceOffers: Array
-  },
-  setup(props) {
-    console.log(props)
+    name: "offers",
+    props: {
+        sourceOffers: Array
+    },
 
-  const store = useStore();
-  const messages = computed(()=>store.state.messages);
+    setup() {
 
+        const store = useStore();
+        const messages = computed(()=>store.state.messages);
 
-  onMounted(()=>{
-    // console.log(mixinRating().ratingHover)
-    setTimeout(()=>{
-        // $('.rating').on('mousemove', mixinRating.ratingHover);
-        // $('.rating').on('mouseleave', mixinRating.ratingLeave);
-        // $(".rate").on('click', mixinRating.ratingClick)
-        // console.log(111)
-        // $('.rating').trigger('mousemove');
-        // console.log(222)
-    },2200)
-    
-     
-  })
+        onMounted(()=>{
+          // console.log($('.rating'))
+          //  $("li").each(function(){
+          //     alert($(this).text())
+          //   });
+          // $('.rating').each( function() {
+            mixinRating().ratingHover()
+          // })
+        })
+        
 
-      return {
-        messages,
-         ...mixinRating(),
-      };
-  },
+        return {
+            messages,
+            ...mixinRating(),
+        };
+
+    },
   
 };
 
