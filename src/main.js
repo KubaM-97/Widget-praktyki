@@ -4,4 +4,4 @@ import store from './store'
 
 createApp(App).use(store).mount('#app')
 
-require("./style.css")
+// require("./style.css")
