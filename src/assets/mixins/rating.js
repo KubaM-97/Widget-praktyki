@@ -37,8 +37,7 @@ export default function mixinRating(){
     }
 
     function ratingLeave(){
-        // $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
-        // e.target.style.width = $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%';
+        $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%'); 
     }
 
     function calculateFill(e, container) {
