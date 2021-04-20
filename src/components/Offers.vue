@@ -10,8 +10,8 @@
     </p>
     
     <teleport to="body">
-        <div class="a44-alert" v-if="showAlert">{{messages['No offers matching criteria']}}</div>
-        <div ref="promo_message" class="a44-promo" v-if="showPromo">{{messages['We also recommend loans with other parameters']}}</div>
+        <div class="a44-alert" v-if="showAlert">{{translations['No offers matching criteria']}}</div>
+        <div class="a44-promo" v-if="showPromo">{{translations['We also recommend loans with other parameters']}}</div>
     </teleport>
 
     <specificOffers-component v-if="showRemainingOffers" :sourceOffers="remainingOffers"/>
@@ -37,15 +37,11 @@ export default {
       const showAlert = ref(false);
       const showPromo = ref(false);
       const showRemainingOffers = ref(false);
-      const promo_message = ref(null);
       const remainingOffers = ref([])
 
       const store = useStore();
-      const messages = computed(()=>store.state.messages);
+      const translations = computed(()=>store.state.translations);
       const filteredOffers = computed(() => store.getters.filteredOffers());
-
-      // console.log()
-
       
       watch(filteredOffers, ()=>{
         manageAlertWindow()
@@ -85,8 +81,7 @@ export default {
         showAlert,
         showPromo,
         filteredOffers,
-        messages,
-        promo_message,
+        translations,
         showRemainingOffers,
         remainingOffers
       };

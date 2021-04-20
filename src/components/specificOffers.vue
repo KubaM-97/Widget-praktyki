@@ -29,14 +29,15 @@
                     <div class="stars">
                       <div class="rank-rate">
                         <span>
-                          <div class="rating" @mousemove="ratingHover" @mouseleave="ratingLeave">
-                            <div class="rate" @click="ratingClick"></div>
+                          <div class="rating" ref="aa" @mousemove="ratingHover" @mouseleave="ratingLeave">
+                            <div class="rate" :style="{ width: calculateFill() + '%' }" @click="ratingClick"></div>
+                            <!-- <div class="rate" :style="{ width: calculateFill($event.currentTarget) + '%' }" @click="ratingClick"></div> -->
                           </div>
                         </span>
                       </div>
                     </div>
                     <div class="votes-count">
-                      (<b>{{ offer.votes_count }}</b> głosów)
+                      (<b>{{ offer.votes_count }}</b> {{ translations.votes2 }})
                     </div>
                   </div>
                   <div class="likes-container">
@@ -46,17 +47,16 @@
               </div>
               <div class="aclr"></div>
             </div>
-
             <div class="offer-params">
               <div class="offer-param-container">
                 <div class="offer-param">
-                  <div class="offer-param-name">Kwota / okres</div>
-                  <div class="offer-param-value amount"> *1000 zł /12dni</div>
+                  <div class="offer-param-name"> {{ translations["Amount / period"] }} </div>
+                  <div class="offer-param-value amount"> *1000{{ arr.currency }} / 12{{arr.suffix }}</div>
                 </div>
               </div>
               <div class="offer-param-container">
                 <div class="offer-param">
-                  <div class="offer-param-name">KOSZT / ŁĄCZNIE</div>
+                  <div class="offer-param-name"> {{ translations["COST / TOTAL"] }} </div>
                   <div class="offer-param-value installment">
                     <a href="#" style="color:#fff">Zobacz</a>
                   </div>
@@ -65,7 +65,7 @@
               </div>
               <div class="offer-param-container">
                 <div class="offer-param">
-                  <div class="offer-param-name">RRSO</div>
+                  <div class="offer-param-name"> {{ translations.APR }} </div>
                   <div class="offer-param-value apr">
                     <a href="#" style="color:#fff">Sprawdź</a>
                   </div>
@@ -79,7 +79,7 @@
             <div class="offer-cta">
               <a :href="offer.link" class="cta-link" target="_blank">
                 <span class="cta-icon"></span>
-                <span class="cta-text">Weź pożyczkę</span>
+                <span class="cta-text"> {{ translations["Take a loan"] }} </span>
               </a>
               <div class="aclr"></div>
             </div>
@@ -89,7 +89,8 @@
           <div class="offer-description">
             {{ offer.description }}
             <br>
-            *Minimalne RRSO: {{ offer.minrrso }}%, maksymalne RRSO: {{ offer.maxrrso }}%
+            * {{ translations["Minimal APR"] }} {{ rrso[offer.category].apr_min }}%, 
+              {{ translations["maximal APR"] }} {{ rrso[offer.category].apr_max }}%
           </div>
 
           <div class="aclr"></div>
@@ -103,10 +104,9 @@
 
 <script>
 
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
-// import $ from 'jquery'
 
 export default {
   
@@ -118,22 +118,20 @@ export default {
     setup() {
 
         const store = useStore();
-        const messages = computed(()=>store.state.messages);
+        const translations = computed(()=>store.state.translations);
+        const rrso = computed(()=>store.state.rrso);
+        const arr = computed(()=>store.state.arr);
+        // console.log(rrso.value[1])
+        // function minRRSO(){
 
-        onMounted(()=>{
-          // console.log($('.rating'))
-          //  $("li").each(function(){
-          //     alert($(this).text())
-          //   });
-          // $('.rating').each( function() {
-            mixinRating().ratingHover()
-          // })
-        })
-        
+        //   // Minimal APR
+        // }
 
         return {
-            messages,
-            ...mixinRating(),
+          translations,
+          rrso,
+          arr,
+          ...mixinRating(),
         };
 
     },

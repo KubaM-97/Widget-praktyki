@@ -9,31 +9,14 @@ export default createStore({
         amount: 1000,
         free_amount: false
       },
-      messages: {
-        "No offers matching criteria" : "Nie znaleziono ofert spełniających podane kryteria",
-        "We also recommend loans with other parameters":"Polecamy też pożyczki o innych parametrach",
-        "days":"dni",
-        "months":"m-cy",
-        "offers-params-info":"Powyższe wartości są mają charakter orientacyjny i nie stanowią oferty w rozumieniu art. 66 Kodeksu Cywilnego. Aby potwierdzić koszt pożyczki kliknij na \"Weź pożyczkę\". Minimalna kwota pożyczki zaczyna się od {MIN-AMOUNT} zł, a maksymalna do {MAX-AMOUNT} zł. Minimalne RRSO: {MIN-RRSO}%, maksymalne RRSO: {MAX-RRSO}%",
-        "Loan period":"Okres pożyczki",
-        "Loan amount":"Kwota pożyczki",
-        "Show only free loans":"Pokaż tylko darmowe pożyczki",
-        "Amount / period":"Kwota / okres",
-        "Take a loan":"Weź pożyczkę",
-        "COST / TOTAL":"KOSZT / ŁĄCZNIE",
-        "INSTALLMENT":"RATA",
-        "vote":"głos",
-        "votes":"głosy",
-        "votes2":"głosów",
-        "no":"brak",
-        "APR":"RRSO",
-        "Minimal APR":"Minimalne RRSO",
-        "maximal APR":"maksymalne RRSO"
-    }
+      rrso: [],
+      translations: [],
+      arr: []
   },
   getters: {
+
     filteredOffers: state => () => {
-      
+    
       const stateFilterParams = state.filterParams
 
       const filteredOffers = state.offers
@@ -44,18 +27,32 @@ export default createStore({
       .filter( offer => stateFilterParams.free_amount ? offer.first_free_amount >= stateFilterParams.free_amount : true)
          
        return filteredOffers
-
     }
+
   },
   mutations: {
     setOffers( state, offers ){
       state.offers = offers;
+    },
+    setRRSO( state, rrso ){
+      state.rrso = rrso;
+    },
+    setTranslations( state, translations ){
+      state.translations = translations;
+    },
+    setMainSettings( state, arr ){
+      state.arr = arr;
     }
   },
   actions: {
     async fetchOffers ( { commit } ) {
       await axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
-        .then( response =>  commit("setOffers", response.data) )
+        .then( response =>  {
+          commit("setOffers", response.data.offers);
+          commit("setRRSO", response.data.rrso);
+          commit("setTranslations", response.data.translations);
+          commit("setMainSettings", response.data.arr);
+        })
     }
   },
 })
