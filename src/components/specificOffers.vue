@@ -29,9 +29,8 @@
                     <div class="stars">
                       <div class="rank-rate">
                         <span>
-                          <div class="rating" ref="aa" @mousemove="ratingHover" @mouseleave="ratingLeave">
-                            <div class="rate" :style="{ width: calculateFill() + '%' }" @click="ratingClick"></div>
-                            <!-- <div class="rate" :style="{ width: calculateFill($event.currentTarget) + '%' }" @click="ratingClick"></div> -->
+                          <div class="rating">
+                            <div class="rate" :style="{width: getRateInitWidth( offer.rate , offer.votes_count ) + '%'}"></div>
                           </div>
                         </span>
                       </div>
@@ -89,8 +88,8 @@
           <div class="offer-description">
             {{ offer.description }}
             <br>
-            * {{ translations["Minimal APR"] }} {{ rrso[offer.category].apr_min }}%, 
-              {{ translations["maximal APR"] }} {{ rrso[offer.category].apr_max }}%
+            *{{ translations["Minimal APR"] }} {{ rrso[offer.category].apr_min }}%, 
+             {{ translations["maximal APR"] }} {{ rrso[offer.category].apr_max }}%
           </div>
 
           <div class="aclr"></div>
@@ -104,10 +103,10 @@
 
 <script>
 
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
-
+import $ from 'jquery'
 export default {
   
     name: "offers",
@@ -121,17 +120,55 @@ export default {
         const translations = computed(()=>store.state.translations);
         const rrso = computed(()=>store.state.rrso);
         const arr = computed(()=>store.state.arr);
-        // console.log(rrso.value[1])
-        // function minRRSO(){
 
-        //   // Minimal APR
-        // }
+        const { calculateFill, round } = mixinRating();
 
+        function getRateInitWidth(rate, votes){
+          const totalOfferRate =  rate * votes
+          const totalPossibleRate =  5 * votes
+          const percentFilled = totalOfferRate / totalPossibleRate * 100
+          return percentFilled
+        }
+        
+        onMounted(()=>{
+          $('.rating').on('mousemove', function(e) {
+              var fill = calculateFill(e, $(this));
+              $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
+          });
+          $('.rating').on('mouseleave', function() {
+              $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
+          });
+          $('.rate').on('click', function(e) {
+            const translations = computed(()=>store.state.translations).value;
+
+        const elem = $(this);
+        console.log(elem)
+            const fill = calculateFill(e, $(this).parents('.rating'));
+            const rate = Math.ceil(fill / 100 * 5);
+            setTimeout(function() {
+                $.ajax({
+                    url: 'https://widgets.aff44.com/vote?save_rate=' + elem.parents('.a44-offer').attr('data-id') + '&rate=' + rate,
+                    dataType: 'jsonp',
+                }).done(function(data) {
+                    if (data.status === 'success') {
+                        const new_rate = Number(data.new_rate);
+                        elem.parents('.a44-offer').find('.offer-rate').html(new_rate.toFixed(1));
+                        const vote_count = data.votes_count.toString();
+                        const last_char = vote_count.slice(-1);
+                        elem.parents('.a44-offer').find('.votes-count').html('(<b>' + data.votes_count + '</b> ' + (last_char == '1' ? (typeof translations['vote'] !== 'undefined' ? translations['vote'] : 'vote') : (['2', '3', '4'].includes(last_char) ? (typeof translations['votes'] !== 'undefined' ? translations['votes'] : 'votes') : (typeof translations['votes2'] !== 'undefined' ? translations['votes2'] : 'głosów'))) + ')');
+                        elem.parents('.a44-offer').find('.rate').css('width', (new_rate.toFixed(1) / 5 * 100) + '%')
+                    }
+                });
+            }, Math.random() * 300);
+
+});
+
+        })
         return {
+          getRateInitWidth,
           translations,
           rrso,
-          arr,
-          ...mixinRating(),
+          arr
         };
 
     },

@@ -3,10 +3,7 @@
     <specificOffers-component :sourceOffers="filteredOffers"/>
 
     <p class="costs-info">
-      *Powyższe wartości są mają charakter orientacyjny i nie stanowią oferty w rozumieniu art. 66 Kodeksu Cywilnego. 
-      Aby potwierdzić koszt pożyczki kliknij na "Weź pożyczkę". 
-      Minimalna kwota pożyczki zaczyna się od 100 zł, a maksymalna do 60000 zł. 
-      Minimalne RRSO: 0%, maksymalne RRSO: 323667%
+      {{ translations["offers-params-info"] }}
     </p>
     
     <teleport to="body">

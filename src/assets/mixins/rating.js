@@ -5,12 +5,13 @@ import { computed } from 'vue'
 export default function mixinRating(){
   
   const store = useStore();
-  const translations = computed(()=>store.state.translations).value;
 
     function ratingClick(e){
+      const translations = computed(()=>store.state.translations).value;
       // let translations = $('.translations').val(JSON.stringify(translations.value));
 
         const elem = $(this);
+        console.log(elem)
             const fill = calculateFill(e, $(this).parents('.rating'));
             const rate = Math.ceil(fill / 100 * 5);
             setTimeout(function() {
@@ -30,57 +31,25 @@ export default function mixinRating(){
             }, Math.random() * 300);
     }
 
-    function ratingHover(){
-        // console.log(e)
-        // $('.rating').each(function(e) {
-        //   var fill = calculateFill(e, $(this));
-        // })
-        // // const fill = calculateFill(e, x);
-        // // const fill = calculateFill(x);
-        // console.log(fill)
-        // $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
-        // const fill = calculateFill(e, $(this));
+    function ratingHover(e){
+      const fill = calculateFill(e, e.target);
+      $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
     }
 
-    function ratingLeave(e){
-        $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
-        e.target.style.width = $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%';
+    function ratingLeave(){
+        // $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
+        // e.target.style.width = $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%';
     }
 
-  //   function calculateFill(e, container) {
-  //     console.log(container)
-  //     var startCoord = container.offset().left;
-  //     var endCoord = container.offset().left + container.width();
-  //     console.log(startCoord, endCoord)
-  //     var cursorPosX = e.pageX;
-  //     var relativeWidth = endCoord - startCoord;
-  //     var relativeCursorPosX = cursorPosX - startCoord;
-  //     // console.log(startCoord, endCoord)
-  //     var percentFilled = relativeCursorPosX / relativeWidth * 100;
-  //     return percentFilled;
-  // }
-    function calculateFill() {
-      // const aa = []
-      // console.log(container.offsetLeft)
-      // console.log(22, x)
-      return 90
-      // console.log(e.offsetLeft)
-      // const startCoord = container.offset().left;
-      // const endCoord = startCoord + container.width();
-      // const cursorPosX = e.pageX;
-      // const relativeWidth = endCoord - startCoord;
-      // const relativeCursorPosX = cursorPosX - startCoord;
-      // console.log(e.target.style.width)
-      // console.log(container.offsetLeft)
-      // console.log(container.offsetWidth)
-      // console.log(document.getElementsByTagName("BODY")[0].offsetWidth)
-      // console.log(e.target.parentNode)
-      
-      // console.log(aa)
-      // console.log(e, relativeWidth, relativeCursorPosX)
-      // const percentFilled = relativeCursorPosX / relativeWidth * 100;
-      // return percentFilled;
-    }
+    function calculateFill(e, container) {
+      var startCoord = container.offset().left;
+      var endCoord = container.offset().left + container.width();
+      var cursorPosX = e.pageX;
+      var relativeWidth = endCoord - startCoord;
+      var relativeCursorPosX = cursorPosX - startCoord;
+      var percentFilled = relativeCursorPosX / relativeWidth * 100;
+      return percentFilled;
+  }
 
     function round(number, increment, offset) {
       return Math.ceil((number - offset) / increment) * increment + offset;
