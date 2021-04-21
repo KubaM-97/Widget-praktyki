@@ -107,6 +107,7 @@ import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
 import $ from 'jquery'
+
 export default {
   
     name: "offers",
@@ -153,6 +154,7 @@ export default {
                   }).done(function(data) { 
                     // console.log(data)
                       if (data.status === 'success') {
+
                           const new_rate = Number(data.new_rate);
 
                           const offer_rate_container = elem.parents('.a44-offer').find('.offer-rate');
@@ -162,8 +164,7 @@ export default {
                           rate.css('width', (new_rate.toFixed(1) / 5 * 100) + '%')
 
                           const votes_count_container = elem.parents('.a44-offer').find('.votes-count');
-                          votes_count_container.html(getVotes_count_container(data))
-                         
+                          votes_count_container.html(getVotes_count_container(data))   
                     
                       }
                   });
@@ -171,52 +172,53 @@ export default {
 
         })
 
-        function getVotes_count_container(data){
+          function getVotes_count_container(data){
 
-          const vote_count = data.votes_count.toString();
-          const last_char = vote_count.slice(-1);
-          
-          if( vote_count !== 1 && vote_count < 11 || vote_count > 14 ){
+            const vote_count = data.votes_count.toString();
+            const last_char = vote_count.slice(-1);
+            
+            if( vote_count !== 1 && vote_count < 11 || vote_count > 14 ){
 
-              switch(last_char){  
+                switch(last_char){  
 
-                  case '2':
-                  case '3':
-                  case '4':
-                    return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes')} )`
+                    case '2':
+                    case '3':
+                    case '4':
+                      return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes')} )`
 
-                  default:
-                    return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')} )`
+                    default:
+                      return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')} )`
 
-              }
+                }
+
+            }
+            else{
+
+                switch(last_char){  
+
+                    case '1':
+                      return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes')} )`
+
+                    case '12':
+                    case '13':
+                    case '14':
+                      return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')})`
+
+                    default:
+                      return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')} )`
+
+                }
+
+            }
 
           }
-          else{
 
-              switch(last_char){  
-
-                  case '1':
-                    return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes')} )`
-
-                  case '12':
-                  case '13':
-                  case '14':
-                    return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')})`
-
-                  default:
-                    return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')} )`
-
-              }
-
+          function getVoteSuffix(vote_suffix){
+            return typeof translations.value[vote_suffix] !== 'undefined' ? translations.value[vote_suffix] : 'votes';
           }
-
-        }
-
-        function getVoteSuffix(vote_suffix){
-          return typeof translations.value[vote_suffix] !== 'undefined' ? translations.value[vote_suffix] : 'votes';
-        }
 
         })
+        
         return {
           getRateInitWidth,
           translations,

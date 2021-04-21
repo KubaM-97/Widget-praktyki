@@ -1,6 +1,6 @@
 <template>
 
-    <specificOffers-component :sourceOffers="filteredOffers"/>
+    <specific-offers-component :sourceOffers="filteredOffers"/>
 
     <p class="costs-info">
       {{ translations["offers-params-info"] }}
@@ -11,7 +11,7 @@
         <div class="a44-promo" v-if="showPromo">{{translations['We also recommend loans with other parameters']}}</div>
     </teleport>
 
-    <specificOffers-component v-if="showRemainingOffers" :sourceOffers="remainingOffers"/>
+    <specific-offers-component v-if="showRemainingOffers" :sourceOffers="remainingOffers"/>
     
     
 </template>
@@ -26,7 +26,7 @@ export default {
   
   name: "offers",
   components: {
-    "specificOffers-component": SpecificOffers
+    "specific-offers-component": SpecificOffers
   },
 
   async setup() {
