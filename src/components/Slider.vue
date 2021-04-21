@@ -41,7 +41,7 @@
         </div>
         <div class="amount-value-container">
           <span class="value-wrapper">
-            <!-- v-styleMe:$event="getAmountManually" -->
+            
             <input type="text" @blur="getAmountManually" @keyup.enter="getAmountManually" class="value" 
             :value="filterParams.amount" :min="arr.minAmount" :max="arr.maxAmount"/>
             
@@ -179,7 +179,6 @@ export default ({
             const elem = e.target;
             const sliderAmountLabel = amountContainer.value.querySelector('input[type=range]')
             
-
             elem.value = parseInt( Math.round ( parseInt(elem.value) / 50) * 50);
 
             // greater than max 60000

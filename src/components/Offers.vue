@@ -6,7 +6,7 @@
       {{ translations["offers-params-info"] }}
     </p>
     
-    <teleport to="body">
+    <teleport to="#layout-2">
         <div class="a44-alert" v-if="showAlert">{{translations['No offers matching criteria']}}</div>
         <div class="a44-promo" v-if="showPromo">{{translations['We also recommend loans with other parameters']}}</div>
     </teleport>

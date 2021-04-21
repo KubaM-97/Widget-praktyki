@@ -53,12 +53,17 @@ export default function mixinRating(){
     }
 
     function ratingClick(e){
-      const elem = $(this);
-      const fill = calculateFill(e, $(this).parents('.rating'));
+      const elem = e.target;
+      console.log(elem)
+
+      //parent, child
+      // dynamic refs
+      const fill = calculateFill(e, e.target.parentNode);
       const rate = Math.ceil(fill / 100 * 5);
+      const id = elem.parents('.a44-offer').attr('data-id')
       setTimeout(function() {
             $.ajax({
-                url: 'https://widgets.aff44.com/vote?save_rate=' + elem.parents('.a44-offer').attr('data-id') + '&rate=' + rate,
+                url: 'https://widgets.aff44.com/vote?save_rate=' + id + '&rate=' + rate,
                 dataType: 'jsonp',
             }).done(function(data) { 
               // console.log(data)
@@ -67,13 +72,13 @@ export default function mixinRating(){
                     const new_rate = Number(data.new_rate);
 
                     const offer_rate_container = elem.parents('.a44-offer').find('.offer-rate');
-                    offer_rate_container.html(new_rate.toFixed(1));
+                    offer_rate_container.innerHTML = new_rate.toFixed(1);
 
                     const rate = elem.parents('.a44-offer').find('.rate')
-                    rate.css('width', (new_rate.toFixed(1) / 5 * 100) + '%')
+                    rate.style.width = (new_rate.toFixed(1) / 5 * 100) + '%'
 
                     const votes_count_container = elem.parents('.a44-offer').find('.votes-count');
-                    votes_count_container.html(getVotes_count_container(data))   
+                    votes_count_container.innerHTML = getVotes_count_container(data)
               
                 }
             });
@@ -83,7 +88,7 @@ export default function mixinRating(){
     function ratingHover(e){
       // GOOD
       const fill = calculateFill(e);
-      e.target.style.width = round(fill, 20, 0) + '%'
+      e.target.parentNode.style.width = round(fill, 20, 0) + '%'
 
       // BAD
       // $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
@@ -99,26 +104,26 @@ export default function mixinRating(){
     }
 
     function calculateFill(e) {
-      const container = e.target;
-      const cursorPosX = e.pageX;
-      const startCoord = container.getBoundingClientRect().left
-      const width = container.getBoundingClientRect().width
-      const relativeCursorPosX = cursorPosX - startCoord;
-      const percentFilled = relativeCursorPosX / width * 100;
-      return percentFilled;
+        const container = e.target;
+        const cursorPosX = e.pageX;
+        const startCoord = container.getBoundingClientRect().left
+        const width = container.getBoundingClientRect().width
+        const relativeCursorPosX = cursorPosX - startCoord;
+        const percentFilled = relativeCursorPosX / width * 100;
+        return percentFilled;
     }
 
     function round(number, increment, offset) {
       return Math.ceil((number - offset) / increment) * increment + offset;
     }
+
     function getRateWidth(rate, votes){
-      console.log(rate, votes)
-      //4.7 / 19
       const totalOfferRate =  rate * votes
       const totalPossibleRate =  5 * votes
       const percentFilled = totalOfferRate / totalPossibleRate * 100
       return percentFilled
     }
+
     return{
       ratingClick,
       ratingHover,

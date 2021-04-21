@@ -29,7 +29,7 @@
                     <div class="stars">
                       <div class="rank-rate">
                         <span>
-                          <div class="rating" @mousemove="ratingHover" @mouseleave="getRateWidth( offer.rate , offer.votes_count )">
+                          <div class="rating" @click="ratingClick" @mousemove="ratingHover" @mouseleave="getRateWidth( offer.rate , offer.votes_count )">
                             <div class="rate" :style="{width: getRateWidth( offer.rate , offer.votes_count ) + '%'}"></div>
                           </div>
                         </span>
@@ -103,7 +103,7 @@
 
 <script>
 
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
 
@@ -115,16 +115,19 @@ export default {
     },
 
     setup() {
-
+// function w(){console.log("ssssssssssssssssssssssssssss")}
+const w = ref(22)
         const store = useStore();
         const translations = computed(()=>store.state.translations);
         const rrso = computed(()=>store.state.rrso);
         const arr = computed(()=>store.state.arr);
 
-        const { ratingHover, getRateWidth } = mixinRating();
+        const { ratingHover, ratingClick, getRateWidth } = mixinRating();
         
         return {
+          w,
           ratingHover,
+          ratingClick,
           getRateWidth,
           translations,
           rrso,
