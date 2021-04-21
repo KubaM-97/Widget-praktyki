@@ -52,7 +52,8 @@ export default {
       }
 
       function managePromoWindow(){
-
+        
+        showRemainingOffers.value = false;
         remainingOffers.value = [];
 
         if (filteredOffers.value.length <= 3) {

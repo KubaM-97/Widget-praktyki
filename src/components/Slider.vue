@@ -11,7 +11,8 @@
 
         <div class="period-value-container">
           <span class="value-wrapper">
-            <input type="text" class="value" readonly :value="filterParams.period" />
+            <input type="text" class="value" readonly :value="filterParams.period" 
+            :min="arr.minPeriod" :max="arr.maxPeriod"/>
             <span class="suffix">{{arr.suffix}}</span>
           </span>
         </div>
@@ -40,10 +41,9 @@
         </div>
         <div class="amount-value-container">
           <span class="value-wrapper">
-
-            <input type="text" @blur="getAmountManually" @keyup="getAmountManually"
-            class="value" :value="filterParams.amount"
-            :min="arr.minAmount" :max="arr.maxAmount"/>
+            <!-- v-styleMe:$event="getAmountManually" -->
+            <input type="text" @blur="getAmountManually" @keyup.enter="getAmountManually" class="value" 
+            :value="filterParams.amount" :min="arr.minAmount" :max="arr.maxAmount"/>
             
             <span class="currency">{{arr.currency}}</span>
           </span>
@@ -86,11 +86,21 @@ import { useStore } from "vuex"
 import $ from "jquery";
 
 export default ({
-
+    directives: {
+    //   styleMe: {
+    //     mounted(el, binding) {
+    //       console.log(binding)
+    //       console.log(binding.arg)
+    //       console.log(binding.value)
+    //       el.addEventListener("blur", binding.value)
+    //       el.addEventListener("blur", binding.value);
+    //       el.addEventListener("keyup.enter", binding.value)
+    //     }
+    //   }
+    },
     setup() {
 
         const store = useStore();
-
         const translations = computed(()=>store.state.translations);
         const arr = computed(()=>store.state.arr); 
         const filterParams = computed(()=>store.state.filterParams); 
@@ -117,7 +127,6 @@ export default ({
 
         function sliderMoveAnimation(fromElement, toElement, oldSuffix){
 
-            console.log(fromElement, toElement, oldSuffix)
             const from = parseInt(fromElement.value);
             const to = parseInt(toElement.value);
 
@@ -166,31 +175,27 @@ export default ({
         }
 
         function getAmountManually(e){
+         
+            const elem = e.target;
+            const sliderAmountLabel = amountContainer.value.querySelector('input[type=range]')
+            
 
-          if (e.type === 'blur' || e.keyCode === 13) {
+            elem.value = parseInt( Math.round ( parseInt(elem.value) / 50) * 50);
 
-                const elem = e.target;
-                const sliderAmountLabel = amountContainer.value.querySelector('input[type=range]')
-                
+            // greater than max 60000
+            if (parseInt(elem.value) > parseInt(elem.max)) {
+              elem.value = parseInt(elem.max);
+            }
 
-                elem.value = parseInt( Math.round ( parseInt(elem.value) / 50) * 50);
-
-                // greater than max 60000
-                if (parseInt(elem.value) > parseInt(elem.max)) {
-                  elem.value = parseInt(elem.max);
-                }
-
-                // lower than min 100
-                if (parseInt(elem.value) < parseInt(elem.min)) {
-                  elem.value = parseInt(elem.min);
-                }
-                
-                sliderMoveAnimation(sliderAmountLabel, elem)    
-                filterParams.value.amount = parseInt(elem.value)
+            // lower than min 100
+            if (parseInt(elem.value) < parseInt(elem.min)) {
+              elem.value = parseInt(elem.min);
             }
             
+            sliderMoveAnimation(sliderAmountLabel, elem)    
+            filterParams.value.amount = parseInt(elem.value)
+            
         }
-       
         
         return {
           arr,
@@ -208,4 +213,5 @@ export default ({
     }
     
 })
+
 </script>

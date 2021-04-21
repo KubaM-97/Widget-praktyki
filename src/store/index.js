@@ -25,7 +25,7 @@ export default createStore({
       .filter( offer => offer.min_period <= stateFilterParams.period )
       .filter( offer => offer.max_period >= stateFilterParams.period )
       .filter( offer => stateFilterParams.free_amount ? offer.first_free_amount >= stateFilterParams.free_amount : true)
-         
+        
        return filteredOffers
     }
 
