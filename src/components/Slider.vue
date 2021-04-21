@@ -40,7 +40,12 @@
         </div>
         <div class="amount-value-container">
           <span class="value-wrapper">
-            <input type="text" class="value" :value="filterParams.amount"/> {{arr.currency}}
+
+            <input type="text" @blur="getAmountManually" @keyup="getAmountManually"
+            class="value" :value="filterParams.amount"
+            :min="arr.minAmount" :max="arr.maxAmount"/>
+            
+            <span class="currency">{{arr.currency}}</span>
           </span>
         </div>
         <div class="aclr"></div>
@@ -110,10 +115,11 @@ export default ({
             sliderMoveAnimation(sliderAmountLabel, elem)    
         }
 
-        function sliderMoveAnimation(labelInputValue, elemValue, oldSuffix){
+        function sliderMoveAnimation(fromElement, toElement, oldSuffix){
 
-            const from = parseInt(labelInputValue.value);
-            const to = parseInt(elemValue.value);
+            console.log(fromElement, toElement, oldSuffix)
+            const from = parseInt(fromElement.value);
+            const to = parseInt(toElement.value);
 
             $({
                 counter: from
@@ -123,7 +129,7 @@ export default ({
                 duration: 500,
                 easing: 'swing',
                 step: function() {
-                    labelInputValue.value = Math.round(this.counter);
+                    fromElement.value = Math.round(this.counter);
                 },
                 done: function() {
                     if(oldSuffix){
@@ -131,7 +137,7 @@ export default ({
                       const suffixContainer = periodContainer.value.querySelector('span.suffix')
   
                       if (category.value == 3 && to == 2) {
-                          labelInputValue = '61';
+                          fromElement = '61';
                           const newSuffix = ` 
                               ${ 
                                 typeof translations.value['days'] !== 'undefined'
@@ -159,6 +165,31 @@ export default ({
         
         }
 
+        function getAmountManually(e){
+
+          if (e.type === 'blur' || e.keyCode === 13) {
+
+                const elem = e.target;
+                const sliderAmountLabel = amountContainer.value.querySelector('input[type=range]')
+                
+
+                elem.value = parseInt( Math.round ( parseInt(elem.value) / 50) * 50);
+
+                // greater than max 60000
+                if (parseInt(elem.value) > parseInt(elem.max)) {
+                  elem.value = parseInt(elem.max);
+                }
+
+                // lower than min 100
+                if (parseInt(elem.value) < parseInt(elem.min)) {
+                  elem.value = parseInt(elem.min);
+                }
+                
+                sliderMoveAnimation(sliderAmountLabel, elem)    
+                filterParams.value.amount = parseInt(elem.value)
+            }
+            
+        }
        
         
         return {
@@ -168,6 +199,7 @@ export default ({
 
           getPeriod,
           getAmount,
+          getAmountManually,
 
           amountContainer,
           periodContainer,
