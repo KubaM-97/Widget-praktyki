@@ -19,11 +19,9 @@
         <div class="aclr"></div>
 
         <div class="input-wrapper">
-          <input type="range" @input="getPeriod"
+          <input type="range" v-model.number.lazy="filterParams.period" @input="getPeriod"
             :class="'a44-period-'+arr.hash +' costslider'"
-            step="1" value="12" ref="sliderPeriod"
-            :data-suffix="arr.suffix" :min="arr.minPeriod" :max="arr.maxPeriod"
-          />
+            step="1" :min="arr.minPeriod" :max="arr.maxPeriod"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min"> {{arr.minPeriod}} {{arr.suffix}} </span>
@@ -42,14 +40,14 @@
         </div>
         <div class="amount-value-container">
           <span class="value-wrapper">
-            <input type="text" class="value" value="" /> {{arr.currency}}
+            <input type="text" class="value" :value="filterParams.amount"/> {{arr.currency}}
           </span>
         </div>
         <div class="aclr"></div>
         <div class="input-wrapper">
-          <input type="range" :class="'a44-amount-'+arr.hash +' costslider'" step="50"
-            v-model.number="filterParams.amount"
-            :data-currency="arr.currency" :min="arr.minAmount" :max="arr.maxAmount" />
+          <input type="range" v-model.number.lazy="filterParams.amount" @input="getAmount" 
+            :class="'a44-amount-'+arr.hash +' costslider'" 
+            step="50" :min="arr.minAmount" :max="arr.maxAmount"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min">{{arr.minAmount}} {{arr.currency}}</span>
@@ -81,7 +79,6 @@ import { computed, ref } from "vue"
 import { useStore } from "vuex" 
 
 import $ from "jquery";
-import { onMounted } from "vue";
 
 export default ({
 
@@ -99,15 +96,8 @@ export default ({
 
         const suffix = computed(()=>arr.value.suffix)
         const category = computed(()=>arr.value.category)
+        // const currency = computed(()=>arr.value.currency)
         
-
-        onMounted(()=>{
-            // getPeriod();
-            // console.log(slider)
-        })
-
-//do amount
-// const currency = computed(()=>arr.value.currency)
 // var $currency = currency.value == undefined ? '' : currency.value;
 
         function getPeriod(e){
@@ -120,6 +110,7 @@ export default ({
 
             const from = parseInt(sliderPeriodLabel.value);
             const to = parseInt(elem.value);
+            // filterParams.value.period = to;
 
             $({
                 counter: from
@@ -132,7 +123,6 @@ export default ({
                     sliderPeriodLabel.value = Math.round(this.counter);
                 },
                 done: function() {
-                    filterParams.value.period = to;
 
                     const suffixContainer = periodContainer.value.querySelector('span.suffix')
 
@@ -161,8 +151,61 @@ export default ({
                     }
                   }
             });
+        
         }
 
+        function getAmount(e){
+            
+            const elem = e.target
+
+            // const oldCurrency = currency.value== undefined ? '' : currency.value;
+            
+            const sliderAmountLabel = amountContainer.value.querySelector('input[type=text]')
+
+            const from = parseInt(sliderAmountLabel.value);
+            const to = parseInt(elem.value);
+
+            $({
+                counter: from
+            }).animate({
+                counter: to
+            }, {
+                duration: 500,
+                easing: 'swing',
+                step: function() {
+                    sliderAmountLabel.value = Math.round(this.counter);
+                },
+                done: function() {
+
+                  //   const suffixContainer = periodContainer.value.querySelector('span.suffix')
+
+                  //   if (category.value == 3 && to == 2) {
+                  //       sliderAmountLabel.value = '61';
+                  //       const newCurrency = ` 
+                  //           ${ 
+                  //             typeof translations.value['days'] !== 'undefined'
+                  //             ? translations.value['days'] 
+                  //             : 'days'                             
+                  //           }`
+                  //       suffixContainer.innerHTML = newCurrency
+
+
+                  //  } else {
+
+                  //       const newCurrency = ` 
+                  //           ${ 
+                  //             oldCurrency == ' dni' 
+                  //             ? ( typeof translations.value['days'] !== 'undefined' ? translations.value['days'] : 'days' )
+                  //             : ( typeof translations.value['months'] !== 'undefined' ? translations.value['months'] : 'months' )
+                  //           }
+                  //       `
+                  //       suffixContainer.innerHTML = newCurrency
+                    
+                  //   }
+                  }
+            });
+        
+        }
 
         
             
@@ -179,6 +222,7 @@ export default ({
           filterParams,
 
           getPeriod,
+          getAmount,
 
           amountContainer,
           periodContainer,
