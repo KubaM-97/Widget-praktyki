@@ -96,74 +96,24 @@ export default ({
 
         const suffix = computed(()=>arr.value.suffix)
         const category = computed(()=>arr.value.category)
-        // const currency = computed(()=>arr.value.currency)
-        
-// var $currency = currency.value == undefined ? '' : currency.value;
 
         function getPeriod(e){
-            
             const elem = e.target
-
             const oldSuffix =  suffix.value == undefined ? ''  : ( suffix.value == ' dni' ? ' ' + translations.value['days'] : ' ' + translations.value['months']);
-        
             const sliderPeriodLabel = periodContainer.value.querySelector('input[type=text]')
-
-            const from = parseInt(sliderPeriodLabel.value);
-            const to = parseInt(elem.value);
-            // filterParams.value.period = to;
-
-            $({
-                counter: from
-            }).animate({
-                counter: to
-            }, {
-                duration: 500,
-                easing: 'swing',
-                step: function() {
-                    sliderPeriodLabel.value = Math.round(this.counter);
-                },
-                done: function() {
-
-                    const suffixContainer = periodContainer.value.querySelector('span.suffix')
-
-                    if (category.value == 3 && to == 2) {
-                        sliderPeriodLabel.value = '61';
-                        const newSuffix = ` 
-                            ${ 
-                              typeof translations.value['days'] !== 'undefined'
-                              ? translations.value['days'] 
-                              : 'days'                             
-                            }`
-                        suffixContainer.innerHTML = newSuffix
-
-
-                   } else {
-
-                        const newSuffix = ` 
-                            ${ 
-                              oldSuffix == ' dni' 
-                              ? ( typeof translations.value['days'] !== 'undefined' ? translations.value['days'] : 'days' )
-                              : ( typeof translations.value['months'] !== 'undefined' ? translations.value['months'] : 'months' )
-                            }
-                        `
-                        suffixContainer.innerHTML = newSuffix
-                    
-                    }
-                  }
-            });
+            sliderMoveAnimation(sliderPeriodLabel, elem, oldSuffix)
+        } 
         
-        }
-
-        function getAmount(e){
-            
-            const elem = e.target
-
-            // const oldCurrency = currency.value== undefined ? '' : currency.value;
-            
+        function getAmount(e){   
+            const elem = e.target        
             const sliderAmountLabel = amountContainer.value.querySelector('input[type=text]')
+            sliderMoveAnimation(sliderAmountLabel, elem)    
+        }
 
-            const from = parseInt(sliderAmountLabel.value);
-            const to = parseInt(elem.value);
+        function sliderMoveAnimation(labelInputValue, elemValue, oldSuffix){
+
+            const from = parseInt(labelInputValue.value);
+            const to = parseInt(elemValue.value);
 
             $({
                 counter: from
@@ -173,49 +123,44 @@ export default ({
                 duration: 500,
                 easing: 'swing',
                 step: function() {
-                    sliderAmountLabel.value = Math.round(this.counter);
+                    labelInputValue.value = Math.round(this.counter);
                 },
                 done: function() {
-
-                  //   const suffixContainer = periodContainer.value.querySelector('span.suffix')
-
-                  //   if (category.value == 3 && to == 2) {
-                  //       sliderAmountLabel.value = '61';
-                  //       const newCurrency = ` 
-                  //           ${ 
-                  //             typeof translations.value['days'] !== 'undefined'
-                  //             ? translations.value['days'] 
-                  //             : 'days'                             
-                  //           }`
-                  //       suffixContainer.innerHTML = newCurrency
-
-
-                  //  } else {
-
-                  //       const newCurrency = ` 
-                  //           ${ 
-                  //             oldCurrency == ' dni' 
-                  //             ? ( typeof translations.value['days'] !== 'undefined' ? translations.value['days'] : 'days' )
-                  //             : ( typeof translations.value['months'] !== 'undefined' ? translations.value['months'] : 'months' )
-                  //           }
-                  //       `
-                  //       suffixContainer.innerHTML = newCurrency
-                    
-                  //   }
-                  }
+                    if(oldSuffix){
+                      
+                      const suffixContainer = periodContainer.value.querySelector('span.suffix')
+  
+                      if (category.value == 3 && to == 2) {
+                          labelInputValue = '61';
+                          const newSuffix = ` 
+                              ${ 
+                                typeof translations.value['days'] !== 'undefined'
+                                ? translations.value['days'] 
+                                : 'days'                             
+                              }`
+                          suffixContainer.innerHTML = newSuffix
+  
+  
+                     } else {
+  
+                          const newSuffix = ` 
+                              ${ 
+                                oldSuffix == ' dni' 
+                                ? ( typeof translations.value['days'] !== 'undefined' ? translations.value['days'] : 'days' )
+                                : ( typeof translations.value['months'] !== 'undefined' ? translations.value['months'] : 'months' )
+                              }
+                          `
+                          suffixContainer.innerHTML = newSuffix
+                      
+                      }
+                    }
+                }
             });
         
         }
 
+       
         
-            
-
-
-
-
-
-
-
         return {
           arr,
           translations,
