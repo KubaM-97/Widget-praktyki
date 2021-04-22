@@ -1,5 +1,5 @@
 <template>
-    {{filterParams}}
+
   <div class="a44-slider">
 
     <div class="period-container" ref="periodContainer">
@@ -20,7 +20,7 @@
         <div class="aclr"></div>
 
         <div class="input-wrapper">
-          <input type="range" v-model.number.lazy="filterParams.period" @input="getPeriod" @change="green_blocks"
+          <input type="range" v-model.number.lazy="filterParams.period" @input="getPeriod" @change="update_amount_inst_apr"
             :class="'a44-period-'+arr.hash +' costslider'" name="period-costslider"
             step="1" :min="arr.minPeriod" :max="arr.maxPeriod"/>
         </div>
@@ -50,7 +50,7 @@
         </div>
         <div class="aclr"></div>
         <div class="input-wrapper">
-          <input type="range" v-model.number.lazy="filterParams.amount" @input="getAmount" @change="green_blocks"
+          <input type="range" v-model.number.lazy="filterParams.amount" @input="getAmount" @change="update_amount_inst_apr"
             :class="'a44-amount-'+arr.hash +' costslider'" name="amount-costslider"
             step="50" :min="arr.minAmount" :max="arr.maxAmount"/>
         </div>
@@ -94,13 +94,12 @@ export default ({
         const arr = computed(()=>store.state.arr); 
         const offers = computed(()=>store.state.offers); 
         const filterParams = computed(()=>store.state.filterParams); 
+        const suffix = computed(()=>arr.value.suffix)
+        const category = computed(()=>arr.value.category)
 
         const amountContainer = ref(null)
         const periodContainer = ref(null)
         const freeAmount = ref(null)
-
-        const suffix = computed(()=>arr.value.suffix)
-        const category = computed(()=>arr.value.category)
         
         function getPeriod(e){
             const elem = e.target
@@ -116,10 +115,10 @@ export default ({
         }
 
         onMounted(()=>{
-          green_blocks()
+          update_amount_inst_apr()
         })
 
-        function green_blocks(){
+        function update_amount_inst_apr(){
 
             const widget = document.querySelector('.a44-widget');
 
@@ -251,12 +250,10 @@ export default ({
             
             elem.value = parseInt( Math.round ( parseInt(elem.value) / 50) * 50);
 
-            // greater than max 60000
             if (parseInt(elem.value) > parseInt(elem.max)) {
               elem.value = parseInt(elem.max);
             }
 
-            // lower than min 100
             if (parseInt(elem.value) < parseInt(elem.min) || isNaN(parseInt(elem.value))) {
               elem.value = parseInt(elem.min);
             }
@@ -267,21 +264,321 @@ export default ({
         }
         
         return {
-          arr,
           translations,
+          arr,
           filterParams,
-          green_blocks,
+
+          amountContainer,
+          periodContainer,
+          freeAmount,
 
           getPeriod,
           getAmount,
           getAmountManually,
-
-          amountContainer,
-          periodContainer,
-          freeAmount
+          update_amount_inst_apr
         }
     }
     
 })
 
 </script>
+
+<style>
+
+.a44-slider {
+    border-radius: 5px;
+    margin-bottom: 16px;
+    padding: 16px;
+}
+
+.a44-slider .period-container {
+    max-width: 50%;
+    width: 100%;
+    float: left;
+    padding-right: 12px;
+}
+
+.a44-slider .period-name-container {
+    max-width: 66%;
+    width: 100%;
+    float: left;
+    text-align: left;
+}
+
+.a44-slider .period-value-container {
+    max-width: 33%;
+    width: 100%;
+    float: left;
+    text-align: right;
+}
+
+.a44-slider .amount-container {
+    max-width: 50%;
+    width: 100%;
+    float: left;
+    padding-left: 12px;
+}
+
+.a44-slider .range-wrapper {
+    border-radius: 5px;
+    padding: 16px;
+}
+
+.a44-slider .range-wrapper .value-wrapper {
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.a44-slider .amount-name-container {
+    max-width: 66%;
+    width: 100%;
+    float: left;
+    text-align: left;
+}
+
+.a44-slider .amount-value-container {
+    max-width: 33%;
+    width: 100%;
+    float: left;
+    text-align: right;
+}
+
+.a44-slider .name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.a44-slider .name:before {
+    display: inline-block;
+    padding: 4px 7.2px 2.4px 7.2px;
+    background: #fd9937;
+    border-radius: 4px;
+    content: " ";
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.a44-slider .amount-container .name:before {
+    content: url("~@/assets/img/wallet.png");
+}
+
+.a44-slider .period-container .name:before {
+    content: url("~@/assets/img/calendar.png");
+}
+
+.a44-slider .value {
+    border: 0;
+    background: transparent;
+    border-bottom: 2px solid #6a727c;
+    font-size: 17.6px;
+    font-weight: bold;
+    max-width: 60px;
+    text-align: center;
+}
+
+.a44-slider .input-wrapper {
+    margin: 8px auto 0 auto;
+}
+
+.a44-slider input[type="range"] {
+    width: 100%;
+}
+
+.a44-slider .free-amount-container {
+    width: 100%;
+    padding-top: 16px;
+    font-weight: 400;
+    font-size: 13.184px;
+    position: relative;
+}
+
+.a44-slider .min-val-wrapper,
+.a44-slider .max-val-wrapper {
+    max-width: 50%;
+    width: 100%;
+    float: left;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.a44-slider .min-val-wrapper {
+    text-align: left;
+}
+
+.a44-slider .max-val-wrapper {
+    text-align: right;
+}
+
+.a44-md .a44-slider .name {
+    font-size: 17.6px;
+}
+
+.a44-md .a44-slider .value-wrapper {
+    font-size: 17.6px;
+}
+
+.a44-sm .a44-slider .name {
+    font-size: 17.6px;
+}
+
+.a44-sm .a44-slider .value-wrapper {
+    font-size: 17.6px;
+}
+
+.a44-sm .period-container,
+.a44-sm .amount-container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.a44-sm .period-container {
+    margin-bottom: 16px;
+}
+
+.a44-xs .a44-slider .name {
+    font-size: 16px;
+}
+
+.a44-xs .a44-slider .value-wrapper {
+    font-size: 16px;
+}
+
+.a44-xs .period-container,
+.a44-xs .amount-container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.a44-xs .period-container {
+    margin-bottom: 16px;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+    height: 38px;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 3px;
+    cursor: pointer;
+    background: #fd9937;
+    border-radius: 1px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -12px;
+}
+
+input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 3px;
+    cursor: pointer;
+    background: #fd9937;
+    border-radius: 1px;
+}
+
+input[type="range"]::-moz-range-thumb {
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    border: 0px transparent;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-progress {
+    background-color: #fd9937;
+}
+
+input[type="range"]::-ms-track {
+    width: 100%;
+    height: 3px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower {
+    background: #fd8c1e;
+    border-radius: 2px;
+}
+
+input[type="range"]::-ms-thumb {
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    border: 0px transparent;
+    background-color: transparent;
+    margin-top: 0px;
+    cursor: pointer;
+}
+
+input[type="range"]:focus::-ms-fill-lower {
+    background: #fd9937;
+}
+
+.free-amount-container input {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -o-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    box-shadow: 0px 1px 1px #efefef;
+    background-color: #fff;
+    border: 1px solid #d7e3f0;
+    position: relative;
+    z-index: 10;
+    top: 4px;
+}
+
+.free-amount-container .checkmark {
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    z-index: 9;
+}
+
+.free-amount-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.free-amount-container input:checked {
+    background: transparent;
+}
+
+.free-amount-container input:checked~.checkmark:after {
+    display: block;
+}
+
+.free-amount-container .checkmark:after {
+    left: -14px;
+    top: 10px;
+    width: 4px;
+    height: 8px;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    background: #fff;
+}
+
+</style>

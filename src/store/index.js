@@ -17,6 +17,12 @@ export default createStore({
 
     filteredOffers: state => () => {
       
+      // const stateFilterParams = state.arr.initValue.period
+      // const stateFilterParams = state.arr.initValue.amount
+
+      // const stateFilterParams = state.arr.initValuePeriod
+      // const stateFilterParams = state.arr.initValueAmount
+
       const stateFilterParams = state.filterParams
       
       const filteredOffers = state.offers

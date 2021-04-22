@@ -4,8 +4,8 @@ import { computed } from 'vue'
 
 export default function mixinRating(){
   
-  const store = useStore();
-  const translations = computed(()=>store.state.translations);
+    const store = useStore();
+    const translations = computed(()=>store.state.translations);
 
 
     function ratingClick(e){
@@ -39,6 +39,7 @@ export default function mixinRating(){
               }
         });
       }, Math.random() * 300);
+      
     }
 
     function ratingHover(e){
@@ -53,7 +54,6 @@ export default function mixinRating(){
     }
     
     function calculateFill(e) {
-      //container == rating
       const container = e.target.parentNode;
       const cursorPosX = e.pageX;
       const startCoord = container.getBoundingClientRect().left
@@ -67,7 +67,7 @@ export default function mixinRating(){
       return Math.ceil((number - offset) / increment) * increment + offset;
     }
     
-    function getRateWidth(rate, votes){
+    function getFirstRateWidth(rate, votes){
       const totalOfferRate =  rate * votes
       const totalPossibleRate =  5 * votes
       const percentFilled = totalOfferRate / totalPossibleRate * 100
@@ -127,7 +127,7 @@ export default function mixinRating(){
       ratingLeave,
       calculateFill,
       round,
-      getRateWidth
+      getFirstRateWidth
     }
     
 }

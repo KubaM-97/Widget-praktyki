@@ -30,14 +30,15 @@ export default {
 
   async setup() {
 
+    
+      const store = useStore();
+      const translations = computed(()=>store.state.translations);
+      const filteredOffers = computed(() => store.getters.filteredOffers());
+        
       const showAlert = ref(false);
       const showPromo = ref(false);
       const showRemainingOffers = ref(false);
       const remainingOffers = ref([])
-
-      const store = useStore();
-      const translations = computed(()=>store.state.translations);
-      const filteredOffers = computed(() => store.getters.filteredOffers());
       
       watch(filteredOffers, ()=>{
         manageAlertWindow()
@@ -73,10 +74,10 @@ export default {
       }
 
       return {
-        showAlert,
-        showPromo,
         filteredOffers,
         translations,
+        showAlert,
+        showPromo,
         showRemainingOffers,
         remainingOffers
       };
@@ -87,3 +88,22 @@ export default {
 
 
 </script>
+<style scoped>
+.a44-alert {
+    border: 3px solid red;
+    padding: 8px;
+    border-radius: 5px;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.a44-promo {
+    border: 3px solid green;
+    padding: 8px;
+    border-radius: 5px;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 16px;
+}
+</style>
