@@ -1,6 +1,6 @@
 <template>
 
-    <specific-offers-component :sourceOffers="filteredOffers" @xxx="aaa"/>
+    <specific-offers-component :sourceOffers="filteredOffers"/>
 
     
     <div class="a44-alert" v-if="showAlert">{{translations['No offers matching criteria']}}</div>
@@ -44,9 +44,6 @@ export default {
         managePromoWindow()
       })
 
-      function aaa(e){
-        console.log(e.target)
-      }
       await store.dispatch("fetchOffers");
 
       function manageAlertWindow(){
@@ -76,7 +73,6 @@ export default {
       }
 
       return {
-        aaa,
         showAlert,
         showPromo,
         filteredOffers,

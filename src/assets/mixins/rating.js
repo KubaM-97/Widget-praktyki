@@ -7,60 +7,48 @@ export default function mixinRating(){
   const store = useStore();
   const translations = computed(()=>store.state.translations);
 
-  
-        function ratingClick(e){
 
-          //elem == rate
-          const elem = e.target;
-          
-          const fill = calculateFill(e);
-          const rate = Math.ceil(fill / 100 * 5);
-          
-          const id = elem.closest('.a44-offer').getAttribute('data-id')
+    function ratingClick(e){
 
-          setTimeout(function() {
-            $.ajax({
-              url: 'https://widgets.aff44.com/vote?save_rate=' + id + '&rate=' + rate,
-              dataType: 'jsonp',
-            }).done(function(data) { 
-                  // console.log(data)
-                  if (data.status === 'success') {
-                    
-                    const new_rate = Number(data.new_rate);
-                    
-                    const offer_rate_container = elem.closest('.a44-offer').querySelector('.offer-rate');
-                    offer_rate_container.innerHTML = new_rate.toFixed(1);
-                    
-                    const rate = elem.closest('.a44-offer').querySelector('.rate')
-                    rate.style.width = (new_rate.toFixed(1) / 5 * 100) + '%'
-                    
-                    const votes_count_container = elem.closest('.a44-offer').querySelector('.votes-count');
-                    votes_count_container.innerHTML = getVotes_count_container(data)
-                    
-                  }
-            });
-          }, Math.random() * 300);
-        }
-
-        function ratingHover(e){
-          console.log(e.target)
-          // e.stopImmediatePropagation()
-          // // e.stopPropagation()
-          // console.log(e.target)
-          if(e.target.getAttribute("class")=="rate") {
-            // const fill = calculateFill(e);
-            // console.log(fill)
-            // e.target.parentNode.style.width = round(fill, 20, 0) + '%'
-          }
-          // GOOD
+      const elem = e.target;
       
+      const fill = calculateFill(e);
+      const rate = Math.ceil(fill / 100 * 5);
       
-      // BAD
-      // $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
+      const id = elem.closest('.a44-offer').getAttribute('data-id')
+
+      setTimeout(function() {
+        $.ajax({
+          url: 'https://widgets.aff44.com/vote?save_rate=' + id + '&rate=' + rate,
+          dataType: 'jsonp',
+        }).done(function(data) { 
+              // console.log(data)
+              if (data.status === 'success') {
+                
+                const new_rate = Number(data.new_rate);
+                
+                const offer_rate_container = elem.closest('.a44-offer').querySelector('.offer-rate');
+                offer_rate_container.innerHTML = new_rate.toFixed(1);
+                
+                const rate = elem.closest('.a44-offer').querySelector('.rate')
+                rate.style.width = (new_rate.toFixed(1) / 5 * 100) + '%'
+                
+                const votes_count_container = elem.closest('.a44-offer').querySelector('.votes-count');
+                votes_count_container.innerHTML = getVotes_count_container(data)
+                
+              }
+        });
+      }, Math.random() * 300);
+    }
+
+    function ratingHover(e){
+      const fill = calculateFill(e);
+      e.target.querySelector('.rate').style.width = round(fill, 20, 0) + '%';
     }
     
     function ratingLeave(e){
-      e.target.querySelector('.rate').style.width = $(this).closest('.a44-offer').querySelector('.offer-rate').innerHTML / 5 * 100 + '%'
+      const offer_rate = parseFloat(e.target.closest('.a44-offer').querySelector('.offer-rate').innerHTML)
+      e.target.querySelector('.rate').style.width = offer_rate / 5 * 100 + '%'
     }
     
     function calculateFill(e) {
