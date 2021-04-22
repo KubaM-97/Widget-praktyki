@@ -2,12 +2,29 @@
  - zobacz, sprawdź
  - step1, step2
  - init values 12, 1000
+
+8. display: none, 
+    - p
+    - LOANS-SOLD
+
+9.filter 0 24
+
+
+
 2. code vacuum
-3. display: none, 
- - p
- - LOANS-SOLD
-4. promo
-5. alert
-6. promo & alert font-size
 7. rating
-8. slider match 12
+9. stateFilter.free_amount
+
+
+
+
+
+
+
+
+
+
+
+1. slider match 12
+2. custom directive or custom event
+3. jquery 233 .time.length = 0, .cost.length = 0

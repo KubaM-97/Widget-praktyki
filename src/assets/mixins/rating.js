@@ -12,7 +12,7 @@ export default function mixinRating(){
       const vote_count = data.votes_count.toString();
       const last_char = vote_count.slice(-1);
       
-      if( vote_count !== 1 && vote_count < 11 || vote_count > 14 ){
+      if( vote_count > 1 && vote_count < 11 || vote_count > 14 ){
 
           switch(last_char){  
 
@@ -28,9 +28,11 @@ export default function mixinRating(){
 
       }
       else{
-
+          console.log(222)
           switch(last_char){  
 
+              case '0':
+                return `(brak głosów)`
               case '1':
                 return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes')} )`
 

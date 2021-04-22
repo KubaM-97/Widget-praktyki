@@ -6,7 +6,10 @@
         :data-minamount="offer.min_amount" :data-maxamount="offer.max_amount"
         :data-minperiod="offer.min_period" :data-maxperiod="offer.max_period" 
         :data-freeamount="offer.first_free_amount"
-      >
+      >   
+          <div class="d-none">
+            <p>{{ offer.min_amount }}, {{ offer.max_amount }}, {{ offer.min_period }}, {{ offer.max_period }}, {{ offer.first_free_amount }}</p>
+          </div>
         
           <div class="offer-details">
 
@@ -36,7 +39,7 @@
                       </div>
                     </div>
                     <div class="votes-count">
-                      (<b>{{ offer.votes_count }}</b> {{ translations.votes2 }})
+                      (<b>{{ offer.votes_count || 0 }}</b> {{ translations.votes2 }})
                     </div>
                   </div>
                   <div class="likes-container">
@@ -50,24 +53,20 @@
               <div class="offer-param-container">
                 <div class="offer-param">
                   <div class="offer-param-name"> {{ translations["Amount / period"] }} </div>
-                  <div class="offer-param-value amount"> *1000{{ arr.currency }} / 12{{arr.suffix }}</div>
+                  <div class="offer-param-value amount"></div>
                 </div>
               </div>
               <div class="offer-param-container">
                 <div class="offer-param">
                   <div class="offer-param-name"> {{ translations["COST / TOTAL"] }} </div>
-                  <div class="offer-param-value installment">
-                    <a href="#" style="color:#fff">Zobacz</a>
-                  </div>
+                  <div class="offer-param-value installment"></div>
                   <div class="total"></div>
                 </div>
               </div>
               <div class="offer-param-container">
                 <div class="offer-param">
                   <div class="offer-param-name"> {{ translations.APR }} </div>
-                  <div class="offer-param-value apr">
-                    <a href="#" style="color:#fff">Sprawdź</a>
-                  </div>
+                  <div class="offer-param-value apr"></div>
                 </div>
                 <div class="aclr"></div>
               </div>
@@ -76,7 +75,7 @@
             </div>
 
             <div class="offer-cta">
-              <a :href="offer.link" class="cta-link" target="_blank">
+              <a :href="offer.cta_url" class="cta-link" target="_blank">
                 <span class="cta-icon"></span>
                 <span class="cta-text"> {{ translations["Take a loan"] }} </span>
               </a>
@@ -103,7 +102,7 @@
 
 <script>
 
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
 
@@ -115,8 +114,7 @@ export default {
     },
 
     setup() {
-// function w(){console.log("ssssssssssssssssssssssssssss")}
-const w = ref(22)
+
         const store = useStore();
         const translations = computed(()=>store.state.translations);
         const rrso = computed(()=>store.state.rrso);
@@ -125,7 +123,6 @@ const w = ref(22)
         const { ratingHover, ratingClick, getRateWidth } = mixinRating();
         
         return {
-          w,
           ratingHover,
           ratingClick,
           getRateWidth,
@@ -133,6 +130,7 @@ const w = ref(22)
           rrso,
           arr,
           mixinRating
+          
         };
 
     },

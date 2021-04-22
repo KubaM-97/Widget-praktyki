@@ -2,17 +2,16 @@
 
     <specific-offers-component :sourceOffers="filteredOffers"/>
 
-    <p class="costs-info">
-      {{ translations["offers-params-info"] }}
-    </p>
     
-    <teleport to="#layout-2">
-        <div class="a44-alert" v-if="showAlert">{{translations['No offers matching criteria']}}</div>
-        <div class="a44-promo" v-if="showPromo">{{translations['We also recommend loans with other parameters']}}</div>
-    </teleport>
+    <div class="a44-alert" v-if="showAlert">{{translations['No offers matching criteria']}}</div>
+    <div class="a44-promo" v-if="showPromo">{{translations['We also recommend loans with other parameters']}}</div>
+
 
     <specific-offers-component v-if="showRemainingOffers" :sourceOffers="remainingOffers"/>
     
+    <p class="costs-info">
+      {{ translations["offers-params-info"] }}
+    </p>
     
 </template>
 
@@ -57,18 +56,16 @@ export default {
         remainingOffers.value = [];
 
         if (filteredOffers.value.length <= 3) {
-            
-            if (filteredOffers.value.length) {
               
-                showPromo.value = true;
-               
-                for(const offer of store.state.offers){
-                  if(!store.getters.filteredOffers().includes(offer)){
-                    remainingOffers.value.push(offer)
-                  }
-                }
-                showRemainingOffers.value = true;
+          showPromo.value = true;
+          
+          for(const offer of store.state.offers){
+            if(!store.getters.filteredOffers().includes(offer)){
+              remainingOffers.value.push(offer)
             }
+          }
+          showRemainingOffers.value = true;
+
         } else {
             showPromo.value = false
         }

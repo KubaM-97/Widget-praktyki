@@ -16,15 +16,17 @@ export default createStore({
   getters: {
 
     filteredOffers: state => () => {
-    
+      
+      console.log(44)
       const stateFilterParams = state.filterParams
-
+      
+      // console.log(0>=stateFilterParams.free_amount)
       const filteredOffers = state.offers
       .filter( offer => offer.min_amount <= stateFilterParams.amount )
       .filter( offer => offer.max_amount >= stateFilterParams.amount )
       .filter( offer => offer.min_period <= stateFilterParams.period )
       .filter( offer => offer.max_period >= stateFilterParams.period )
-      .filter( offer => stateFilterParams.free_amount ? offer.first_free_amount >= stateFilterParams.free_amount : true)
+      .filter( offer => stateFilterParams.free_amount ? offer.first_free_amount >= stateFilterParams.amount : true)
         
        return filteredOffers
     }
