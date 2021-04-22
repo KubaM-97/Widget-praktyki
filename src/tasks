@@ -1,17 +1,24 @@
 1. variables to api
- - zobacz, sprawdź
- - step1, step2
- - init values 12, 1000
 
-8. display: none, 
-    - p
-    - LOANS-SOLD
+ - zobacz, sprawdź -> do translations
+ - stepPeriodSlider = 1, stepAmountSlider = 50  (dla input[type=range])-> do arr
+ - initPeriodValue = 12, initAmountValue = 1000 (dla input[type=range]) -> do arr
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 2. code vacuum
-7. rating
 
 
 
@@ -26,3 +33,7 @@
 1. slider match 12
 2. custom directive or custom event
 3. jquery 233 .time.length = 0, .cost.length = 0
+4. null pozyczkapieniedzy
+8. display: none, 
+    - p
+    - LOANS-SOLD
