@@ -17,10 +17,8 @@ export default createStore({
 
     filteredOffers: state => () => {
       
-      console.log(44)
       const stateFilterParams = state.filterParams
       
-      // console.log(0>=stateFilterParams.free_amount)
       const filteredOffers = state.offers
       .filter( offer => offer.min_amount <= stateFilterParams.amount )
       .filter( offer => offer.max_amount >= stateFilterParams.amount )

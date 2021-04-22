@@ -101,7 +101,6 @@ export default ({
 
         const suffix = computed(()=>arr.value.suffix)
         const category = computed(()=>arr.value.category)
-
         function getPeriod(e){
             const elem = e.target
             const oldSuffix =  suffix.value == undefined ? ''  : ( suffix.value == ' dni' ? ' ' + translations.value['days'] : ' ' + translations.value['months']);

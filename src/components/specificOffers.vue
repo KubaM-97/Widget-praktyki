@@ -32,8 +32,13 @@
                     <div class="stars">
                       <div class="rank-rate">
                         <span>
-                          <div class="rating" @click="ratingClick" @mousemove="ratingHover" @mouseleave="getRateWidth( offer.rate , offer.votes_count )">
-                            <div class="rate" :style="{width: getRateWidth( offer.rate , offer.votes_count ) + '%'}"></div>
+<!-- @mousemove.self="ratingHover"  @click="ratingClick"-->
+                          <div class="rating"
+                            @mouseleave="getRateWidth( offer.rate , offer.votes_count )"
+                           
+                           >
+
+                            <div class="rate" @click="ratingClick" :style="{width: getRateWidth( offer.rate , offer.votes_count ) + '%'}"></div>
                           </div>
                         </span>
                       </div>
@@ -102,17 +107,17 @@
 
 <script>
 
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
-
+import $ from 'jquery'
 export default {
   
     name: "offers",
     props: {
         sourceOffers: Array
     },
-
+    emits: ["xxx"],
     setup() {
 
         const store = useStore();
@@ -120,8 +125,19 @@ export default {
         const rrso = computed(()=>store.state.rrso);
         const arr = computed(()=>store.state.arr);
 
-        const { ratingHover, ratingClick, getRateWidth } = mixinRating();
+        const { ratingHover, ratingClick, calculateFill, round, getRateWidth } = mixinRating();
         
+        onMounted(()=>{
+          
+            $('.rating').on('mousemove', function(e) {
+                var fill = calculateFill(e, $(this));
+                $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
+            });
+            $('.rating').on('mouseleave', function() {
+                $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%');
+            });
+        
+        })
         return {
           ratingHover,
           ratingClick,
