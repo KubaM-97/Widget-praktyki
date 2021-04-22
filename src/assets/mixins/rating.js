@@ -59,13 +59,8 @@ export default function mixinRating(){
       // $(this).find('.rate').css('width', round(fill, 20, 0) + '%');
     }
     
-    function ratingLeave(){
-      
-      // e.target.CHILD(".RATE").style.width = round(fill, 20, 0) + '%'
-      // e.target.CHILD(".RATE").style.width = 
-      // np.4,8 / 5 *100
-      //    $(this).parents('.a44-offer').find('.offer-rate').html()           / 5 * 100 + '%'; 
-      //   $(this).find('.rate').css('width', $(this).parents('.a44-offer').find('.offer-rate').html() / 5 * 100 + '%'); 
+    function ratingLeave(e){
+      e.target.querySelector('.rate').style.width = $(this).closest('.a44-offer').querySelector('.offer-rate').innerHTML / 5 * 100 + '%'
     }
     
     function calculateFill(e) {
