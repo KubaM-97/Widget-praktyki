@@ -30,9 +30,9 @@ export default{
 
     const container = ref(null);
     
-    window.addEventListener("resize", screen_size);
+    window.addEventListener("resize", viewport_size);
 
-    function screen_size(){
+    function viewport_size(){
 
         const containerWidth = container.value.parentNode.clientWidth;
         let containerSize = '';
@@ -61,7 +61,7 @@ export default{
     }
     
     onMounted(()=>{
-      screen_size();
+      viewport_size();
     })
     
     

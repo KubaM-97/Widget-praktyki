@@ -43,7 +43,8 @@ export default function mixinRating(){
 
     function ratingHover(e){
       const fill = calculateFill(e);
-      e.target.querySelector('.rate').style.width = round(fill, 20, 0) + '%';
+      const rate = e.target.closest('.rank-rate').querySelector('.rate')
+      rate.style.width = round(fill, 20, 0) + '%';
     }
     
     function ratingLeave(e){
@@ -119,6 +120,7 @@ export default function mixinRating(){
     function getVoteSuffix(vote_suffix){
       return typeof translations.value[vote_suffix] !== 'undefined' ? translations.value[vote_suffix] : 'votes';
     }
+
     return{
       ratingClick,
       ratingHover,
