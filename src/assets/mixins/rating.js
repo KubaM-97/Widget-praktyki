@@ -48,7 +48,7 @@ export default function mixinRating(){
     }
     
     function ratingLeave(e){
-      const offer_rate = parseFloat(e.target.closest('.a44-offer').querySelector('.offer-rate').innerHTML)
+      const offer_rate = parseFloat(e.target.closest('.a44-offer').querySelector('.offer-rate').innerHTML) || 0
       e.target.querySelector('.rate').style.width = offer_rate / 5 * 100 + '%'
     }
     
