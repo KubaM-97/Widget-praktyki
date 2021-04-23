@@ -159,8 +159,7 @@ export default ({
                               const installmentContainer = container.querySelector('.installment');
                               const href = container.querySelector('.cta-link').getAttribute('href')
 
-                              //zobacz
-                              installmentContainer.innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">${translations.value['see']}</a>`
+                              installmentContainer.innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">Zobacz</a>`
                      
                               if (typeof data.costs[slug].installment !== 'undefined' && prefix == 'month')
                                   installmentContainer.innerHTML = `${data.costs[slug].installment} ${arr.value['currency']}`;
@@ -170,11 +169,10 @@ export default ({
 
                               const aprContainer = container.querySelector('.apr');
 
-                              // SPRAWDŹ
                               aprContainer.innerHTML = ` ${ 
                                 typeof data.costs[slug].apr !== 'undefined' && data.costs[slug].apr != null 
                                 ? `${data.costs[slug].apr} %` 
-                                : `<a href=${href}" target="_blank" style="color:#fff;">${translations.value['check']}</a>`
+                                : `<a href=${href}" target="_blank" style="color:#fff;">Sprawdź</a>`
                               }`;
                               
                               if (typeof data.costs[slug].amount !== 'undefined' && typeof data.costs[slug].cost !== 'undefined') {                             

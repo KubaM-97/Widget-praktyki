@@ -1,8 +1,3 @@
-1. variables to api
-
- - zobacz, sprawdź -> do translations
- - stepPeriodSlider = 1, stepAmountSlider = 50  (dla input[type=range])-> do arr
- - initPeriodValue = 12, initAmountValue = 1000 (dla input[type=range]) -> do arr
 
 
 filterParams -> arr.initValuePeriod || arr.initValue.period
@@ -15,10 +10,8 @@ store.js 20 / slider.vue 14, 23, 46, 53, 71, 96, 262, 269
 
 
 
-
-2.wygodnapozyczka 0 głosów i 5 gwiazdek
-3. 1 głosów 24 głosów 
 4.jquery kod pousuwać
+5. nulle
 
 
 
@@ -28,9 +21,6 @@ store.js 20 / slider.vue 14, 23, 46, 53, 71, 96, 262, 269
 
 
 1. slider match 12
-2. custom directive or custom event
-3. jquery 233 .time.length = 0, .cost.length = 0
-4. null pozyczkapieniedzy
 8. display: none, 
     - p
     - LOANS-SOLD

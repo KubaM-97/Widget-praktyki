@@ -33,7 +33,7 @@ export default function mixinRating(){
                 rate.style.width = (new_rate.toFixed(1) / 5 * 100) + '%'
                 
                 const votes_count_container = elem.closest('.a44-offer').querySelector('.votes-count');
-                votes_count_container.innerHTML = getVotes_count_container(data)
+                votes_count_container.innerHTML = get_votes_count_container(data.vote_count)
                 
               }
         });
@@ -73,11 +73,12 @@ export default function mixinRating(){
       
       const percentFilled = totalOfferRate / totalPossibleRate * 100
       return percentFilled || 0
+
     }
     
-    function getVotes_count_container(data){
+    function get_votes_count_container(vote_count_number){
   
-      const vote_count = data.votes_count.toString();
+      const vote_count = vote_count_number.toString();
       const last_char = vote_count.slice(-1);
       
       if( vote_count > 1 && vote_count < 11 || vote_count > 14 ){
@@ -87,10 +88,10 @@ export default function mixinRating(){
               case '2':
               case '3':
               case '4':
-                return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes')} )`
+                return `(<b> ${vote_count} </b> ${getVoteSuffix('votes')} )`
   
               default:
-                return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')} )`
+                return `(<b> ${vote_count} </b> ${getVoteSuffix('votes2')} )`
   
           }
   
@@ -100,17 +101,17 @@ export default function mixinRating(){
           switch(last_char){  
   
               case '0':
-                return `(brak głosów)`
+                return ` (brak głosów) `
               case '1':
-                return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes')} )`
+                return `(<b> ${vote_count} </b> ${getVoteSuffix('votes')} )`
   
               case '12':
               case '13':
               case '14':
-                return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')})`
+                return `(<b> ${vote_count} </b> ${getVoteSuffix('votes2')})`
   
               default:
-                return `(<b> ${data.votes_count} </b> ${getVoteSuffix('votes2')} )`
+                return `(<b> ${vote_count} </b> ${getVoteSuffix('votes2')} )`
   
           }
   
@@ -128,7 +129,8 @@ export default function mixinRating(){
       ratingLeave,
       calculateFill,
       round,
-      getFirstRateWidth
+      getFirstRateWidth,
+      get_votes_count_container
     }
     
 }

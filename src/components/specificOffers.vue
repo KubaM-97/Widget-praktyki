@@ -38,10 +38,7 @@
                         </span>
                       </div>
                     </div>
-                    <!-- głosów -->
-                    <div class="votes-count">
-                      (<b>{{ offer.votes_count || 0 }}</b> {{ translations.votes2 }})
-                    </div>
+                    <div class="votes-count" v-html="get_votes_count_container(offer.votes_count || 0)"></div>
                   </div>
                   <div class="likes-container">
                     <div class="likes">{LOANS-SOLD}</div>
@@ -119,7 +116,7 @@ export default {
         const rrso = computed(()=>store.state.rrso);
         const arr = computed(()=>store.state.arr);
         
-        const { ratingHover, ratingLeave, ratingClick, getFirstRateWidth } = mixinRating();
+        const { ratingHover, ratingLeave, ratingClick, getFirstRateWidth, get_votes_count_container } = mixinRating();
 
         return {
 
@@ -127,11 +124,11 @@ export default {
           rrso,
           arr,
 
-          mixinRating,
           ratingHover,
           ratingLeave,
           ratingClick,
-          getFirstRateWidth
+          getFirstRateWidth,
+          get_votes_count_container
 
         };
 
