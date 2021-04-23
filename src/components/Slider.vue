@@ -1,16 +1,5 @@
 <template>
-{{typeof parseInt(arr.initPeriodValue)}}
-{{typeof arr.initAmountValue}}
-{{typeof arr.free_amount}}
-{{arr.initPeriodValue}}
-{{arr.initAmountValue}}
-{{arr.free_amount}}
 
-{{typeof test}}
-{{test}}
-
-{{filterPeriod}}
-{{aa}}
   <div class="a44-slider">
 
     <div class="period-container" ref="periodContainer">
@@ -22,7 +11,7 @@
 
         <div class="period-value-container">
           <span class="value-wrapper">
-            <input type="text" class="value" readonly :value="aa.period" 
+            <input type="text" class="value" readonly :value="arr.initPeriodValue" 
             :min="arr.minPeriod" :max="arr.maxPeriod" name="period-label"/>
             <span class="suffix">{{arr.suffix}}</span>
           </span>
@@ -31,7 +20,7 @@
         <div class="aclr"></div>
 
         <div class="input-wrapper">
-          <input type="range" v-model.number.lazy="aa.period" @input="getPeriod" @change="update_amount_inst_apr"
+          <input type="range" v-model.number.lazy="arr.initPeriodValue" @input="getPeriod" @change="update_amount_inst_apr"
             :class="'a44-period-'+arr.hash +' costslider'" name="period-costslider"
             :step="arr.stepPeriodSlider" :min="arr.minPeriod" :max="arr.maxPeriod"/>
         </div>
@@ -42,6 +31,7 @@
           <span class="a44-max"> {{arr.maxPeriod}} {{arr.suffix}} </span>
         </div>
         <div class="aclr"></div>
+
       </div>
     </div>
 
@@ -97,30 +87,19 @@ import $ from "jquery";
 
 export default ({
   
-    async setup() {
-        console.log(222)
+    setup() {
 
         const store = useStore();
-        const translations = computed(()=>store.state.translations);
-        const arr = computed(()=>store.state.arr); 
         const offers = computed(()=>store.state.offers); 
+        const translations = computed(()=>store.state.translations);
+        
+        const arr = computed(()=>store.state.arr); 
         const suffix = computed(()=>arr.value.suffix)
         const category = computed(()=>arr.value.category)
-        // input v-model=filterPeriod works
-        const filterPeriod = computed(()=>store.state.filterPeriod)
-        // const filterPeriod = store.state.filterPeriod
-        const aa = computed(()=>store.getters.filterParams())
-        console.log(aa.value)
-    // console.log(store.state.arr)
+        
         const amountContainer = ref(null)
         const periodContainer = ref(null)
-        setTimeout(()=>{
-            // arr.value.initPeriodValue = 20000
-        },2000)
-        onMounted(()=>{
-            const test_string = ""+arr.value.initPeriodValue
-            console.log(test_string)
-        })
+        
         function getPeriod(e){
             const elem = e.target
             const oldSuffix =  suffix.value == undefined ? ''  : ( suffix.value == ' dni' ? ' ' + translations.value['days'] : ' ' + translations.value['months']);
@@ -281,22 +260,19 @@ export default ({
             
         }
         
-        const test = computed(()=>arr.value.initPeriodValue)
-        console.log(test.value)
         return {
-            aa,
-test,
+
           translations,
           arr,
 
           amountContainer,
           periodContainer,
-          filterPeriod,
 
           getPeriod,
           getAmount,
           getAmountManually,
           update_amount_inst_apr
+
         }
     }
     

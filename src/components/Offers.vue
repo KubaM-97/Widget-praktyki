@@ -30,7 +30,6 @@ export default {
 
   setup() {
 
-    
       const store = useStore();
       const translations = computed(()=>store.state.translations);
       const filteredOffers = computed(() => store.getters.filteredOffers());

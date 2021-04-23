@@ -4,7 +4,6 @@ import axios from 'axios'
 export default createStore({
     state: {
       offers: [],
-      filterPeriod: 12,
       rrso: [],
       translations: [],
       arr: []
@@ -27,9 +26,8 @@ export default createStore({
     },
 
     filterParams: state =>  () => {
-      console.log(state.arr)
       const params = {
-        period: 12,
+        period: state.arr.initPeriodValue,
         amount: state.arr.initAmountValue,
         free_amount: state.arr.free_amount,
       }
@@ -48,13 +46,13 @@ export default createStore({
       state.translations = translations;
     },
     setArr( state, arr ){
-      console.log("mutations")
+      // console.log("mutations")
       state.arr = arr;
     }
   },
   actions: {
     async fetchOffers ( { commit } ) {
-      console.log("dispatch")
+      // console.log("dispatch")
       await axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
         .then( response =>  {
           commit("setOffers", response.data.offers);
