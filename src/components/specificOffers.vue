@@ -14,12 +14,9 @@
           <div class="offer-details">
 
             <div class="offer-name-details">
-                <span v-html="ss(offer.thumbnail)"></span>
-              <div class="offer-logo">
-                  <!-- <img :src="$emit(ss, $event)"> -->
-                <!-- <img ref="aa" :src="offer.thumbnail" /> -->
-                <img ref="aa" :src="ss(offer.thumbnail)" />
-                <!-- <img src='../assets/img/default.png' /> -->
+                  <!-- <span v-html="getImgSrc(offer.thumbnail)"></span> -->
+                  <!-- <img :src="offer.thumbnail"> -->
+              <div class="offer-logo" v-html="getImgSrc(offer.thumbnail)">
               </div>
               <div class="offer-rates">
                 <div class="offer-rate" v-html="parseInt(offer.rate).toFixed(1) || 'gsdfgsd'"></div>
@@ -104,7 +101,7 @@
 
 <script>
 
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
 export default {
@@ -119,30 +116,28 @@ export default {
         const translations = computed(()=>store.state.translations);
         const rrso = computed(()=>store.state.rrso);
         const arr = computed(()=>store.state.arr);
-        const aa = ref(null)
-        const defaultImage = require('../assets/img/default.png')
-        console.log(defaultImage)
-        const { ratingHover, ratingLeave, ratingClick, getFirstRateWidth, get_votes_count_container } = mixinRating();
-function ss(x){
-    return x ? `<img src="${x}" />` : `<img src="${defaultImage}" />`
-    // console.log(x == null)
-}          
-// '../assets/img/default.png'
-        // onMounted(()=>{
-        //     // aa.value=""
-        // })
-        return {
-            aa,
-ss,
-          translations,
-          rrso,
-          arr,
 
-          ratingHover,
-          ratingLeave,
-          ratingClick,
-          getFirstRateWidth,
-          get_votes_count_container
+        const defaultImage = require('../assets/img/default.png');
+
+        const { ratingHover, ratingLeave, ratingClick, getFirstRateWidth, get_votes_count_container } = mixinRating();
+        
+        function getImgSrc(offerSource){
+            return offerSource ? `<img src="${offerSource}" />` : `<img src="${defaultImage}" />`
+        } 
+
+        return {
+
+            translations,
+            rrso,
+            arr,
+
+            ratingHover,
+            ratingLeave,
+            ratingClick,
+            getFirstRateWidth,
+            get_votes_count_container,
+          
+            getImgSrc,
 
         };
 
@@ -152,7 +147,7 @@ ss,
 
 </script>
 
-<style scoped>
+<style>
 
 
 .a44-widget .a44-offer {
