@@ -139,46 +139,59 @@ export default ({
                     period: parseInt(period),
                     time_type: prefix
                 }, function(data) {
-                    console.log(data);
+                    // console.log(data);
                     slugs.forEach( slug => {
-                      if (typeof data.costs !== 'undefined' && typeof data.costs[slug] !== 'undefined') {
                         
-                        // console.log(slug)
+                        const containers = widget.querySelectorAll('[data-costs]');
+                        console.log(containers)
+                        containers.forEach( container => {
+                            container.querySelector('.amount').innerHTML = `*  ${parseInt(amount)} ${arr.value['currency']} / ${parseInt(period)} 
+                                    ${(prefix == 'month' 
+                                      ? ` ${typeof translations.value['months'] !== 'undefined' ? translations.value['months'] : 'months'}`
+                                      : ` ${typeof translations.value['days'] !== 'undefined' ? translations.value['days'] : 'days'}`)}`;
+                            const href = container.querySelector('.cta-link').getAttribute('href');
+                            container.querySelector('.installment').innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">Zobacz</a>`
+                            container.querySelector('.apr').innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">Sprawdź</a>`
+
+                        })
+
+                      if (typeof data.costs[slug] !== 'undefined' && slug !== '') {
                           const container = widget.querySelector('[data-costs="' + slug + '"]');
-                        //   console.log(container)
 
                           if(container){
-                            
+                              
                               const amountContainer = container.querySelector('.amount');
+                              
+                              const installmentContainer = container.querySelector('.installment');
+                              const href = container.querySelector('.cta-link').getAttribute('href');
+                              
+                              const aprContainer = container.querySelector('.apr');
+
                               amountContainer.innerHTML = `*  ${parseInt(amount)} ${arr.value['currency']} / ${parseInt(period)} 
                                     ${(prefix == 'month' 
                                       ? ` ${typeof translations.value['months'] !== 'undefined' ? translations.value['months'] : 'months'}`
                                       : ` ${typeof translations.value['days'] !== 'undefined' ? translations.value['days'] : 'days'}`)}`;
                              
-
-                              const installmentContainer = container.querySelector('.installment');
-                              const href = container.querySelector('.cta-link').getAttribute('href')
-
                               installmentContainer.innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">Zobacz</a>`
-                     
+            
+                              aprContainer.innerHTML = ` ${ 
+                                  typeof data.costs[slug].apr !== 'undefined' && data.costs[slug].apr != null 
+                                ? `${data.costs[slug].apr} %` 
+                                : `<a href=${href}" target="_blank" style="color:#fff;">Sprawdź</a>`
+                              }`;
+                                    
                               if (typeof data.costs[slug].installment !== 'undefined' && prefix == 'month')
                                   installmentContainer.innerHTML = `${data.costs[slug].installment} ${arr.value['currency']}`;
                               if (typeof data.costs[slug].cost !== 'undefined' && prefix == 'day')
                                   installmentContainer.innerHTML = `${data.costs[slug].cost} ${arr.value['currency']}`;
-
-
-                              const aprContainer = container.querySelector('.apr');
-
-                              aprContainer.innerHTML = ` ${ 
-                                typeof data.costs[slug].apr !== 'undefined' && data.costs[slug].apr != null 
-                                ? `${data.costs[slug].apr} %` 
-                                : `<a href=${href}" target="_blank" style="color:#fff;">Sprawdź</a>`
-                              }`;
-                              
                               if (typeof data.costs[slug].amount !== 'undefined' && typeof data.costs[slug].cost !== 'undefined') {                             
                                   installmentContainer.innerHTML += ` /  ${ Math.round( (data.costs[slug].cost + data.costs[slug].amount) * 100) / 100 }  ${arr.value['currency']}`;                       
                               }
                           }
+                        //   else{
+                            //       installmentContainer.innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">Zobacz</a>`
+                        //       aprContainer.innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">Sprawdź</a>`
+                        //   }
 
 
                       }

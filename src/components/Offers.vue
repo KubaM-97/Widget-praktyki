@@ -33,7 +33,6 @@ export default {
       const store = useStore();
       const translations = computed(()=>store.state.translations);
       const filteredOffers = computed(() => store.getters.filteredOffers());
-        
       const showAlert = ref(false);
       const showPromo = ref(false);
       const showRemainingOffers = ref(false);

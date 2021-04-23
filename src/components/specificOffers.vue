@@ -1,8 +1,8 @@
 <template>
     
-    <div class="a44-offers" v-for="offer in sourceOffers" :key="offer.id">
+    <div class="a44-offers">
    
-      <div class='a44-offer pl promo' :data-id="offer.id" :data-costs="offer.loando_slug"
+      <div class='a44-offer pl promo' v-for="offer in sourceOffers" :key="offer.id" :data-id="offer.id" :data-costs="offer.loando_slug || 'default_slug'"
         :data-minamount="offer.min_amount" :data-maxamount="offer.max_amount"
         :data-minperiod="offer.min_period" :data-maxperiod="offer.max_period" 
         :data-freeamount="offer.first_free_amount"
@@ -14,12 +14,11 @@
           <div class="offer-details">
 
             <div class="offer-name-details">
-                  <!-- <span v-html="getImgSrc(offer.thumbnail)"></span> -->
-                  <!-- <img :src="offer.thumbnail"> -->
-              <div class="offer-logo" v-html="getImgSrc(offer.thumbnail)">
+              <div class="offer-logo" v-html="getOfferThumbnail(offer.thumbnail)">
               </div>
               <div class="offer-rates">
-                <div class="offer-rate" v-html="parseInt(offer.rate).toFixed(1) || 'gsdfgsd'"></div>
+                <div class="offer-rate" v-if="offer.rate" v-html="parseFloat(offer.rate||0).toFixed(1)"></div>
+                <div class="offer-rate" v-else></div>
                 <div class="offer-name-container">
                   <div class="offer-name">
                     {{ offer.display_name }}
@@ -121,7 +120,7 @@ export default {
 
         const { ratingHover, ratingLeave, ratingClick, getFirstRateWidth, get_votes_count_container } = mixinRating();
         
-        function getImgSrc(offerSource){
+        function getOfferThumbnail(offerSource){
             return offerSource ? `<img src="${offerSource}" />` : `<img src="${defaultImage}" />`
         } 
 
@@ -137,7 +136,7 @@ export default {
             getFirstRateWidth,
             get_votes_count_container,
           
-            getImgSrc,
+            getOfferThumbnail,
 
         };
 
