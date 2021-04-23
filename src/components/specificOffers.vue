@@ -38,6 +38,7 @@
                         </span>
                       </div>
                     </div>
+                    <!-- głosów -->
                     <div class="votes-count">
                       (<b>{{ offer.votes_count || 0 }}</b> {{ translations.votes2 }})
                     </div>
@@ -121,14 +122,17 @@ export default {
         const { ratingHover, ratingLeave, ratingClick, getFirstRateWidth } = mixinRating();
 
         return {
+
           translations,
           rrso,
           arr,
+
           mixinRating,
           ratingHover,
           ratingLeave,
           ratingClick,
           getFirstRateWidth
+
         };
 
     },
@@ -136,12 +140,9 @@ export default {
 };
 
 </script>
+
 <style scoped>
 
-
-
-
-/* OFFERS */
 
 .a44-widget .a44-offer {
     font-family: 'Open Sans';

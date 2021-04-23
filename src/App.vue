@@ -1,6 +1,6 @@
 <template>
   <div style="max-width: 1200px; margin: auto; width: 100%;">
-    <div id="layout-" class="a44-widget layout" ref="container">
+    <div id="layout-2" class="a44-widget layout" ref="container">
       <suspense>
         <template #default>
           <div>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-require("./assets/css/style.css")
+
 import Slider from '@/components/Slider.vue';
 import Offers from '@/components/Offers.vue';
 

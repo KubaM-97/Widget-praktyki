@@ -7,7 +7,6 @@ export default function mixinRating(){
     const store = useStore();
     const translations = computed(()=>store.state.translations);
 
-
     function ratingClick(e){
 
       const elem = e.target;
@@ -68,10 +67,12 @@ export default function mixinRating(){
     }
     
     function getFirstRateWidth(rate, votes){
+
       const totalOfferRate =  rate * votes
       const totalPossibleRate =  5 * votes
+      
       const percentFilled = totalOfferRate / totalPossibleRate * 100
-      return percentFilled
+      return percentFilled || 0
     }
     
     function getVotes_count_container(data){
