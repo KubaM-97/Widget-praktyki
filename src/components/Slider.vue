@@ -1,5 +1,16 @@
 <template>
+{{typeof parseInt(arr.initPeriodValue)}}
+{{typeof arr.initAmountValue}}
+{{typeof arr.free_amount}}
+{{arr.initPeriodValue}}
+{{arr.initAmountValue}}
+{{arr.free_amount}}
 
+{{typeof test}}
+{{test}}
+
+{{filterPeriod}}
+{{aa}}
   <div class="a44-slider">
 
     <div class="period-container" ref="periodContainer">
@@ -11,7 +22,7 @@
 
         <div class="period-value-container">
           <span class="value-wrapper">
-            <input type="text" class="value" readonly :value="filterParams.period" 
+            <input type="text" class="value" readonly :value="aa.period" 
             :min="arr.minPeriod" :max="arr.maxPeriod" name="period-label"/>
             <span class="suffix">{{arr.suffix}}</span>
           </span>
@@ -20,9 +31,9 @@
         <div class="aclr"></div>
 
         <div class="input-wrapper">
-          <input type="range" v-model.number.lazy="filterParams.period" @input="getPeriod" @change="update_amount_inst_apr"
+          <input type="range" v-model.number.lazy="aa.period" @input="getPeriod" @change="update_amount_inst_apr"
             :class="'a44-period-'+arr.hash +' costslider'" name="period-costslider"
-            step="1" :min="arr.minPeriod" :max="arr.maxPeriod"/>
+            :step="arr.stepPeriodSlider" :min="arr.minPeriod" :max="arr.maxPeriod"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min"> {{arr.minPeriod}} {{arr.suffix}} </span>
@@ -43,16 +54,16 @@
           <span class="value-wrapper">
             
             <input type="text" @blur="getAmountManually" @keyup.enter="getAmountManually" class="value" 
-            :value="filterParams.amount" :min="arr.minAmount" :max="arr.maxAmount" name="amount-label"/>
+            :value="arr.initAmountValue" :min="arr.minAmount" :max="arr.maxAmount" name="amount-label"/>
             
             <span class="currency">{{arr.currency}}</span>
           </span>
         </div>
         <div class="aclr"></div>
         <div class="input-wrapper">
-          <input type="range" v-model.number.lazy="filterParams.amount" @input="getAmount" @change="update_amount_inst_apr"
+          <input type="range" v-model.number.lazy="arr.initAmountValue" @input="getAmount" @change="update_amount_inst_apr"
             :class="'a44-amount-'+arr.hash +' costslider'" name="amount-costslider"
-            step="50" :min="arr.minAmount" :max="arr.maxAmount"/>
+            :step="arr.stepAmountSlider" :min="arr.minAmount" :max="arr.maxAmount"/>
         </div>
         <div class="min-val-wrapper">
           <span class="a44-min">{{arr.minAmount}} {{arr.currency}}</span>
@@ -68,10 +79,9 @@
 
     <div class="free-amount-container" ref="freeAmount">
       <input type="checkbox" :id="'chck-free-amount-'+arr.hash"
-       v-model="filterParams.free_amount"/>
+       v-model="arr.free_amount"/>
       <span class="checkmark"></span>
       <label :for="'chck-free-amount-'+arr.hash"> {{ translations["Show only free loans"] }}</label>
-      <input type="hidden" class="translations" value="" />
     </div>
 
   </div>
@@ -87,20 +97,30 @@ import $ from "jquery";
 
 export default ({
   
-    setup() {
+    async setup() {
+        console.log(222)
 
         const store = useStore();
         const translations = computed(()=>store.state.translations);
         const arr = computed(()=>store.state.arr); 
         const offers = computed(()=>store.state.offers); 
-        const filterParams = computed(()=>store.state.filterParams); 
         const suffix = computed(()=>arr.value.suffix)
         const category = computed(()=>arr.value.category)
-
+        // input v-model=filterPeriod works
+        const filterPeriod = computed(()=>store.state.filterPeriod)
+        // const filterPeriod = store.state.filterPeriod
+        const aa = computed(()=>store.getters.filterParams())
+        console.log(aa.value)
+    // console.log(store.state.arr)
         const amountContainer = ref(null)
         const periodContainer = ref(null)
-        const freeAmount = ref(null)
-        
+        setTimeout(()=>{
+            // arr.value.initPeriodValue = 20000
+        },2000)
+        onMounted(()=>{
+            const test_string = ""+arr.value.initPeriodValue
+            console.log(test_string)
+        })
         function getPeriod(e){
             const elem = e.target
             const oldSuffix =  suffix.value == undefined ? ''  : ( suffix.value == ' dni' ? ' ' + translations.value['days'] : ' ' + translations.value['months']);
@@ -257,18 +277,21 @@ export default ({
             }
             
             sliderMoveAnimation(sliderAmountLabel, elem)    
-            filterParams.value.amount = parseInt(elem.value)
+            arr.value.initAmountValue = parseInt(elem.value)
             
         }
         
+        const test = computed(()=>arr.value.initPeriodValue)
+        console.log(test.value)
         return {
+            aa,
+test,
           translations,
           arr,
-          filterParams,
 
           amountContainer,
           periodContainer,
-          freeAmount,
+          filterPeriod,
 
           getPeriod,
           getAmount,

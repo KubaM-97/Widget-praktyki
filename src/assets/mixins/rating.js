@@ -103,7 +103,7 @@ export default function mixinRating(){
               case '0':
                 return ` (brak głosów) `
               case '1':
-                return `(<b> ${vote_count} </b> ${getVoteSuffix('votes')} )`
+                return `(<b> ${vote_count} </b> ${getVoteSuffix('vote')} )`
   
               case '12':
               case '13':

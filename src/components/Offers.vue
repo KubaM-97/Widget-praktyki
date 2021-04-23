@@ -28,7 +28,7 @@ export default {
     "specific-offers-component": SpecificOffers
   },
 
-  async setup() {
+  setup() {
 
     
       const store = useStore();
@@ -44,8 +44,6 @@ export default {
         manageAlertWindow()
         managePromoWindow()
       })
-
-      await store.dispatch("fetchOffers");
 
       function manageAlertWindow(){
           filteredOffers.value.length > 0 ? showAlert.value = false: showAlert.value  = true;
