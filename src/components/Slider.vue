@@ -156,27 +156,14 @@ export default ({
                         installmentContainer.innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">Zobacz</a>`
                         aprContainer.innerHTML = `<a href=${href}" target="_blank" style="color:#fff;">Sprawdź</a>`
 
-                        // if(typeof data.costs[slug].apr !== 'undefined' && data.costs[slug].apr != null) `${data.costs[slug].apr} %`
-                        // ` ${ 
-                        //           typeof data.costs[slug].apr !== 'undefined' && data.costs[slug].apr != null 
-                        //         ? `${data.costs[slug].apr} %` 
-                        //         : `<a href=${href}" target="_blank" style="color:#fff;">Sprawdź</a>`
-                        //       }`
                     })
-                    //jeśli jest nazwa to zastąp link liczbami
                     slugs.forEach( slug => {
-                    //   if (typeof data.costs[slug] !== 'undefined' && slug !== '') {
+                        
                           const slug_container = widget.querySelector('[data-costs="' + slug + '"]');
+                          
                           if(slug_container){
-                        const installmentContainer = slug_container.querySelector('.installment');
-                        const aprContainer = slug_container.querySelector('.apr');
-                        // const href = slug_container.querySelector('.cta-link').getAttribute('href');
 
-                            //   aprContainer.innerHTML = ` ${ 
-                            //       typeof data.costs[slug].apr !== 'undefined' && data.costs[slug].apr != null 
-                            //     ? `${data.costs[slug].apr} %` 
-                            //     : `<a href=${href}" target="_blank" style="color:#fff;">Sprawdź</a>`
-                            //   }`;
+                            const installmentContainer = slug_container.querySelector('.installment');
                                     
                               if (typeof data.costs[slug].installment !== 'undefined' && prefix == 'month')
                                   installmentContainer.innerHTML = `${data.costs[slug].installment} ${arr.value['currency']}`;
@@ -186,19 +173,8 @@ export default ({
                                   installmentContainer.innerHTML += ` /  ${ Math.round( (data.costs[slug].cost + data.costs[slug].amount) * 100) / 100 }  ${arr.value['currency']}`;                       
                               }
 
+                          }    
 
-
-                        if(typeof data.costs[slug].apr !== 'undefined' && data.costs[slug].apr != null) aprContainer.innerHTML = `${data.costs[slug].apr} %` 
-
-
-                            console.log(333)
-                          }
-
-
-
-                    //   }
-
-                    
                     })
                 });
             }
