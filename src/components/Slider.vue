@@ -92,14 +92,18 @@ export default ({
         const store = useStore();
         const offers = computed(()=>store.state.offers); 
         const translations = computed(()=>store.state.translations);
-        
+
         const arr = computed(()=>store.state.arr); 
         const suffix = computed(()=>arr.value.suffix)
         const category = computed(()=>arr.value.category)
         
         const amountContainer = ref(null)
         const periodContainer = ref(null)
-        
+
+        onMounted(()=>{
+          update_amount_inst_apr()
+        })
+
         function getPeriod(e){
             const elem = e.target
             const oldSuffix =  suffix.value == undefined ? ''  : ( suffix.value == ' dni' ? ' ' + translations.value['days'] : ' ' + translations.value['months']);
@@ -112,10 +116,6 @@ export default ({
             const sliderAmountLabel = amountContainer.value.querySelector('input[type=text].value')
             sliderMoveAnimation(sliderAmountLabel, elem)    
         }
-
-        onMounted(()=>{
-          update_amount_inst_apr()
-        })
 
         function update_amount_inst_apr(){
 
@@ -139,12 +139,13 @@ export default ({
                     period: parseInt(period),
                     time_type: prefix
                 }, function(data) {
-                    // console.log(data);
+                    console.log(data);
                     slugs.forEach( slug => {
                       if (typeof data.costs !== 'undefined' && typeof data.costs[slug] !== 'undefined') {
-
+                        
+                        // console.log(slug)
                           const container = widget.querySelector('[data-costs="' + slug + '"]');
-                          
+                        //   console.log(container)
 
                           if(container){
                             

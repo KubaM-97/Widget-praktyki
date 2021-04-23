@@ -1,9 +1,16 @@
 <template>
-    <suspense>
-      <template #default>
-          <main-component/>
-      </template>
-    </suspense>
+  <div style="max-width: 1200px; margin: auto; width: 100%;">
+    <div id="layout-2" class="a44-widget layout" ref="container">
+      <suspense>
+        <template #default>
+          <div>
+            <main-component/>
+          </div>
+        </template>
+      </suspense>
+
+    </div>
+  </div>
 </template>
 
 <script>

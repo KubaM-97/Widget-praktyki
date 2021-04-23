@@ -17,21 +17,14 @@ export default createStore({
       const initFreeAmountValue = state.arr.free_amount
 
       const filteredOffers = state.offers
-      .filter( offer => offer.min_amount <= initAmountValue )
-      .filter( offer => offer.max_amount >= initAmountValue )
       .filter( offer => offer.min_period <= initPeriodValue )
-      .filter( offer => offer.max_period >= initPeriodValue )
+      .filter( offer => offer.max_period >= initPeriodValue || offer.max_period == null )
+      .filter( offer => offer.min_amount <= initAmountValue )
+      .filter( offer => offer.max_amount >= initAmountValue || offer.max_amount == null )
       .filter( offer => initFreeAmountValue ? offer.first_free_amount >= initAmountValue : true)
-       return filteredOffers
-    },
+      
+      return filteredOffers
 
-    filterParams: state =>  () => {
-      const params = {
-        period: state.arr.initPeriodValue,
-        amount: state.arr.initAmountValue,
-        free_amount: state.arr.free_amount,
-      }
-      return params
     }
 
   },
@@ -46,13 +39,11 @@ export default createStore({
       state.translations = translations;
     },
     setArr( state, arr ){
-      // console.log("mutations")
       state.arr = arr;
     }
   },
   actions: {
     async fetchOffers ( { commit } ) {
-      // console.log("dispatch")
       await axios.get("https://panel-dev.aff44.com/widget-json/718f1b61")
         .then( response =>  {
           commit("setOffers", response.data.offers);
