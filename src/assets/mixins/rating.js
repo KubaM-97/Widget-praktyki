@@ -33,7 +33,7 @@ export default function mixinRating(){
                 rate.style.width = (new_rate.toFixed(1) / 5 * 100) + '%'
                 
                 const votes_count_container = elem.closest('.a44-offer').querySelector('.votes-count');
-                votes_count_container.innerHTML = get_votes_count_container(data.vote_count)
+                votes_count_container.innerHTML = get_votes_count_container(data.votes_count)
                 
               }
         });
