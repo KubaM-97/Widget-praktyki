@@ -21,7 +21,7 @@ export default function mixinRating(){
           url: 'https://widgets.aff44.com/vote?save_rate=' + id + '&rate=' + rate,
           dataType: 'jsonp',
         }).done(function(data) { 
-              // console.log(data)
+          
               if (data.status === 'success') {
                 
                 const new_rate = Number(data.new_rate);
@@ -81,7 +81,7 @@ export default function mixinRating(){
       const vote_count = vote_count_number.toString();
       const last_char = vote_count.slice(-1);
       
-      if( vote_count > 1 && vote_count < 11 || vote_count > 14 ){
+      if( vote_count > 1 && vote_count <= 11 || vote_count > 14 ){
   
           switch(last_char){  
   

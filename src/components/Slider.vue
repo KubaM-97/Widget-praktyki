@@ -92,7 +92,6 @@ export default ({
         const store = useStore();
         const offers = computed(()=>store.state.offers); 
         const translations = computed(()=>store.state.translations);
-        // console.log(translations.value)
         const arr = computed(()=>store.state.arr); 
         const suffix = computed(()=>arr.value.suffix)
         const category = computed(()=>arr.value.category)
@@ -139,7 +138,6 @@ export default ({
                     period: parseInt(period),
                     time_type: prefix
                 }, function(data) {
-
                     const containers = widget.querySelectorAll('[data-costs]');
                     containers.forEach( container => {
                              
@@ -164,14 +162,16 @@ export default ({
                           if(slug_container){
 
                             const installmentContainer = slug_container.querySelector('.installment');
+                            const aprContainer = slug_container.querySelector('.apr');
                                     
-                              if (typeof data.costs[slug].installment !== 'undefined' && prefix == 'month')
-                                  installmentContainer.innerHTML = `${data.costs[slug].installment} ${arr.value['currency']}`;
-                              if (typeof data.costs[slug].cost !== 'undefined' && prefix == 'day')
-                                  installmentContainer.innerHTML = `${data.costs[slug].cost} ${arr.value['currency']}`;
-                              if (typeof data.costs[slug].amount !== 'undefined' && typeof data.costs[slug].cost !== 'undefined') {                             
-                                  installmentContainer.innerHTML += ` /  ${ Math.round( (data.costs[slug].cost + data.costs[slug].amount) * 100) / 100 }  ${arr.value['currency']}`;                       
-                              }
+                            if (typeof data.costs[slug].installment !== 'undefined' && prefix == 'month')
+                                installmentContainer.innerHTML = `${data.costs[slug].installment} ${arr.value['currency']}`;
+                            if (typeof data.costs[slug].cost !== 'undefined' && prefix == 'day')
+                                installmentContainer.innerHTML = `${data.costs[slug].cost} ${arr.value['currency']}`;
+                            if (typeof data.costs[slug].amount !== 'undefined' && data.costs[slug].apr !== null) {                             
+                                installmentContainer.innerHTML += ` /  ${ Math.round( (data.costs[slug].cost + data.costs[slug].amount) * 100) / 100 }  ${arr.value['currency']}`;                       
+                                aprContainer.innerHTML = data.costs[slug].apr + '%';  
+                            }                                    
 
                           }    
 

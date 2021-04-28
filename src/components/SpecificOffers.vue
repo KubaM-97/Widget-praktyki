@@ -1,12 +1,50 @@
 <template>
+<!-- $schema = [
+    '@context' => 'http://schema.org/',
+    '@type' => 'Product',
+    'image' => '',
+    'name' => $offersDetails[$offer_id]['Offer']['name'],
+    'aggregateRating' => [
+        '@type' => 'AggregateRating',
+        'ratingValue' => $offers[$offer_id]['rate'],
+        'reviewCount' => $offers[$offer_id]['stars-votes'],
+        'worstRating' => '1',
+        'bestRating' => '5',
+    ]
+];
+$HTMLoffer = "<script type=\'application/ld+json\'>" . Zend_Json::encode($schema) . "<\/script>" . $HTMLoffer; -->
+    
+    
+    
+    
+    
+    
+    
+<!--     
+    const schema = [
+        '@context'.'http://schema.org',
+        '@type'.'Product',
+        'image'.'',
+        'name'.offer.name,
+        'aggregateRating'.[
+            '@type'.'AggregateRating',
+            'ratingValue'.offer.rate,
+            'reviewCount'.offer['votes_count'],
+            'worstRating'[1],
+            'bestRating'[5],
+        ]
+    ]
+
+
+    <script type=\'application/ld+json\'> + Zend_Json::encode($schema) + </script>; --> -->
     
     <div class="a44-offers">
-   
       <div class='a44-offer pl promo' v-for="offer in sourceOffers" :key="offer.id" :data-id="offer.id" :data-costs="offer.loando_slug || 'default_slug'"
-        :data-minamount="offer.min_amount" :data-maxamount="offer.max_amount"
+        :class="{ 'recommended': offer.recommended }" :data-minamount="offer.min_amount" :data-maxamount="offer.max_amount"
         :data-minperiod="offer.min_period" :data-maxperiod="offer.max_period" 
         :data-freeamount="offer.first_free_amount"
       >   
+      
           <div class="d-none">
             <p>{{ offer.min_amount }}, {{ offer.max_amount }}, {{ offer.min_period }}, {{ offer.max_period }}, {{ offer.first_free_amount }}</p>
           </div>
@@ -14,8 +52,11 @@
           <div class="offer-details">
 
             <div class="offer-name-details">
-              <div class="offer-logo" v-html="getOfferThumbnail(offer.thumbnail)">
+              <div class="offer-logo">
+                    <div v-html="getOfferThumbnail(offer.thumbnail)"></div> 
+                    <div v-if="offer.recommended" class="recom">Polecamy!</div>
               </div>
+              
               <div class="offer-rates">
                 <div class="offer-rate" v-if="offer.rate" v-html="parseFloat(offer.rate||0).toFixed(1)"></div>
                 <div class="offer-rate" v-else></div>
@@ -90,7 +131,9 @@
           </div>
 
           <div class="aclr"></div>
+        <div class="zendjson" v-html="fetchZend(offer)">
 
+        </div>
       </div>
 
     </div>
@@ -103,19 +146,22 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import mixinRating from "../assets/mixins/rating.js"
+import axios from 'axios'
+
 export default {
   
     name: "offers",
     props: {
         sourceOffers: Array
     },
+
     setup() {
 
         const store = useStore();
         const translations = computed(()=>store.state.translations);
         const rrso = computed(()=>store.state.rrso);
         const arr = computed(()=>store.state.arr);
-
+        
         const defaultImage = require('../assets/img/default.png');
 
         const { ratingHover, ratingLeave, ratingClick, getFirstRateWidth, get_votes_count_container } = mixinRating();
@@ -123,7 +169,14 @@ export default {
         function getOfferThumbnail(offerSource){
             return offerSource ? `<img src="${offerSource}" />` : `<img src="${defaultImage}" />`
         } 
-
+        function fetchZend(offer){
+            console.log(offer)
+            axios.get('static/zdenjson.php',{query: offer})
+            .then( response => {
+                console.log(response.data)
+                return response.data
+            })
+        }
         return {
 
             translations,
@@ -137,6 +190,7 @@ export default {
             get_votes_count_container,
           
             getOfferThumbnail,
+            fetchZend
 
         };
 
