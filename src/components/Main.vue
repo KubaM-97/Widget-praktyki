@@ -1,29 +1,35 @@
 <template>
   <div style="max-width: 1200px; margin: auto; width: 100%;">
     <div id="layout-2" class="a44-widget layout" ref="container">
+
+      <!-- <div v-if="category==='1'">
         <slider-component/>
-        <offers-component/>
+      </div> -->
+      
+      <offers-component/>
+
     </div>
   </div>
 </template>
 
 <script>
 
-import Slider from '@/components/Slider.vue';
+// import Slider from '@/components/Slider.vue';
 import Offers from '@/components/Offers.vue';
 
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useStore } from 'vuex';
 
 export default{
   components: {
     "offers-component": Offers,
-    "slider-component": Slider,
+    // "slider-component": Slider,
   },
   props: ['offerId'],
   async setup(props){
     
-    const store = useStore()
+    const store = useStore();
+    const category = computed(()=>store.state.arr.category)
     const container = ref(null);
     
     window.addEventListener("resize", viewport_size);
@@ -63,7 +69,8 @@ export default{
     await store.dispatch("fetchOffers", { offerId: props.offerId });
     
     return{
-      container
+      container,
+      category
     }
 
   }

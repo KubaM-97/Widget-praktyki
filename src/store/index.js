@@ -1,5 +1,7 @@
 import { createStore } from 'vuex'
+
 import axios from 'axios'
+var qs = require('qs');
 
 export default createStore({
   state: {
@@ -17,10 +19,10 @@ export default createStore({
       const initFreeAmountValue = state.arr.free_amount
 
       const filteredOffers = state.offers
-      .filter( offer => offer.min_period <= initPeriodValue )
+      .filter( offer => offer.min_period <= initPeriodValue || offer.max_period == null )
       .filter( offer => offer.max_period >= initPeriodValue || offer.max_period == null )
-      .filter( offer => offer.min_amount <= initAmountValue )
-      .filter( offer => offer.max_amount >= initAmountValue )
+      .filter( offer => offer.min_amount <= initAmountValue || offer.max_amount == null )
+      .filter( offer => offer.max_amount >= initAmountValue || offer.max_amount == null )
       .filter( offer => initFreeAmountValue ? offer.first_free_amount >= initAmountValue : true)
       
       return filteredOffers
@@ -44,13 +46,32 @@ export default createStore({
   },
   actions: {
     async fetchOffers ( { commit }, payload ) {
-      await axios.get("https://panel-dev.aff44.com/widget-json/" + payload.offerId)    
+      // await axios.get("https://panel-dev.aff44.com/widget-json/" + payload.offerId)    
+      await axios.get("https://panel-dev.aff44.com/widget-json/f34ee6f3")    
       .then( response =>  {
-          commit("setOffers", response.data.offers);
+          const category = response.data.arr.category
+          const offers = response.data.offers.filter( el => el.category === category)
+          
+          commit("setOffers", offers);
+          
           commit("setRRSO", response.data.rrso);
           commit("setTranslations", response.data.translations);
           commit("setArr", response.data.arr);
+          console.log(offers)
         })
-    }
+    },
+    // fetchZend ({ commit }, payload) {
+    //   // console.log(payload.offer)
+    //   const offer = payload.offer
+    //   return new Promise((resolve, reject) => {
+    //     const bb = axios.post('static/zdenjson.php', qs.stringify({ offer }))
+    //     setTimeout(() => {
+    //       // console.log(bb)
+    //       // console.log(bb.data)
+    //       resolve(bb.data)
+    //     }, 1000)
+    //   })
+    // }
+    
   },
 })
