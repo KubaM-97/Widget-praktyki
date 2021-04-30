@@ -1,7 +1,5 @@
 import { createStore } from 'vuex'
-
 import axios from 'axios'
-var qs = require('qs');
 
 export default createStore({
   state: {
@@ -57,21 +55,8 @@ export default createStore({
           commit("setRRSO", response.data.rrso);
           commit("setTranslations", response.data.translations);
           commit("setArr", response.data.arr);
-          console.log(offers)
         })
     },
-    // fetchZend ({ commit }, payload) {
-    //   // console.log(payload.offer)
-    //   const offer = payload.offer
-    //   return new Promise((resolve, reject) => {
-    //     const bb = axios.post('static/zdenjson.php', qs.stringify({ offer }))
-    //     setTimeout(() => {
-    //       // console.log(bb)
-    //       // console.log(bb.data)
-    //       resolve(bb.data)
-    //     }, 1000)
-    //   })
-    // }
     
   },
 })

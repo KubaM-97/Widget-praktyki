@@ -99,7 +99,7 @@
 
       <div class="aclr"></div>
 
-      <div class="scriptjson" v-html="fetchZend(offer)"></div>
+      <div class="schema-json" v-html="fetchZend(offer)"></div>
 
     </div>
   </div>
