@@ -116,7 +116,7 @@ export default {
     margin: auto;
     text-align: center;
     margin-bottom: 16px;
-}<style>
+}
 .a44-widget .a44-offer {
   font-family: "Open Sans";
   margin-bottom: 16px;

@@ -1,10 +1,6 @@
 <template>
   <div style="max-width: 1200px; margin: auto; width: 100%;">
     <div id="layout-2" class="a44-widget layout" ref="container">
-
-      <!-- <div v-if="category==='1'">
-        <slider-component/>
-      </div> -->
       
       <offers-component/>
 
@@ -14,7 +10,6 @@
 
 <script>
 
-// import Slider from '@/components/Slider.vue';
 import Offers from '@/components/Offers.vue';
 
 import { onMounted, ref, computed } from 'vue';
@@ -23,7 +18,6 @@ import { useStore } from 'vuex';
 export default{
   components: {
     "offers-component": Offers,
-    // "slider-component": Slider,
   },
   props: ['offerId'],
   async setup(props){
