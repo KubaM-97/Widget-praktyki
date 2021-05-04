@@ -42,10 +42,8 @@
         </div>
         <div class="amount-value-container">
           <span class="value-wrapper">
-            
             <input type="text" @blur="getAmountManually" @keyup.enter="getAmountManually" class="value" 
             :value="arr.initAmountValue" :min="arr.minAmount" :max="arr.maxAmount" name="amount-label"/>
-            
             <span class="currency">{{arr.currency}}</span>
           </span>
         </div>
@@ -68,8 +66,7 @@
     <div class="aclr"></div>
 
     <div class="free-amount-container" ref="freeAmount">
-      <input type="checkbox" :id="'chck-free-amount-'+arr.hash"
-       v-model="arr.free_amount"/>
+      <input type="checkbox" :id="'chck-free-amount-'+arr.hash" v-model="arr.free_amount"/>
       <span class="checkmark"></span>
       <label :for="'chck-free-amount-'+arr.hash"> {{ translations["Show only free loans"] }}</label>
     </div>

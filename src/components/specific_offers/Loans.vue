@@ -55,16 +55,14 @@
                         @mouseleave="ratingLeave"
                         @mousemove="ratingHover"
                       >
-                        <div
-                          class="rate"
-                          :style="{
+                        <div class="rate" :style="{
                             width:
                               getFirstRateWidth(offer.rate, offer.votes_count) +
                               '%',
                           }"
                         ></div>
                       </div>
-                    </span>
+                     </span>
                   </div>
                 </div>
                 <div
@@ -174,7 +172,9 @@ export default {
                     'bestRating': '5',
                 }
             };
+            
             return "<script type=\'application/ld+json\'>" + JSON.stringify(schema) + "<\/script>";
+        
         }
 
         return {
