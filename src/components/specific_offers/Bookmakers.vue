@@ -97,7 +97,7 @@
 
       <div class="aclr"></div>
 
-      <div class="schema-json" v-html="fetchZend(offer)"></div>
+      <div class="schema-json" v-html="jsonSchema(offer)"></div>
 
     </div>
   </div>
@@ -130,7 +130,7 @@ export default {
             return offerSource ? `<img src="${offerSource}" />` : `<img src="${defaultImage}" />`
         }
 
-        function fetchZend(offer){
+        function jsonSchema(offer){
 
             const schema = {
                 '@context': 'http://schema.org/',
@@ -150,7 +150,7 @@ export default {
 
         return {
 
-            fetchZend,
+            jsonSchema,
 
             translations,
             rrso,

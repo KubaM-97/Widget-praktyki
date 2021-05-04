@@ -7,7 +7,6 @@ export default {
         window.App = app.mount(element);
       }
     }
-
     window.customElements.define(options.offerHash, HTMLWidgetElement);
   },
 };
