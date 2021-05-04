@@ -44,8 +44,8 @@ export default createStore({
   },
   actions: {
     async fetchOffers ( { commit }, payload ) {
-      await axios.get("https://panel-dev.aff44.com/widget-json/" + payload.offerHash)    
-      // await axios.get("https://panel-dev.aff44.com/widget-json/f34ee6f3")    
+      // await axios.get("https://panel-dev.aff44.com/widget-json/" + payload.offerHash)    
+      await axios.get("https://panel-dev.aff44.com/widget-json/f34ee6f3")    
       .then( response =>  {
         
           const category = response.data.arr.category
@@ -58,6 +58,5 @@ export default createStore({
 
         })
     },
-    
   },
 })

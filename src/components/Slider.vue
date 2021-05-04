@@ -135,6 +135,7 @@ export default ({
                     period: parseInt(period),
                     time_type: prefix
                 }, function(data) {
+
                     const containers = widget.querySelectorAll('[data-costs]');
                     containers.forEach( container => {
                              
@@ -159,6 +160,7 @@ export default ({
                           if(slug_container){
 
                             const installmentContainer = slug_container.querySelector('.installment');
+
                             const aprContainer = slug_container.querySelector('.apr');
                                     
                             if (typeof data.costs[slug].installment !== 'undefined' && prefix == 'month')
@@ -168,7 +170,7 @@ export default ({
                             if (typeof data.costs[slug].amount !== 'undefined' && data.costs[slug].apr !== null) {                             
                                 installmentContainer.innerHTML += ` /  ${ Math.round( (data.costs[slug].cost + data.costs[slug].amount) * 100) / 100 }  ${arr.value['currency']}`;                       
                                 aprContainer.innerHTML = data.costs[slug].apr + '%';  
-                            }                                    
+                            }
 
                           }    
 

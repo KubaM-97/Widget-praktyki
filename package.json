@@ -11,7 +11,6 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "jquery": "^3.6.0",
-    "qs-stringify": "^1.2.1",
     "vue": "^3.0.0",
     "vue3-webcomponent-wrapper": "^0.1.4",
     "vuex": "^4.0.0-0"

@@ -1,6 +1,5 @@
 <template>
 
-
     <div class="offers_container" v-if="arr.type === 'loan'">
 
         <slider-component/>
@@ -99,6 +98,7 @@ export default {
 
 
 </script>
+
 <style>
 .a44-alert {
     border: 3px solid red;
@@ -702,5 +702,4 @@ export default {
   padding-left: 8px;
   padding-top: 4px;
 }
-
 </style>

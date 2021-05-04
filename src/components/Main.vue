@@ -1,7 +1,7 @@
 <template>
   <div style="max-width: 1200px; margin: auto; width: 100%;">
     <div id="layout-2" class="a44-widget layout" ref="container">
-      
+
       <offers-component/>
 
     </div>

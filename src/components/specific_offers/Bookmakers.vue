@@ -91,8 +91,6 @@
       </div>
 
       <div class="offer-description">
-        {{ offer.description }}
-        <br />
         *{{ translations["Minimal APR"] }} {{ rrso[offer.category].apr_min }}%,
         {{ translations["maximal APR"] }} {{ rrso[offer.category].apr_max }}%
       </div>
