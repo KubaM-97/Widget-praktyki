@@ -19,7 +19,7 @@ export default{
   components: {
     "offers-component": Offers,
   },
-  props: ['offerId'],
+  props: ['offerHash'],
   async setup(props){
     
     const store = useStore();
@@ -60,7 +60,7 @@ export default{
       viewport_size();
     })
     
-    await store.dispatch("fetchOffers", { offerId: props.offerId });
+    await store.dispatch("fetchOffers", { offerHash: props.offerHash });
     
     return{
       container,

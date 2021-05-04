@@ -1,6 +1,6 @@
-import $ from "jquery";
 import { useStore } from 'vuex';
 import { computed } from 'vue'
+import $ from "jquery";
 
 export default function mixinRating(){
   

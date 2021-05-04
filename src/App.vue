@@ -2,7 +2,7 @@
     <suspense>
       <template #default>
         <div>
-          <main-component :offerId='offerId'/>
+          <main-component :offerHash='offerHash'/>
         </div>
       </template>
     </suspense>
@@ -16,7 +16,7 @@ export default{
   components: {
     "main-component": Main,
   },
-  props: ['offerId']
+  props: ['offerHash']
 }
 </script>
 
