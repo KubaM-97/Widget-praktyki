@@ -1,4 +1,4 @@
-# vue-widget
+# aff44-widget
 
 ## Project setup
 ```

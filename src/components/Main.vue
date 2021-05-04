@@ -60,7 +60,7 @@ export default{
       viewport_size();
     })
     
-    await store.dispatch("fetchOffers", { offerHash: props.offerHash });
+    await store.dispatch("fetchFullData", { offerHash: props.offerHash });
     
     return{
       container,

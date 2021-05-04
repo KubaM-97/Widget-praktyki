@@ -1,5 +1,5 @@
 {
-  "name": "vue-widget",
+  "name": "aff44-widget",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,8 @@
     "jquery": "^3.6.0",
     "vue": "^3.0.0",
     "vue3-webcomponent-wrapper": "^0.1.4",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "vuex-cache": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
