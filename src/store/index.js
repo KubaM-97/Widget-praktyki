@@ -49,22 +49,22 @@ export default createStore({
 
       const filteredOffers = state.offers
         .filter(
-          (offer) =>
+          offer =>
             offer.min_period <= initPeriodValue || offer.max_period == null
         )
         .filter(
-          (offer) =>
+          offer =>
             offer.max_period >= initPeriodValue || offer.max_period == null
         )
         .filter(
-          (offer) =>
+          offer =>
             offer.min_amount <= initAmountValue || offer.max_amount == null
         )
         .filter(
-          (offer) =>
+          offer =>
             offer.max_amount >= initAmountValue || offer.max_amount == null
         )
-        .filter((offer) =>
+        .filter(offer =>
           initFreeAmountValue
             ? offer.first_free_amount >= initAmountValue
             : true
