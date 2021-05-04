@@ -1,4 +1,0 @@
-bookmakers
-1. min rrso, max rrso
-2. {BUK}
-3. description
