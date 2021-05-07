@@ -2,38 +2,6 @@ import { createStore } from "vuex";
 import axios from "axios";
 const _ = require('lodash');
 
-// const aa = {
-//   offers: [
-//     { name: "KKK", age: 24 },
-//     { name: "LLL", age: 37 },
-//     { name: "MMM", age: 17 }
-//   ],
-//   arr: 
-//     { 
-//       hash: "sdfs" ,
-//       aaa: 111 ,
-
-//     }
-
-  
-  
-// }
-// const bb = {
-//   offers: [
-//     { name: "KKK", age: 24 },
-//     { name: "LLL", age: 37 },
-//     { name: "MMM", age: 17 },
-//     // { name: "ZZZ", age: 88 }
-//   ],
-//   arr: 
-//     { hash: "sssdfs", aaa: 111 }
-  
-// }
-// customizer(aa, bb)
-// const cc = _.isEqualWith(aa, bb, customizer)
-// const cc = _.isEqual(aa, bb)
-// console.log(cc)
-
 export default createStore({
   state: {
     offers: [],
@@ -69,8 +37,9 @@ export default createStore({
             ? offer.first_free_amount >= initAmountValue
             : true
         );
-
-      return filteredOffers;
+        
+      return _.shuffle(filteredOffers);
+      
     },
   },
   mutations: {
@@ -109,7 +78,7 @@ export default createStore({
       if (!fetchedData) {
 
         await axios.get("https://panel-dev.aff44.com/widget-json/" + payload.offerHash)
-          // await axios.get("https://panel-dev.aff44.com/widget-json/f34ee6f3")
+        // await axios.get("https://panel-dev.aff44.com/widget-json/f34ee6f3")
           .then( response => {
             dispatch('insertDataToState', response.data)
             sessionStorage.setItem("aff44-data", JSON.stringify(response.data))

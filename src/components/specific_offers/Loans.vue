@@ -25,7 +25,7 @@
       <div class="offer-details">
         <div class="offer-name-details">
           <div class="offer-logo">
-            <div v-html="getOfferThumbnail(offer.thumbnail)"></div>
+            <img :src="offer.thumbnail || defaultImage" :alt="offer.display_name">
             <div v-if="offer.recommended" class="recom">Polecamy!</div>
           </div>
 
@@ -153,10 +153,6 @@ export default {
 
         const { ratingHover, ratingLeave, ratingClick, getFirstRateWidth, get_votes_count_container } = mixinRating();
 
-        function getOfferThumbnail(offerSource){
-            return offerSource ? `<img src="${offerSource}" />` : `<img src="${defaultImage}" />`
-        }
-
         function jsonSchema(offer){
 
             const schema = {
@@ -185,13 +181,13 @@ export default {
             rrso,
             arr,
 
+            defaultImage,
+            
             ratingHover,
             ratingLeave,
             ratingClick,
             getFirstRateWidth,
-            get_votes_count_container,
-
-            getOfferThumbnail
+            get_votes_count_container
 
         };
 

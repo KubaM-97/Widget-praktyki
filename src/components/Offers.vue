@@ -25,6 +25,8 @@
 
 <script>
 
+const _ = require('lodash');
+
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import Slider from '@/components/Slider.vue';
@@ -74,6 +76,8 @@ export default {
               remainingOffers.value.push(offer)
             }
           }
+          
+          remainingOffers.value = _.shuffle(remainingOffers.value)
           showRemainingOffers.value = true;
 
         } else {
